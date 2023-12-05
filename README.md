@@ -4,7 +4,8 @@
 
 ## Tech Stack
 
-API: Spring Boot, MyBatis, MySQL
+- FE: Vue.js
+- API: Spring Boot, MyBatis, MySQL
 
 ## Run Locally
 
@@ -14,6 +15,19 @@ API: Spring Boot, MyBatis, MySQL
       git clone https://github.com/cheesecat47/myBlog.git
       cd myBlog
     ```
+
+### FE Dev server
+
+- 실행 전 아래 요구사항이 설치되어 있는지 확인이 필요합니다.
+- Node v18
+
+1. `myBlog-frontend` 디렉토리로 이동
+
+  ```bash
+    cd myBlog-frontend/
+    npm install
+    npm run dev
+  ```
 
 ### API server
 
