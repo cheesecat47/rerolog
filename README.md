@@ -12,8 +12,8 @@
 - 프로젝트 클론 후 디렉토리로 이동
 
     ```bash
-      git clone https://github.com/cheesecat47/myBlog.git
-      cd myBlog
+    git clone https://github.com/cheesecat47/myBlog.git
+    cd myBlog
     ```
 
 ### FE Dev server
@@ -23,11 +23,11 @@
 
 1. `myBlog-frontend` 디렉토리로 이동
 
-  ```bash
+    ```bash
     cd myBlog-frontend/
     npm install
     npm run dev
-  ```
+    ```
 
 ### API server
 
@@ -38,19 +38,19 @@
 
 1. `myBlog-api` 디렉토리로 이동
 
-  ```bash
+    ```bash
     cd myBlog-api/
-  ```
+    ```
 
-1. 실행
+2. 실행
 
-  ```bash
-      # Maven 패키징
-      ./mvnw package
-      
-      # 실행
-      java -jar target/myBlog-0.0.1-SNAPSHOT.jar
-  ```
+    ```bash
+    # Maven 패키징
+    ./mvnw package
+
+    # 실행
+    java -jar target/myBlog-0.0.1-SNAPSHOT.jar
+    ```
 
 ## Author
 
