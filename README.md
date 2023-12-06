@@ -52,6 +52,10 @@
     java -jar target/myBlog-0.0.1-SNAPSHOT.jar
     ```
 
+## Documentations
+
+- [기능 명세서](./docs/feature-spec.md)
+
 ## Author
 
 - [@cheesecat47](https://github.com/cheesecat47)
