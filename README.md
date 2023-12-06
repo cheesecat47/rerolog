@@ -54,7 +54,8 @@
 
 ## Documentations
 
-- [기능 명세서](./docs/feature-spec.md)
+- [기능 명세서](docs/feature-spec.md)
+- [ERD](docs/ERD.md)
 
 ## Author
 
