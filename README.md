@@ -56,6 +56,7 @@
 
 - [기능 명세서](docs/feature-spec.md)
 - [ERD](docs/ERD.md)
+- [화면 설계서](docs/pages.md)
 
 ## Author
 
