@@ -11,9 +11,9 @@
         <span class="mr-6">Contact</span>
         <ul>
           <!-- Todo: 여기 들어갈 내용은 추후 API로 받아온 유저 정보 객체에 따라 동적으로 처리 필요. -->
-          <li><a href="mailto:cheesecat47@gmail.com">cheesecat47@gmail.com</a></li>
-          <li><a href="https://github.com/cheesecat47">GitHub</a></li>
-          <li><a href="https://www.linkedin.com/in/shinjuyong">LinkedIn</a></li>
+          <li><a href="mailto:cheesecat47@gmail.com"><font-awesome-icon :icon="['fas', 'envelope']" /> cheesecat47@gmail.com</a></li>
+          <li><a href="https://github.com/cheesecat47"><font-awesome-icon :icon="['fab', 'github']" /> GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/shinjuyong"><font-awesome-icon :icon="['fab', 'linkedin']" /> LinkedIn</a></li>
         </ul>
       </div>
     </div>
