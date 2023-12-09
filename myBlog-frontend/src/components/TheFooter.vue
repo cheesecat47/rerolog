@@ -1,8 +1,8 @@
 <script setup></script>
 
 <template>
-  <footer class="footer items-center">
-    <hr />
+  <footer class="footer items-center my-6">
+    <hr class="border border-gray-500" />
     <div class="flex items-center justify-evenly mt-2">
       <div>
         <span> Blog Title &copy; 2023 Shin Juyong. </span>

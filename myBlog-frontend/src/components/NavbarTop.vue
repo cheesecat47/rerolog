@@ -26,7 +26,7 @@ const logout = () => {
         <span @click="logout">로그아웃</span>
       </div>
     </nav>
-    <hr />
+    <hr class="border border-gray-500" />
   </header>
 </template>
 
