@@ -13,7 +13,7 @@ const logout = () => {
 </script>
 
 <template>
-  <header class="box-border">
+  <header class="box-border mb-6">
     <nav class="flex items-center justify-between flex-wrap p-8">
       <div class="flex items-center flex-shrink-0 mr-6">
         <span class="font-bold text-2xl">Blog Title</span>
