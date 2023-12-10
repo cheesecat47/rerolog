@@ -2,6 +2,8 @@
 
 > 블로그 서비스를 만들어보는 프로젝트입니다.
 
+![main page](docs/resources/pages-main.gif)
+
 ## Tech Stack
 
 - FE: Vue.js
