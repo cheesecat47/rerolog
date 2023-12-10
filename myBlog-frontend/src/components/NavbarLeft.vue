@@ -8,7 +8,7 @@ const categories = ref(['Java', 'Spring Boot', 'Vue.js', '알고리즘 문제'])
 
 <template>
   <!-- 좌측 Navbar -->
-  <nav class="lg:w-48 mx-6 lg:mx-0 px-2 py-4 rounded border">
+  <nav class="lg:w-48 lg:shrink-0 px-2 py-4 rounded border">
     <!-- 프로필 영역. 누르면 소개 페이지로 이동 -->
     <RouterLink
       :to="{ name: 'about' }"
