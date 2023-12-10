@@ -5,7 +5,7 @@ import TheFooter from './components/TheFooter.vue';
 </script>
 
 <template>
-  <div class="lg:container lg:mx-auto">
+  <div class="container mx-auto max-w-5xl">
     <!-- 상단 Navbar -->
     <NavbarTop />
 
