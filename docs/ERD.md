@@ -1,5 +1,16 @@
 # ERD
 
+## 2023.12.11.
+
+![ERD](resources/ERD-231211.png)
+
+### 변경 내역
+
+- 연락 방법을 varchar(20) -> FK로 변경.
+  - 기존에는 varchar(20)으로 `github`, `linkedin`, `email` 같은 것을 직접 적어넣으려 했음.
+  - https://velog.io/@leejh3224/번역-MySQL의-ENUM-타입을-사용하지-말아야-할-8가지-이유
+- 포스트 썸네일 테이블 추가.
+
 ## 2023.12.09.
 
 ![ERD](resources/ERD-231209.png)
