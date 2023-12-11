@@ -167,7 +167,7 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-# db 설정
-application.properties
+# 프로젝트 설정
+application.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij
