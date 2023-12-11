@@ -29,5 +29,3 @@ const logout = () => {
     <hr class="border border-gray-500" />
   </header>
 </template>
-
-<style scoped></style>

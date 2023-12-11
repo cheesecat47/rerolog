@@ -15,5 +15,3 @@ import TheFooter from './components/TheFooter.vue';
     <TheFooter />
   </div>
 </template>
-
-<style scoped></style>

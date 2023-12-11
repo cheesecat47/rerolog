@@ -39,5 +39,3 @@ const categories = ref(['Java', 'Spring Boot', 'Vue.js', '알고리즘 문제'])
     </ul>
   </nav>
 </template>
-
-<style scoped></style>
