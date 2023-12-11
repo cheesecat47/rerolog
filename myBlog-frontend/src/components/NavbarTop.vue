@@ -16,7 +16,7 @@ const logout = () => {
   <header class="box-border mb-6">
     <nav class="flex items-center justify-between flex-wrap p-8">
       <div class="flex items-center flex-shrink-0 mr-6">
-        <span class="font-bold text-2xl">Blog Title</span>
+        <RouterLink :to="{name: 'home'}" class="font-bold text-3xl">Blog Title</RouterLink>
       </div>
       <div v-if="!isLogin" class="block lg:flex lg:items-center lg:w-auto">
         <RouterLink to="/">로그인</RouterLink>
