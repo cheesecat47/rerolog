@@ -73,4 +73,12 @@ Insert gif or link to demo -->
 
 ## ✍🏻 Authors
 
--   [@rosielsh](https://www.github.com/rosielsh)
+-   [@rosielsh](https://www.github.com/rosielsh)
+
+<br/>
+
+## 👫 Contributors
+
+-   [@cheesecat47](https://www.github.com/cheesecat47)
+-   [@yeaaaaahhhhh](https://www.github.com/yeaaaaahhhhh)
+-   [@HeewonYoun](https://www.github.com/HeewonYoun)
