@@ -4,7 +4,7 @@
 
 ## 메인 페이지
 
-![main page](resources/pages-main.jpg)
+![main page](resources/pages-main.gif)
 
 - 메인 페이지는 상단 Navbar, 좌측 Navbar, 본문, Footer 영역으로 구성.
     - 이 구조는 블로그 전체에서 일관되게 사용. (일부 페이지 제외)
@@ -22,7 +22,7 @@
 
 ### 소개 페이지
 
-![about page](resources/pages-about.jpg)
+![about page](resources/pages-about.png)
 
 - 블로그 주인(유저) 정보를 배치.
     - 이름, 아이디, 프로필 사진, 소개 멘트 등.
