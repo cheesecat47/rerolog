@@ -1,101 +1,91 @@
-CREATE SCHEMA IF NOT EXISTS `myblog` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;
-USE `myblog` ;
-
 CREATE TABLE `User` (
-                        `id` INT NOT NULL AUTO_INCREMENT,
-                        `id_str` VARCHAR(20) NOT NULL UNIQUE,
-                        `pw` VARCHAR(12) NOT NULL,
-                        `email_account` VARCHAR(50) NOT NULL,
-                        `email_domain` VARCHAR(50) NOT NULL,
-                        `content` VARCHAR(200) DEFAULT NULL,
-                        `session_id` VARCHAR(20) DEFAULT NULL,
-                        `created_at` DATETIME NOT NULL DEFAULT NOW(),
-                        `updated_at` DATETIME DEFAULT NULL,
-                        `deleted_at` DATETIME DEFAULT NULL,
-                        PRIMARY KEY (`id`)
+                        `id` int PRIMARY KEY AUTO_INCREMENT,
+                        `id_str` varchar(20) NOT NULL UNIQUE,
+                        `pw` varchar(12) NOT NULL,
+                        `nick_name` varchar(8) NOT NULL,
+                        `email_account` varchar(50) NOT NULL,
+                        `email_domain` varchar(50) NOT NULL,
+                        `content` varchar(200) DEFAULT NULL,
+                        `profile_image` varchar(250) DEFAULT NULL,
+                        `session_id` varchar(20) DEFAULT NULL,
+                        `created_at` datetime NOT NULL DEFAULT NOW(),
+                        `updated_at` datetime DEFAULT NULL,
+                        `deleted_at` datetime DEFAULT NULL
 );
 
 CREATE TABLE `Contact` (
-                           `id` INT NOT NULL AUTO_INCREMENT,
-                           `user_id` INT NOT NULL,
-                           `type_id` INT NOT NULL,
-                           `value` VARCHAR(2048) NOT NULL,
-                           PRIMARY KEY (`id`),
-                           FOREIGN KEY (`user_id`) REFERENCES `User`(`id`)
+                           `id` int PRIMARY KEY AUTO_INCREMENT,
+                           `user_id` int NOT NULL,
+                           `type_id` int NOT NULL,
+                           `value` varchar(2048) NOT NULL,
+                           FOREIGN KEY (`user_id`) REFERENCES `User` (`id`)
 );
 
 CREATE TABLE `ContactType` (
-                               `id` INT NOT NULL AUTO_INCREMENT,
-                               `type` VARCHAR(20) NOT NULL,
-                               PRIMARY KEY (`id`)
+                               `id` int PRIMARY KEY AUTO_INCREMENT,
+                               `type` varchar(20) NOT NULL
 );
 
 CREATE TABLE `Blog` (
-                        `id` INT NOT NULL AUTO_INCREMENT,
-                        `user_id` INT NOT NULL,
-                        `name` VARCHAR(20) NOT NULL,
-                        `created_at` DATETIME NOT NULL DEFAULT NOW(),
-                        PRIMARY KEY (`id`),
-                        FOREIGN KEY (`user_id`) REFERENCES `User`(`id`)
+                        `id` int PRIMARY KEY AUTO_INCREMENT,
+                        `user_id` int NOT NULL,
+                        `name` varchar(20) NOT NULL,
+                        `created_at` datetime NOT NULL DEFAULT NOW(),
+                        FOREIGN KEY (`user_id`) REFERENCES `User` (`id`)
 );
 
 CREATE TABLE `Category` (
-                            `id` INT NOT NULL AUTO_INCREMENT,
-                            `blog_id` INT NOT NULL,
-                            `name` VARCHAR(20),
-                            `created_at` DATETIME NOT NULL DEFAULT NOW(),
-                            `updated_at` DATETIME DEFAULT NULL,
-                            `deleted_at` DATETIME DEFAULT NULL,
-                            PRIMARY KEY (`id`),
-                            FOREIGN KEY (`blog_id`) REFERENCES `Blog`(`id`)
+                            `id` int PRIMARY KEY AUTO_INCREMENT,
+                            `blog_id` int NOT NULL,
+                            `name` varchar(20),
+                            `created_at` datetime NOT NULL DEFAULT NOW(),
+                            `updated_at` datetime DEFAULT NULL,
+                            `deleted_at` datetime DEFAULT NULL,
+                            FOREIGN KEY (`blog_id`) REFERENCES `Blog` (`id`)
 );
 
 CREATE TABLE `Post` (
-                        `id` INT NOT NULL AUTO_INCREMENT,
-                        `category_id` INT NOT NULL,
-                        `user_id` INT NOT NULL,
-                        `title` VARCHAR(100) NOT NULL,
-                        `content` VARCHAR(2000),
-                        `hit` INT NOT NULL DEFAULT 0,
-                        `created_at` DATETIME NOT NULL DEFAULT NOW(),
-                        `updated_at` DATETIME DEFAULT NULL,
-                        `deleted_at` DATETIME DEFAULT NULL,
-                        PRIMARY KEY (`id`),
-                        FOREIGN KEY (`category_id`) REFERENCES `Category`(`id`),
-                        FOREIGN KEY (`user_id`) REFERENCES `User`(`id`)
+                        `id` int PRIMARY KEY AUTO_INCREMENT,
+                        `category_id` int NOT NULL,
+                        `user_id` int NOT NULL,
+                        `title` varchar(100) NOT NULL,
+                        `content` varchar(2000),
+                        `hit` int NOT NULL DEFAULT 0,
+                        `created_at` datetime NOT NULL DEFAULT NOW(),
+                        `updated_at` datetime DEFAULT NULL,
+                        `deleted_at` datetime DEFAULT NULL,
+                        FOREIGN KEY (`category_id`) REFERENCES `Category` (`id`),
+                        FOREIGN KEY (`user_id`) REFERENCES `User` (`id`)
 );
 
 CREATE TABLE `Comment` (
-                           `id` INT NOT NULL AUTO_INCREMENT,
-                           `user_id` INT NOT NULL,
-                           `post_id` INT NOT NULL,
-                           `content` VARCHAR(300) NOT NULL,
-                           `created_at` DATETIME NOT NULL DEFAULT NOW(),
-                           `updated_at` DATETIME DEFAULT NULL,
-                           `deleted_at` DATETIME DEFAULT NULL,
-                           PRIMARY KEY (`id`),
-                           FOREIGN KEY (`user_id`) REFERENCES `User`(`id`),
-                           FOREIGN KEY (`post_id`) REFERENCES `Post`(`id`)
+                           `id` int PRIMARY KEY AUTO_INCREMENT,
+                           `user_id` int NOT NULL,
+                           `post_id` int NOT NULL,
+                           `content` varchar(300) NOT NULL,
+                           `created_at` datetime NOT NULL DEFAULT NOW(),
+                           `updated_at` datetime DEFAULT NULL,
+                           `deleted_at` datetime DEFAULT NULL,
+                           FOREIGN KEY (`user_id`) REFERENCES `User` (`id`),
+                           FOREIGN KEY (`post_id`) REFERENCES `Post` (`id`)
 );
 
 CREATE TABLE `PostAttachment` (
-                                  `id` INT NOT NULL AUTO_INCREMENT,
-                                  `post_id` INT NOT NULL,
-                                  `path` VARCHAR(250),
-                                  PRIMARY KEY (`id`),
-                                  FOREIGN KEY (`post_id`) REFERENCES `Post`(`id`)
+                                  `id` int PRIMARY KEY AUTO_INCREMENT,
+                                  `post_id` int NOT NULL,
+                                  `path` varchar(250),
+                                  FOREIGN KEY (`post_id`) REFERENCES `Post` (`id`)
 );
 
 CREATE TABLE `PostThumbnailImage` (
-                                      `id` INT NOT NULL,
-                                      `path` VARCHAR(250),
-                                      PRIMARY KEY (`id`),
-                                      FOREIGN KEY (`id`) REFERENCES `Post`(`id`)
+                                      `id` int PRIMARY KEY,
+                                      `path` varchar(250),
+                                      FOREIGN KEY (`id`) REFERENCES `Post` (`id`)
 );
 
-CREATE TABLE `UserProfileImage` (
-                                    `id` INT NOT NULL,
-                                    `path` VARCHAR(250),
-                                    PRIMARY KEY (`id`),
-                                    FOREIGN KEY (`id`) REFERENCES `User`(`id`)
+CREATE TABLE `PostImage` (
+                             `id` int PRIMARY KEY AUTO_INCREMENT,
+                             `post_id` int NOT NULL,
+                             `path` varchar(250),
+                             FOREIGN KEY (`post_id`) REFERENCES `Post` (`id`)
 );
