@@ -1,10 +1,11 @@
 import React from 'react';
+import { Layout } from "../../components/layout/Layout";
 
 const MainPage = () => {
     return (
-        <div>
-            MainPage
-        </div>
+        <Layout>
+            메인페이지
+        </Layout>
     );
 }
 

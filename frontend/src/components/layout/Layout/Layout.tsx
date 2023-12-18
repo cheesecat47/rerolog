@@ -3,14 +3,13 @@ import { Header } from "../Header";
 import { Footer } from "../Footer";
 
 import { DEFAULT_BLOG_NAME } from "../../../constants/post";
-import { Outlet } from "react-router-dom";
 
-const Layout = () => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             <Header blogName={DEFAULT_BLOG_NAME} />
-            <main>
-                <Outlet />
+            <main className="flex-grow">
+                {children}
             </main>
             <Footer />
         </div>
