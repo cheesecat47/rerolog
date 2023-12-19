@@ -1,23 +1,46 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+
+// Todo: 추후 API 응답 데이터로 변경 필요.
+const user = ref({
+  id_str: 'cheesecat47',
+  name: '신주용',
+  content:
+    '안녕하세요, 신주용입니다. 저는 고양이를 좋아합니다. 사실 이런 곳에는 Lorem Ipsum 문자열을 채워넣으면 가장 편하긴 한데 그러기에는 재미가 없잖아요. 근데 안그러려니 딱히 채울 내용이 없긴 해요. 그래서 한 세 줄만 넣어봐야겠어요. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dictum, nunc at posuere iaculis, augue lectus efficitur dolor, ac facilisis metus ipsum ac sem. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In hac habitasse platea dictumst. Nulla elementum facilisis velit, quis varius ante venenatis nec.',
+  contacts: [
+    { type: 'Email', value: 'cheesecat47@gmail.com' },
+    { type: 'GitHub', value: 'https://github.com/cheesecat47' },
+    { type: 'LinkedIn', value: 'https://www.linkedin.com/in/shinjuyong' },
+  ],
+});
+
+const contactIcon = (type) => {
+  switch (type) {
+    case 'Email':
+      return ['fas', 'envelope'];
+    case 'GitHub':
+      return ['fab', 'github'];
+    case 'LinkedIn':
+      return ['fab', 'linkedin'];
+    default:
+      return ['fas', 'link'];
+  }
+};
+</script>
 
 <template>
-  <footer class="footer items-center my-6">
-    <hr class="border border-gray-500" />
-    <div class="flex items-center justify-evenly mt-2">
-      <div>
-        <span> Blog Title &copy; 2023 Shin Juyong. </span>
-      </div>
-      <div class="flex items-center mr-6">
-        <span class="mr-6">Contact</span>
-        <ul>
-          <!-- Todo: 여기 들어갈 내용은 추후 API로 받아온 유저 정보 객체에 따라 동적으로 처리 필요. -->
-          <li><a href="mailto:cheesecat47@gmail.com"><font-awesome-icon :icon="['fas', 'envelope']" /> cheesecat47@gmail.com</a></li>
-          <li><a href="https://github.com/cheesecat47"><font-awesome-icon :icon="['fab', 'github']" /> GitHub</a></li>
-          <li><a href="https://www.linkedin.com/in/shinjuyong"><font-awesome-icon :icon="['fab', 'linkedin']" /> LinkedIn</a></li>
-        </ul>
+  <hr class="border border-gray-500 my-6" />
+  <footer class="footer my-6 text-lg">
+    <div class="flex flex-col lg:flex-row justify-center items-center mx-auto">
+      <span> Blog Title &copy; 2023 {{ user.name }}. </span>
+      <div class="flex items-center lg:ml-4 gap-2">
+        <!-- Todo: 여기 들어갈 내용은 추후 API로 받아온 유저 정보 객체에 따라 동적으로 처리 필요. -->
+        <template v-for="(item, index) in user.contacts" :key="index">
+          <a :href="(item.type === 'Email' ? 'mailto:' : '') + item.value">
+            <font-awesome-icon :icon="contactIcon(item.type)" />
+          </a>
+        </template>
       </div>
     </div>
   </footer>
 </template>
-
-<style scoped></style>
