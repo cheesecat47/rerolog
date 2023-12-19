@@ -27,10 +27,14 @@
                 "tsx": "never"
             }
         ],
+        "import/prefer-default-export": "off",
         "react/react-in-jsx-scope": "off",
         "react/function-component-definition": [
-            2,
-            { "namedcomponents": "arrow-function" }
+            "error",
+            {
+                "namedComponents": "arrow-function",
+                "unnamedComponents": "arrow-function"
+            }
         ]
     },
     "settings": {
