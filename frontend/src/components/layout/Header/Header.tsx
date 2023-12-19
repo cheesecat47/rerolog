@@ -19,19 +19,20 @@ const Header = ({ blogName }: { blogName: string }) => {
     }
 
     return (
-        <header className="w-full h-16 flex bg-transparent font-PyeongChangPeace ">
-            <div className="basis-[40%]" />
-            <div className="basis-[20%] flex justify-center items-center">
+        <header className="w-full h-16 flex justify-end bg-transparent font-PyeongChangPeace ">
+            <div className="basis-[20%] flex justify-center items-center cursor-pointer">
                 <img className="w-8" src={flower} alt="logo" />
                 <span className="text-gray-700 font-semibold text-lg pl-1">{blogName}</span>
             </div>
             <div className="basis-[40%] flex justify-end">
                 {
-                    checkIsLogin() ? <div className="hidden sm:flex w-full justify-end">
-                        <HeaderIconText icon={pencil} alt="pencil" text="Write" />
-                        <HeaderIconText icon={my} alt="my" text="My" />
-                        <HeaderIconText icon={logout} alt="logout" text="Logout" />
-                    </div>
+                    checkIsLogin()
+                        ?
+                        <div className="hidden sm:flex w-full justify-end">
+                            <HeaderIconText icon={pencil} alt="pencil" text="Write" />
+                            <HeaderIconText icon={my} alt="my" text="My" />
+                            <HeaderIconText icon={logout} alt="logout" text="Logout" />
+                        </div>
                         :
                         <HeaderIconText icon={login} alt="login" text="Login" />
                 }
