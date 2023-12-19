@@ -14,8 +14,8 @@ const user = ref({
   ],
 });
 
-const contactIcon = (t) => {
-  switch (t) {
+const contactIcon = (type) => {
+  switch (type) {
     case 'Email':
       return ['fas', 'envelope'];
     case 'GitHub':
