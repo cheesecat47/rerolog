@@ -1,5 +1,24 @@
 # ERD
 
+## 2023.12.19.
+
+![ERD](resources/ERD-231219.png)
+
+### 변경 내역
+
+- `Session` 테이블 추가.
+    - 기존에는 `session_id` 컬럼이 `User` 테이블에 포함되어 있었으나 테이블로 분리.
+- `User` 테이블에서 `email_account`, `email_domain` 컬럼 삭제.
+  - 본 블로그 서비스 로그인 시 이메일 정보를 활용하지 않음.
+  - `Contact`에 이메일도 저장 가능.
+- `Blog` 테이블에서 `user_id`, `created_at` 컬럼 제거.
+  - `User`와 `Blog`는 1대 1 관계이므로 `User`.`id`를 `Blog` 테이블의 PK로 쓰는 식별 관계로 구성 가능.
+  - 또한, 유저 회원 가입 시 블로그를 자동 생성하므로 블로그 개설일은 유저 회원 가입일과 동일. 
+- `Category`.`name`을 NOT NULL로 변경.
+- `Post`.`excerpt` 컬럼 추가. 본문 내용을 요약하는 간단한 문장. 글 미리보기 블럭에 표시됨. `null`이면 본문 내용 앞 일부를 잘라서 자동 저장. 
+- `Post`.`content` NOT NULL로 변경. 본문이 빈 글 방지.
+- `SET GLOBAL time_zone` 명령 추가하여 DB 시간을 `UTC`로 지정.
+
 ## 2023.12.11.
 
 ![ERD](resources/ERD-231211.png)

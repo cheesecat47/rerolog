@@ -1,19 +1,31 @@
+SET GLOBAL time_zone = '+00:00';
+
 CREATE SCHEMA IF NOT EXISTS `myBlog` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `myBlog`;
 
 CREATE TABLE IF NOT EXISTS `myBlog`.`User`
 (
-    `id`            int                NOT NULL AUTO_INCREMENT,
-    `id_str`        varchar(20) UNIQUE NOT NULL COMMENT '유저 로그인 아이디',
-    `pw`            varchar(12)        NOT NULL COMMENT '유저 비밀번호',
-    `email_account` varchar(50)        NOT NULL COMMENT '이메일 계정 부분',
-    `email_domain`  varchar(50)        NOT NULL COMMENT '이메일 도메인 부분',
-    `content`       varchar(200)                DEFAULT null COMMENT '유저 소개 멘트',
-    `session_id`    varchar(20)                 DEFAULT null COMMENT '로그인 되지 않았다면 null',
-    `created_at`    datetime           NOT NULL DEFAULT (now()) COMMENT '생성 시각',
-    `updated_at`    datetime                    DEFAULT null COMMENT '업데이트 시각',
-    `deleted_at`    datetime                    DEFAULT null COMMENT '삭제 시각',
+    `id`         int                NOT NULL AUTO_INCREMENT,
+    `id_str`     varchar(20) UNIQUE NOT NULL COMMENT '유저 로그인 아이디',
+    `pw`         varchar(12)        NOT NULL COMMENT '유저 비밀번호',
+    `name`       varchar(20)        NOT NULL COMMENT '유저명',
+    `content`    varchar(200)                DEFAULT null COMMENT '유저 소개 멘트',
+    `created_at` datetime           NOT NULL DEFAULT (now()) COMMENT '생성 시각',
+    `updated_at` datetime                    DEFAULT null COMMENT '업데이트 시각',
+    `deleted_at` datetime                    DEFAULT null COMMENT '삭제 시각',
     PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `myBlog`.`Session`
+(
+    `id`         int NOT NULL,
+    `session_id` varchar(20) DEFAULT null COMMENT '로그인 되지 않았다면 null',
+    PRIMARY KEY (`id`),
+    CONSTRAINT `Session_id_fk`
+        FOREIGN KEY (`id`)
+            REFERENCES `myBlog`.`User` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -21,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `myBlog`.`User`
 CREATE TABLE IF NOT EXISTS `myBlog`.`ContactType`
 (
     `id`   int         NOT NULL AUTO_INCREMENT,
-    `type` varchar(20) NOT NULL COMMENT 'email, linkedin, github, website 등',
+    `type` varchar(20) NOT NULL COMMENT 'Email, LinkedIn, GitHub, WebSite 등',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8mb4
@@ -46,13 +58,11 @@ CREATE TABLE IF NOT EXISTS `myBlog`.`Contact`
 
 CREATE TABLE IF NOT EXISTS `myBlog`.`Blog`
 (
-    `id`         int         NOT NULL AUTO_INCREMENT,
-    `user_id`    int         NOT NULL COMMENT '유저 아이디',
-    `name`       varchar(20) NOT NULL COMMENT '블로그 이름',
-    `created_at` datetime    NOT NULL DEFAULT (now()) COMMENT '블로그 개설일',
+    `id`   int         NOT NULL AUTO_INCREMENT,
+    `name` varchar(20) NOT NULL COMMENT '블로그 이름',
     PRIMARY KEY (`id`),
-    CONSTRAINT `Blog_user_id_fk`
-        FOREIGN KEY (`user_id`)
+    CONSTRAINT `Blog_id_fk`
+        FOREIGN KEY (`id`)
             REFERENCES `myBlog`.`User` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8mb4
@@ -60,12 +70,12 @@ CREATE TABLE IF NOT EXISTS `myBlog`.`Blog`
 
 CREATE TABLE IF NOT EXISTS `myBlog`.`Category`
 (
-    `id`         int      NOT NULL AUTO_INCREMENT,
-    `blog_id`    int      NOT NULL COMMENT '블로그 아이디',
-    `name`       varchar(20) COMMENT '카테고리명',
-    `created_at` datetime NOT NULL DEFAULT (now()) COMMENT '생성 시각',
-    `updated_at` datetime          DEFAULT null COMMENT '업데이트 시각',
-    `deleted_at` datetime          DEFAULT null COMMENT '삭제 시각',
+    `id`         int         NOT NULL AUTO_INCREMENT,
+    `blog_id`    int         NOT NULL COMMENT '블로그 아이디',
+    `name`       varchar(20) NOT NULL COMMENT '게시판 이름',
+    `created_at` datetime    NOT NULL DEFAULT (now()) COMMENT '생성 시각',
+    `updated_at` datetime             DEFAULT null COMMENT '업데이트 시각',
+    `deleted_at` datetime             DEFAULT null COMMENT '삭제 시각',
     PRIMARY KEY (`id`),
     CONSTRAINT `Category_blog_id_fk`
         FOREIGN KEY (`blog_id`)
@@ -76,15 +86,16 @@ CREATE TABLE IF NOT EXISTS `myBlog`.`Category`
 
 CREATE TABLE IF NOT EXISTS `myBlog`.`Post`
 (
-    `id`          int          NOT NULL AUTO_INCREMENT,
-    `category_id` int          NOT NULL COMMENT '포스트가 속한 카테고리 아이디',
-    `user_id`     int          NOT NULL COMMENT '유저(작성자) 아이디',
-    `title`       varchar(100) NOT NULL COMMENT '포스트 제목',
-    `content`     varchar(2000) COMMENT '포스트 내용',
-    `hit`         int          NOT NULL DEFAULT 0 COMMENT '조회수',
-    `created_at`  datetime     NOT NULL DEFAULT (now()) COMMENT '생성 시각',
-    `updated_at`  datetime              DEFAULT null COMMENT '업데이트 시각',
-    `deleted_at`  datetime              DEFAULT null COMMENT '삭제 시각',
+    `id`          int           NOT NULL AUTO_INCREMENT,
+    `category_id` int           NOT NULL COMMENT '글이 속한 게시판 아이디',
+    `user_id`     int           NOT NULL COMMENT '유저(작성자) 아이디',
+    `title`       varchar(100)  NOT NULL COMMENT '글 제목',
+    `excerpt`     varchar(200) COMMENT '요약. `null`이면 content 중 앞에서 197자 + `...` 문자열으로 채우기',
+    `content`     varchar(2000) NOT NULL COMMENT '글 내용',
+    `hit`         int           NOT NULL DEFAULT 0 COMMENT '조회수',
+    `created_at`  datetime      NOT NULL DEFAULT (now()) COMMENT '생성 시각',
+    `updated_at`  datetime               DEFAULT null COMMENT '업데이트 시각',
+    `deleted_at`  datetime               DEFAULT null COMMENT '삭제 시각',
     PRIMARY KEY (`id`),
     CONSTRAINT `Post_user_id_fk`
         FOREIGN KEY (`user_id`)
