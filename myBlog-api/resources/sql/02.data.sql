@@ -1,28 +1,28 @@
 USE `myBlog`;
 
-INSERT INTO myBlog.User (id_str, pw, email_account, email_domain, content)
-VALUES ('cheesecat47', '1234', 'cheesecat47', 'gmail.com', '안녕하세요, 신주용입니다.');
+INSERT INTO myBlog.User (id_str, pw, name, content)
+VALUES ('cheesecat47', '1234', '신주용', '안녕하세요, 신주용입니다.');
 SET @user_cheesecat47 = (SELECT id
                          FROM myBlog.User
                          WHERE `id_str` = 'cheesecat47');
 
 INSERT INTO myBlog.ContactType (type)
-VALUES ('email'),
-       ('github'),
-       ('linkedin'),
-       ('website');
+VALUES ('Email'),
+       ('GitHub'),
+       ('LinkedIn'),
+       ('WebSite');
 SET @contacttype_email = (SELECT id
                           FROM ContactType
-                          WHERE type = 'email');
+                          WHERE type = 'Email');
 SET @contacttype_github = (SELECT id
                            FROM ContactType
-                           WHERE type = 'github');
+                           WHERE type = 'GitHub');
 SET @contacttype_linkedin = (SELECT id
                              FROM ContactType
-                             WHERE type = 'linkedin');
+                             WHERE type = 'LinkedIn');
 SET @contacttype_website = (SELECT id
                             FROM ContactType
-                            WHERE type = 'website');
+                            WHERE type = 'WebSite');
 
 INSERT INTO myBlog.Contact (user_id, type_id, value)
 VALUES (@user_cheesecat47, @contacttype_email, 'cheesecat47@gmail.com'),
@@ -30,11 +30,11 @@ VALUES (@user_cheesecat47, @contacttype_email, 'cheesecat47@gmail.com'),
        (@user_cheesecat47, @contacttype_linkedin, 'https://www.linkedin.com/in/shinjuyong/'),
        (@user_cheesecat47, @contacttype_website, 'https://cheesecat47.github.io');
 
-INSERT INTO myBlog.Blog (user_id, name)
+INSERT INTO myBlog.Blog (id, name)
 VALUES (@user_cheesecat47, 'La foret rouge');
 SET @blogid_cheesecat47 = (SELECT id
                            FROM myBlog.Blog
-                           WHERE user_id = @user_cheesecat47);
+                           WHERE id = @user_cheesecat47);
 
 INSERT INTO myBlog.Category (blog_id, name)
 VALUES (@blogid_cheesecat47, 'Java'),
