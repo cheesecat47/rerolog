@@ -18,25 +18,24 @@
     cd myBlog
     ```
 
-### FE Dev server
+### Database
 
-- 실행 전 아래 요구사항이 설치되어 있는지 확인이 필요합니다.
-- Node v18
+- Prerequisites
+    - MySQL 8.0.34
 
-1. `myBlog-frontend` 디렉토리로 이동
+1. `myBlog-api/resources/sql` 디렉토리로 이동
 
     ```bash
-    cd myBlog-frontend/
-    npm install
-    npm run dev
+   cd myBlog-api/resources/sql
     ```
+
+2. MySQL Workbench, CLI 등에서 `01.schema.sql`, `02.data.sql` 순서대로 실행.
 
 ### API server
 
-- 실행 전 아래 요구사항이 설치되어 있는지 확인이 필요합니다.
-- Java 17
-- Maven 3.9
-- MySQL 8.0.34
+- Prerequisites
+    - Java 17
+    - Maven 3.9
 
 1. `myBlog-api` 디렉토리로 이동
 
@@ -52,6 +51,19 @@
 
     # 실행
     java -jar target/myBlog-0.0.1-SNAPSHOT.jar
+    ```
+
+### FE Dev server
+
+- Prerequisites
+    - Node v18
+
+1. `myBlog-frontend` 디렉토리로 이동
+
+    ```bash
+    cd myBlog-frontend/
+    npm install
+    npm run dev
     ```
 
 ## Documentations
