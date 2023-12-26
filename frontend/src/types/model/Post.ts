@@ -1,7 +1,18 @@
-import { POST_MODE } from '../../constants/post';
+import { POST_OPTION } from '../../constants/post';
 
-export type PostMode = keyof typeof POST_MODE;
+export type PostOption = keyof typeof POST_OPTION;
 
-export type PostModeType = {
-    mode: keyof typeof POST_MODE;
+export type PostOptionType = {
+    option: keyof typeof POST_OPTION;
+};
+
+export type Post = {
+    id: string;
+    createdAt: string;
+    title: string;
+    description: string;
+    category: string;
+    commentsCount: number;
+    thumbNail: string;
+    hits: number;
 };
