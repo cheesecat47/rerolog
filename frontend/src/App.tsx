@@ -1,5 +1,7 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { MainPage } from "./pages/MainPage";
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import { PostWritePage } from "./pages/PostWritePage";
 import { ManagePage } from "./pages/ManagePage";
 import { UserPage } from "./pages/UserPage";
@@ -9,40 +11,51 @@ import { PostDetail } from "./pages/PostDetailPage/components/PostDetail";
 import { GuestBook } from "./pages/UserPage/components/GuestBook";
 import { Introduce } from "./pages/UserPage/components/Introduce";
 
-import { POST_MODE } from "./constants/post";
+import { Layout } from "./components/layout/Layout";
+import { MainPage } from "./pages/MainPage";
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <MainPage />,
-    },
-    {
-        path: '/:userId',
-        element: <UserPage />,
+        element: <Layout />,
         children: [
-            { index: true, element: <PostList mode={POST_MODE.recent} /> },
-            { path: '/:userId/:postId', element: <PostDetail /> },
-            { path: '/:userId/guestbook', element: <GuestBook /> },
-            { path: '/:userId/introduce', element: <Introduce /> },
+            { index: true, element: <MainPage /> },
+            { path: 'manage', element: <ManagePage /> },
+            { path: 'post', element: <MainPage /> },
+            { path: 'post/:sort', element: <MainPage /> },
+            {
+                path: ':userId',
+                element: <UserPage />,
+                children: [
+                    { index: true, element: <PostList /> },
+                    { path: 'category', element: <PostList /> },
+                    { path: 'category/:categoryName', element: <PostList /> },
+                    { path: ':postId', element: <PostDetail /> },
+                    { path: 'guestbook', element: <GuestBook /> },
+                    { path: 'introduce', element: <Introduce /> },
+                ]
+            }
         ]
     },
     {
-        path: '/login',
-        element: <LoginPage />
-    },
-    {
-        path: '/write',
-        element: <PostWritePage />
-    },
-    {
-        path: '/manage',
-        element: <ManagePage />
+        path: '/',
+        element: <Outlet />,
+        children: [
+            { path: 'login', element: <LoginPage /> },
+            { path: 'write', element: <PostWritePage /> },
+        ]
     }
 ])
 
 const App = () => {
     return (
-        <RouterProvider router={router} />
+        // react query를 router 내의 어디서든 쓸 수 있도록
+        <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+            <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
     );
 }
 
