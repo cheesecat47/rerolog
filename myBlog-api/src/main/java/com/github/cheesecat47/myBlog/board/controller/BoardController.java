@@ -1,5 +1,9 @@
 package com.github.cheesecat47.myBlog.board.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -22,6 +26,7 @@ import java.util.Map;
  * @author cheesecat47
  */
 @RestController
+@Tag(name = "게시판 API")
 @RequestMapping("/board")
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +37,11 @@ public class BoardController {
      */
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
-    @GetMapping(value = "", produces = "application/json")
+    @Operation(summary = "게시판 목록 조회", description = "게시판 이름 목록 배열 타입으로 반환")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK")
+    })
+    @GetMapping(value = "")
     public ResponseEntity<Map<String, Object>> getBoardList() {
         Map<String, Object> result = new HashMap<>();
 
