@@ -20,24 +20,31 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfiguration {
     // Swagger-UI 3.x http://localhost:8080/{api-root}/swagger-ui/index.html
 
+    /**
+     * 모든 API를 보여주는 페이지
+     */
     @Bean
     public GroupedOpenApi allApis() {
         return GroupedOpenApi.builder()
                 .group("All APIs")
-                .packagesToScan("com.github.cheesecat47.myBlog")
                 .pathsToMatch("/**")
                 .build();
     }
 
+    /**
+     * 게시판 관련 API만 보여주는 페이지
+     */
     @Bean
     public GroupedOpenApi boardApis() {
         return GroupedOpenApi.builder()
                 .group("Board APIs")
-                .packagesToScan("com.github.cheesecat47.myBlog.board")
-                .pathsToMatch("/**")
+                .pathsToMatch("/board/**")
                 .build();
     }
 
+    /**
+     * Swagger Web UI에서 보여줄 정보
+     */
     @Bean
     public OpenAPI apiInfo() {
         return new OpenAPI()
