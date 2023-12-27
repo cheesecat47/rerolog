@@ -1,7 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 
 interface State {
-    [key: string]: string | number;
+    [key: string]: string;
 }
 
 const useInput = (initialValue: State) => {
