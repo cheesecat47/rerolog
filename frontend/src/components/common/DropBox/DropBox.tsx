@@ -6,7 +6,7 @@ const DropBox = ({ showText, menuList, handleOption }: { showText: string, menuL
         <div className="w-56 text-right">
             <Menu as="div" className="relative inline-block text-left">
                 <div>
-                    <Menu.Button className="inline-flex w-full justify-center rounded-full border border-ml-pink-200 text-ml-pink-200 px-4 py-2 text-sm font-mediu hover:bg-ml-pink-200 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
+                    <Menu.Button className="inline-flex w-full justify-center rounded-full border border-ml-pink-200 text-ml-pink-200 px-4 py-2 text-sm font-medium hover:bg-ml-pink-200 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
                         {showText}
                     </Menu.Button>
                 </div>
