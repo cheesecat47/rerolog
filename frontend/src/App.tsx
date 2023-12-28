@@ -23,16 +23,14 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <MainPage /> },
             { path: 'manage', element: <ManagePage /> },
-            { path: 'post', element: <MainPage /> },
-            { path: 'post/:sort', element: <MainPage /> },
+            { path: 'post/:sort?', element: <MainPage /> },
             {
                 path: ':userId',
                 element: <UserPage />,
                 children: [
                     { index: true, element: <PostList /> },
-                    { path: 'category', element: <PostList /> },
-                    { path: 'category/:categoryName', element: <PostList /> },
                     { path: ':postId', element: <PostDetail /> },
+                    { path: 'category/:categoryName?', element: <PostList /> },
                     { path: 'guestbook', element: <GuestBook /> },
                     { path: 'introduce', element: <Introduce /> },
                 ]
