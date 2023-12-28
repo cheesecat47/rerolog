@@ -1,4 +1,4 @@
-export const POST_MODE = {
+export const POST_OPTION = {
     recent: 'recent',
     trend: 'trend',
 } as const; // 상수화

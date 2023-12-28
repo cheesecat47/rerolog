@@ -30,3 +30,12 @@
 body {
     font-family: 'NEXON Lv1 Gothic OTF';
 }
+
+button {
+    outline: none;
+    cursor: pointer;
+}
+
+input {
+    outline: none;
+}
