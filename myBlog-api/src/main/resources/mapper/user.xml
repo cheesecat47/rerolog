@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.cheesecat47.myBlog.user.model.mapper.UserMapper">
+
+    <!--  getUserInfo 결과 매핑 -->
+    <resultMap id="getUserInfoResultMap" type="UserInfoDto">
+        <result property="idStr" column="id_str"/>
+        <result property="name" column="name"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <collection property="contacts" javaType="List" ofType="ContactDto">
+            <result property="type" column="type"/>
+            <result property="value" column="value"/>
+        </collection>
+    </resultMap>
+
+    <!--  getUserInfo 쿼리 -->
+    <select id="getUserInfo" parameterType="String" resultMap="getUserInfoResultMap">
+        select User.id_str,
+               User.name,
+               User.content,
+               User.created_at,
+               ContactType.type,
+               Contact.value
+        from User
+                 left outer join Contact on User.id = Contact.user_id
+                 left outer join ContactType on Contact.type_id = ContactType.id
+        where id_str = #{idStr}
+          and deleted_at is null -- 탈퇴한 유저 정보 제외
+          and User.id = Contact.user_id
+          and Contact.type_id = ContactType.id
+        order by User.id, Contact.id;
+    </select>
+
+</mapper>
