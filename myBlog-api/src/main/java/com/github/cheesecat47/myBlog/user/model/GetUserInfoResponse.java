@@ -10,5 +10,5 @@ public class GetUserInfoResponse {
     HttpStatus status;
     String message;
     Map<String, Object> error;
-    UserInfo data;
+    UserInfoDto data;
 }
