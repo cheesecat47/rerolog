@@ -24,5 +24,40 @@ module.exports = {
             PyeongChangPeace: ['PyeongChangPeace'],
         },
     },
-    plugins: [],
+    plugins: [
+        function ({ addBase, config }) {
+            addBase({
+                h1: {
+                    fontSize: config('theme.fontSize.4xl'),
+                    fontWeight: config('theme.fontWeight.bold'),
+                },
+                h2: {
+                    fontSize: config('theme.fontSize.3xl'),
+                    fontWeight: config('theme.fontWeight.semibold'),
+                },
+                h3: {
+                    fontSize: config('theme.fontSize.2xl'),
+                    fontWeight: config('theme.fontWeight.medium'),
+                },
+                h4: {
+                    fontSize: config('theme.fontSize.xl'),
+                    fontWeight: config('theme.fontWeight.normal'),
+                },
+                h5: {
+                    fontSize: config('theme.fontSize.lg'),
+                    fontWeight: config('theme.fontWeight.light'),
+                },
+                h6: {
+                    fontSize: config('theme.fontSize.base'),
+                    fontWeight: config('theme.fontWeight.thin'),
+                },
+                blockquote: {
+                    paddingLeft: '1rem',
+                    borderLeft: '4px solid #ddd',
+                },
+                ul: { listStyleType: 'disc', paddingLeft: '1rem' },
+                ol: { listStyleType: 'decimal', paddingLeft: '1rem' },
+            });
+        },
+    ],
 };

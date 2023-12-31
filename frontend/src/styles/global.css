@@ -39,3 +39,7 @@ button {
 input {
     outline: none;
 }
+
+.quill {
+    @apply flex-1;
+}
