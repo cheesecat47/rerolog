@@ -11,6 +11,12 @@ import my from '../../../assets/icons/ML_my-icon.png';
 import pencil from '../../../assets/icons/ML_pencil-icon.png';
 
 import { HeaderIconText } from "../../common/HeaderIconText";
+import { PopOver } from "../../common/PopOver";
+
+export type PopOverType = {
+    text: string,
+    link: string
+}
 
 const Header = ({ blogName }: { blogName: string }) => {
     // 추후 로그인 여부 확인
@@ -26,8 +32,19 @@ const Header = ({ blogName }: { blogName: string }) => {
         navigate('/write');
     }
 
-    const goMy = () => {
-        navigate('/my');
+    const popOverList: PopOverType[] = [
+        {
+            text: '내 블로그',
+            link: '/shlee/posts'
+        },
+        {
+            text: '설정하기',
+            link: '/manage'
+        }
+    ]
+
+    const handlePopOver = (pop: PopOverType) => {
+        navigate(pop.link);
     }
 
     const handleLogout = () => {
@@ -46,7 +63,10 @@ const Header = ({ blogName }: { blogName: string }) => {
                         ?
                         <div className="hidden sm:flex w-full justify-end">
                             <HeaderIconText icon={pencil} alt="pencil" text="Write" onClick={goWrite} />
-                            <HeaderIconText icon={my} alt="my" text="My" onClick={goMy} />
+                            <PopOver popOverList={popOverList} handlePopOver={handlePopOver}>
+                                <HeaderIconText icon={my} alt="my" text="My" onClick={() => { }} />
+                            </PopOver>
+
                             <HeaderIconText icon={logout} alt="logout" text="Logout" onClick={handleLogout} />
                         </div>
                         :
