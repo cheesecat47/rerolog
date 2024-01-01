@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactQuill from "react-quill";
+import Parser from 'html-react-parser';
 import "react-quill/dist/quill.snow.css";
 import { useNavigate } from "react-router-dom";
 import './PostWritePage.css';
@@ -67,7 +68,7 @@ const PostWritePage = () => {
             {/* 왼쪽 - 에디터 */}
             <div className="h-screen flex flex-col">
                 {/* 헤더 => 뒤로가기, 작성하기 버튼 포함 */}
-                <div className="flex justify-between my-2 mx-1 text-sm">
+                <div className="h-15 flex justify-between my-2 mx-1 text-sm">
                     <button type="button" className="text-gray-800 mx-3 my-2 rounded-md hover:bg-gray-100" onClick={goBack}>
                         뒤로가기
                     </button>
@@ -90,9 +91,9 @@ const PostWritePage = () => {
                 />
             </div>
             {/* 오른쪽 = 미리보기 */}
-            <div className="p-8 w-full text-ellipsis">
-                <h1>{title}</h1>
-                <div dangerouslySetInnerHTML={{ __html: editorText }} />
+            <div className="p-8 w-full text-ellipsis overflow-scroll">
+                <div className="text-5xl pb-4">{title}</div>
+                <div>{Parser(editorText)}</div>
             </div>
         </div>
     );
