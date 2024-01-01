@@ -29,8 +29,6 @@
                  left outer join ContactType on Contact.type_id = ContactType.id
         where id_str = #{idStr}
           and deleted_at is null -- 탈퇴한 유저 정보 제외
-          and User.id = Contact.user_id
-          and Contact.type_id = ContactType.id
         order by User.id, Contact.id;
     </select>
 
