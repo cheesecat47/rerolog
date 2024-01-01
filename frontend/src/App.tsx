@@ -13,6 +13,7 @@ import { Introduce } from "./pages/UserPage/components/Introduce";
 
 import { Layout } from "./components/layout/Layout";
 import { MainPage } from "./pages/MainPage";
+import { SignupPage } from "./pages/SignupPage";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
         element: <Outlet />,
         children: [
             { path: 'login', element: <LoginPage /> },
+            { path: 'signup', element: <SignupPage /> },
             { path: 'write', element: <PostWritePage /> },
         ]
     }
