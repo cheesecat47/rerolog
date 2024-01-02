@@ -1,18 +1,19 @@
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import { PostWritePage } from "./pages/PostWritePage";
-import { ManagePage } from "./pages/ManagePage";
-import { UserPage } from "./pages/UserPage";
-import { LoginPage } from "./pages/LoginPage";
-import { PostList } from "./components/post/PostList";
-import { PostDetail } from "./pages/PostDetailPage/components/PostDetail";
-import { GuestBook } from "./pages/UserPage/components/GuestBook";
-import { Introduce } from "./pages/UserPage/components/Introduce";
+import { PostWritePage } from './pages/PostWritePage';
+import { ManagePage } from './pages/ManagePage';
+import { UserPage } from './pages/UserPage';
+import { LoginPage } from './pages/LoginPage';
+import { PostList } from './components/post/PostList';
+import { PostDetail } from './pages/PostDetailPage/components/PostDetail';
+import { GuestBook } from './pages/UserPage/components/GuestBook';
+import { Introduce } from './pages/UserPage/components/Introduce';
 
-import { Layout } from "./components/layout/Layout";
-import { MainPage } from "./pages/MainPage";
+import { Layout } from './components/layout/Layout';
+import { MainPage } from './pages/MainPage';
+import { SignupPage } from './pages/SignupPage';
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
         element: <Outlet />,
         children: [
             { path: 'login', element: <LoginPage /> },
+            { path: 'signup', element: <SignupPage /> },
             { path: 'write', element: <PostWritePage /> },
         ]
     }
