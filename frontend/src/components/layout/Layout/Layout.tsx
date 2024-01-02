@@ -1,10 +1,10 @@
 import React from 'react';
-import { Outlet } from "react-router-dom";
+import { Outlet } from 'react-router-dom';
 
-import { Header } from "../Header";
-import { Footer } from "../Footer";
+import { Header } from '../Header';
+import { Footer } from '../Footer';
 
-import { DEFAULT_BLOG_NAME } from "../../../constants/post";
+import { DEFAULT_BLOG_NAME } from '../../../constants/post';
 
 const Layout = () => {
     return (

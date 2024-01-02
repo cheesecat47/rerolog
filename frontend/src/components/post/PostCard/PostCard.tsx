@@ -1,10 +1,10 @@
 import React from 'react';
-import { CategoryBadge } from "../../common/CategoryBadge";
-import thumbnail from "../../../assets/images/ML_test-thumbnail.png";
+import { CategoryBadge } from '../../common/CategoryBadge';
+import thumbnail from '../../../assets/images/ML_test-thumbnail.png';
 import calendarIcon from '../../../assets/icons/ML_calendar-icon.png';
 import commentIcon from '../../../assets/icons/ML_comment-icon.png';
 
-import { Post } from "../../../types/model";
+import { Post } from '../../../types/model';
 
 const PostCard = ({ post }: { post: Post }) => {
     return (

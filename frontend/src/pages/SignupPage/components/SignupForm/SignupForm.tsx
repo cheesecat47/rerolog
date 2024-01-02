@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from "react-router-dom";
-import useInput from "../../../../hooks/useInput/useInput";
+import { Link } from 'react-router-dom';
+import useInput from '../../../../hooks/useInput/useInput';
 import kakao from '../../../../assets/icons/ML_kakao-icon.png';
 import naver from '../../../../assets/icons/ML_naver-icon.png';
 
@@ -24,11 +24,11 @@ const SignupForm = () => {
             <form onSubmit={handleSubmit} className="flex flex-col">
                 <label htmlFor="userId" className="flex flex-col mb-2">
                     <span className="text-gray-600">이름</span>
-                    <input id="userName" type="text" name='userName' onChange={handleChange} className="h-12 my-2 p-2 rounded-md border" />
+                    <input id="userName" type="text" name="userName" onChange={handleChange} className="h-12 my-2 p-2 rounded-md border" />
                 </label>
                 <label htmlFor="userId" className="flex flex-col mb-2">
                     <span className="text-gray-600">아이디</span>
-                    <input id="userId" type="text" name='userId' onChange={handleChange} className="h-12 my-2 p-2 rounded-md border" />
+                    <input id="userId" type="text" name="userId" onChange={handleChange} className="h-12 my-2 p-2 rounded-md border" />
                 </label>
                 <label htmlFor="userId" className="flex flex-col mb-2">
                     <span className="text-gray-600">비밀번호</span>
