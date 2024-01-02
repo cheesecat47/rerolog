@@ -62,9 +62,9 @@
 
 ## User
 
-### getUserInfo 유저 정보 얻기
+### getUserInfo 유저 정보 조회
 
-- 유저 아이디를 사용해 해당 유저 정보를 얻어옴.
+- 유저 아이디를 사용해 해당 유저 정보 조회.
 
 ```http request
 GET /api/user/{id}
@@ -133,11 +133,11 @@ GET /api/user/{id}
 // HTTP/1.1 400 BAD REQUEST
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "블로그 정보 조회 실패",
+  "message": "유저 정보 조회 실패",
   "status": "BAD_REQUEST",
   "data": {
     "error_related_key": error_related_value,
-    // 만약 해당 user_id가 없어서 못 불러온 경우는 "user_id": "파라미터로 입력한 id" 포함.
+    // 만약 해당 id가 없어서 못 불러온 경우는 "id": "파라미터로 입력한 id" 포함.
     ...
   }
 }
@@ -147,37 +147,37 @@ GET /api/user/{id}
 
 ## Blog
 
-### getBlogInfo 블로그 정보 얻기
+### getBlogInfo 블로그 정보 조회
 
-- 블로그 주인 유저 아이디를 사용해 해당 유저의 블로그 정보를 얻어옴.
+- 블로그 주인 유저 아이디를 사용해 해당 유저의 블로그 정보 조회.
 
 ```http request
-GET /api/blog/{id_str}
+GET /api/blog/{id}
 ```
 
 #### 요청
 
-| Param Type |   Name   | Data Type | Required | Description |  Validation   |
-|:----------:|:--------:|:---------:|:--------:|:-----------:|:-------------:|
-|    Path    | `id_str` | `string`  |    O     |   유저 아이디    | 존재하는 아이디인지 확인 |
+| Param Type | Name | Data Type | Required |      Description       |  Validation   |
+|:----------:|:----:|:---------:|:--------:|:----------------------:|:-------------:|
+|    Path    | `id` | `string`  |    O     | 유저 아이디. DB의 `id_str` 값 | 존재하는 아이디인지 확인 |
 
 #### 응답
 
 ##### 응답 본문
 
-|   Name    |     Data Type     |            Description             | 
-|:---------:|:-----------------:|:----------------------------------:|
-| `message` |     `string`      |               응답 메시지               |
-| `errors`  |   `Exception[]`   |            응답 공통 형식과 동일            |
-|  `data`   | `BlogInfo \| Map` | 블로그 메타 정보 객체. 오류 발생 시 응답 공통 형식과 동일 |
+|   Name    | Data Type  | Description  | 
+|:---------:|:----------:|:------------:|
+| `message` |  `string`  |    응답 메시지    |
+| `status`  |  `String`  | HTTP 상태 메시지  |
+|  `data`   | `BlogInfo` | 블로그 메타 정보 객체 |
 
 ##### BlogInfo
 
-|    Name    | Data Type |         Description          | 
-|:----------:|:---------:|:----------------------------:|
-|  user_id   |  string   |  블로그 주인 유저 아이디. `id_str` 값   |
-|    name    |  string   |            블로그 이름            |
-| created_at |  string   | 블로그 개설일. ISO 8601 형식. UTC 기준 |
+|    Name    | Data Type |          Description          | 
+|:----------:|:---------:|:-----------------------------:|
+|     id     |  string   | 블로그 주인 유저 아이디. DB의 `id_str` 값 |
+|    name    |  string   |            블로그 이름             |
+| created_at |  string   | 블로그 개설일. ISO 8601 형식. UTC 기준  |
 
 ##### 예시
 
@@ -186,9 +186,9 @@ GET /api/blog/{id_str}
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "블로그 정보 조회 성공",
-  "errors": null,
+  "status": "OK",
   "data": {
-    "user_id": "string",
+    "id": "string",
     "name": "string",
     "created_at": "string"
   }
@@ -200,10 +200,7 @@ GET /api/blog/{id_str}
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "블로그 정보 조회 실패",
-  "errors": [
-    error1,
-    ...
-  ],
+  "status": "BAD_REQUEST",
   "data": {
     "error_related_key": error_related_value,
     ...
