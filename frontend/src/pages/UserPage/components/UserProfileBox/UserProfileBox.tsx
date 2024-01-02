@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 import github from '../../../../assets/icons/ML_github-icon.png';
-import linkedin from "../../../../assets/icons/ML_linkedin-icon.png";
-import mail from "../../../../assets/icons/ML_mail-icon.png";
+import linkedin from '../../../../assets/icons/ML_linkedin-icon.png';
+import mail from '../../../../assets/icons/ML_mail-icon.png';
 import defaultProfile from '../../../../assets/images/ML_test-profile.png';
 
 const UserProfileBox = () => {

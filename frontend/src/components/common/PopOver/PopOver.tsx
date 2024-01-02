@@ -1,6 +1,6 @@
 import React, { ReactElement, Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react'
-import { PopOverType } from "../../layout/Header/Header";
+import { PopOverType } from '../../layout/Header/Header';
 
 const PopOver = ({ popOverList, handlePopOver, children }: { popOverList: PopOverType[], handlePopOver: (pop: PopOverType) => void, children: ReactElement; }) => {
     return (

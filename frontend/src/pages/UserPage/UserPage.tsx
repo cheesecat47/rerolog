@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Outlet, useNavigate } from "react-router-dom";
-import { UserProfileBox } from "./components/UserProfileBox";
-import { TabBar } from "./components/TabBar";
-import { Category } from "./components/Category";
-import { TabBarMenuType } from "./components/TabBar/TabBar";
-import { DropBox } from "../../components/common/DropBox";
+import { Outlet, useNavigate } from 'react-router-dom';
+import { UserProfileBox } from './components/UserProfileBox';
+import { TabBar } from './components/TabBar';
+import { Category } from './components/Category';
+import { TabBarMenuType } from './components/TabBar/TabBar';
+import { DropBox } from '../../components/common/DropBox';
 
 const UserPage = () => {
 

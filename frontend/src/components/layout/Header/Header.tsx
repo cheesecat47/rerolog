@@ -11,7 +11,7 @@ import my from '../../../assets/icons/ML_my-icon.png';
 import pencil from '../../../assets/icons/ML_pencil-icon.png';
 
 import { HeaderIconText } from '../../common/HeaderIconText';
-import { PopOver } from "../../common/PopOver";
+import { PopOver } from '../../common/PopOver';
 
 export type PopOverType = {
     text: string,
