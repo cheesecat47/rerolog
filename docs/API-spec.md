@@ -67,14 +67,14 @@
 - 유저 아이디를 사용해 해당 유저 정보를 얻어옴.
 
 ```http request
-GET /api/user/{id_str}
+GET /api/user/{id}
 ```
 
 #### 요청
 
-| Param Type |   Name   | Data Type | Required | Description |  Validation   |
-|:----------:|:--------:|:---------:|:--------:|:-----------:|:-------------:|
-|    Path    | `id_str` | `string`  |    O     |   유저 아이디    | 존재하는 아이디인지 확인 |
+| Param Type | Name | Data Type | Required |      Description       |  Validation   |
+|:----------:|:----:|:---------:|:--------:|:----------------------:|:-------------:|
+|    Path    | `id` | `string`  |    O     | 유저 아이디. DB의 `id_str` 값 | 존재하는 아이디인지 확인 |
 
 #### 응답
 
@@ -90,7 +90,7 @@ GET /api/user/{id_str}
 
 |    Name     | Data Type |          Description          | 
 |:-----------:|:---------:|:-----------------------------:|
-|   user_id   |  string   |      유저 아이디. `id_str` 값       |
+|     id      |  string   |    유저 아이디. DB의 `id_str` 값     |
 |    name     |  string   |              유저명              |
 |   content   |  string   |       유저 소개. `null` 가능        |
 | created_at  |  string   |  회원 가입일. ISO 8601 형식. UTC 기준  |
@@ -113,7 +113,7 @@ GET /api/user/{id_str}
   "message": "유저 정보 조회 성공",
   "status": "OK",
   "data": {
-    "user_id": "cheesecat47",
+    "id": "cheesecat47",
     "name": "신주용",
     "content": "안녕하세요, 신주용입니다.",
     "created_at": "2023-12-20T09:00:00Z",

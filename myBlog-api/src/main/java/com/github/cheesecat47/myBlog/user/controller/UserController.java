@@ -54,7 +54,7 @@ public class UserController {
     })
     @GetMapping(value = "/{id}")
     public ResponseEntity<GetUserInfoResponse> getUserInfo(
-            @Parameter(description = "로그인 아이디") @PathVariable(value = "id") Optional<String> idStr
+            @Parameter(description = "유저 아이디") @PathVariable(value = "id") Optional<String> idStr
     ) throws Exception {
         logger.info("getUserInfo");
         GetUserInfoResponse response = new GetUserInfoResponse();

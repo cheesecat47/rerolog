@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
                     HttpStatus.BAD_REQUEST,
                     "유저 아이디는 필수입니다",
                     new HashMap<>() {{
-                        put("id_str", idStr);
+                        put("id", idStr);
                     }}
             );
         }
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
                         HttpStatus.NOT_FOUND,
                         "입력한 아이디에 해당하는 유저가 없습니다.",
                         new HashMap<>() {{
-                            put("id_str", idStr);
+                            put("id", idStr);
                         }}
                 );
             }
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "DB 조회 중 오류가 발생했습니다.",
                     new HashMap<>() {{
-                        put("id_str", idStr);
+                        put("id", idStr);
                         put("error", e.getMessage());
                     }}
             );

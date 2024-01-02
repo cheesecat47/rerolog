@@ -10,7 +10,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Schema(description = "사용자 정보 객체.")
 public class UserInfoDto {
-    @Schema(name = "user_id", description = "유저 아이디.")
+    @Schema(name = "id", description = "유저 아이디. DB의 `id_str` 값.")
     String idStr;
 
     @Schema(description = "유저명.")
