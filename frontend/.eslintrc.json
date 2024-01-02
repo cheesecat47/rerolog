@@ -36,7 +36,8 @@
                 "namedComponents": "arrow-function",
                 "unnamedComponents": "arrow-function"
             }
-        ]
+        ],
+        "quotes": ["error", "single"]
     },
     "settings": {
         "import/resolver": {
