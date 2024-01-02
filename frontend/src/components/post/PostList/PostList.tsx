@@ -1,11 +1,11 @@
 import React from 'react';
 // import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { PostCard } from "../PostCard";
-import { POST_OPTION } from "../../../constants/post";
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { PostCard } from '../PostCard';
+import { POST_OPTION } from '../../../constants/post';
 
-import { Post } from "../../../types/model";
+import { Post } from '../../../types/model';
 
 const PostList = ({ selectedOption }: { selectedOption?: string }) => {
 
