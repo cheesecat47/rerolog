@@ -1,6 +1,9 @@
 package com.github.cheesecat47.myBlog.blog.controller;
 
+import com.github.cheesecat47.myBlog.blog.model.BlogInfoDto;
 import com.github.cheesecat47.myBlog.blog.model.response.GetBlogInfoResponse;
+import com.github.cheesecat47.myBlog.blog.service.BlogService;
+import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,10 +35,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class BlogController {
 
     private final Logger logger = LoggerFactory.getLogger(BlogController.class);
+    private final BlogService blogService;
 
     @Operation(summary = "getBlogInfo 블로그 정보 조회", description = "아이디에 해당하는 블로그 정보 조회")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "블로그 정보 조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GetBlogInfoResponse.class))})
+            @ApiResponse(responseCode = "200", description = "블로그 정보 조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GetBlogInfoResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "블로그 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
+            @ApiResponse(responseCode = "404", description = "블로그 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
+            @ApiResponse(responseCode = "500", description = "블로그 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))})
     })
     @GetMapping(value = "/{id}")
     public ResponseEntity<GetBlogInfoResponse> getBlogInfo(
@@ -44,9 +51,11 @@ public class BlogController {
         logger.info("getBlogInfo");
         GetBlogInfoResponse response = new GetBlogInfoResponse();
 
+        BlogInfoDto blogInfoDto = blogService.getBlogInfo(idStr);
+
         response.setStatus(HttpStatus.OK);
         response.setMessage("블로그 정보 조회 성공");
-        response.setData(null);
+        response.setData(blogInfoDto);
 
         return ResponseEntity.status(response.getStatus()).body(response);
     }
