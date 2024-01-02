@@ -8,14 +8,14 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class WrongRequestParameterException extends Exception {
+public class MyBlogCommonException extends Exception {
 
-    private Map<String, Object> param;
+    private Map<String, Object> data;
     private HttpStatus status;
 
-    public WrongRequestParameterException(HttpStatus status, String message, Map<String, Object> param) {
+    public MyBlogCommonException(HttpStatus status, String message, Map<String, Object> data) {
         super(message);
-        this.setParam(param);
+        this.setData(data);
         this.setStatus(status);
     }
 }

@@ -55,7 +55,7 @@
 |   Name    |   Data Type   |                       Description                       | 
 |:---------:|:-------------:|:-------------------------------------------------------:|
 | `message` |   `String`    |                         응답 메시지                          |
-| `errors`  | `Exception[]` |      오류 발생 시 발생한 오류 모두를 배열로 포함.<br/>처리 성공 시 `null`      |
+| `status`  |   `String`    |                       HTTP 상태 메시지                       |
 |  `data`   | `Object\|Map` | 요청 성공시 데이터 객체 포함.<br/>오류 발생 시 `Map` 타입으로 오류 관련 키-값 쌍 포함 |
 
 ---
@@ -80,11 +80,11 @@ GET /api/user/{id_str}
 
 ##### 응답 본문
 
-|   Name    |     Data Type     |          Description           | 
-|:---------:|:-----------------:|:------------------------------:|
-| `message` |     `string`      |             응답 메시지             |
-| `errors`  |   `Exception[]`   |          응답 공통 형식과 동일          |
-|  `data`   | `UserInfo \| Map` | 유저 정보 객체. 오류 발생 시 응답 공통 형식과 동일 |
+|   Name    |   Data Type   | Description | 
+|:---------:|:-------------:|:-----------:|
+| `message` |   `string`    |   응답 메시지    |
+| `status`  |   `String`    | HTTP 상태 메시지 |
+|  `data`   |  `UserInfo`   |  유저 정보 객체   |
 
 ##### UserInfo
 
@@ -111,7 +111,7 @@ GET /api/user/{id_str}
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "유저 정보 조회 성공",
-  "errors": null,
+  "status": "OK",
   "data": {
     "user_id": "cheesecat47",
     "name": "신주용",
@@ -134,10 +134,7 @@ GET /api/user/{id_str}
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "블로그 정보 조회 실패",
-  "errors": [
-    error1,
-    ...
-  ],
+  "status": "BAD_REQUEST",
   "data": {
     "error_related_key": error_related_value,
     // 만약 해당 user_id가 없어서 못 불러온 경우는 "user_id": "파라미터로 입력한 id" 포함.
