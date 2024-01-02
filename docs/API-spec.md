@@ -84,18 +84,18 @@ GET /api/user/{id}
 |:---------:|:-------------:|:-----------:|
 | `message` |   `string`    |   응답 메시지    |
 | `status`  |   `String`    | HTTP 상태 메시지 |
-|  `data`   |  `UserInfo`   |  유저 정보 객체   |
+|  `data`   | `UserInfoDto` |  유저 정보 객체   |
 
 ##### UserInfo
 
-|    Name     | Data Type |          Description          | 
-|:-----------:|:---------:|:-----------------------------:|
-|     id      |  string   |    유저 아이디. DB의 `id_str` 값     |
-|    name     |  string   |              유저명              |
-|   content   |  string   |       유저 소개. `null` 가능        |
-| created_at  |  string   |  회원 가입일. ISO 8601 형식. UTC 기준  |
-| profile_img |  string   |    프로필 이미지 URL. `null` 가능     |
-|   contact   | Contact[] | 연락처 배열. 등록된 연락처가 없으면 길이 0인 배열 |
+|    Name     |  Data Type   |          Description          | 
+|:-----------:|:------------:|:-----------------------------:|
+|     id      |    string    |    유저 아이디. DB의 `id_str` 값     |
+|    name     |    string    |              유저명              |
+|   content   |    string    |       유저 소개. `null` 가능        |
+| created_at  |    string    |  회원 가입일. ISO 8601 형식. UTC 기준  |
+| profile_img |    string    |    프로필 이미지 URL. `null` 가능     |
+|   contact   | ContactDto[] | 연락처 배열. 등록된 연락처가 없으면 길이 0인 배열 |
 
 ##### Contact
 
@@ -165,11 +165,11 @@ GET /api/blog/{id}
 
 ##### 응답 본문
 
-|   Name    | Data Type  | Description  | 
-|:---------:|:----------:|:------------:|
-| `message` |  `string`  |    응답 메시지    |
-| `status`  |  `String`  | HTTP 상태 메시지  |
-|  `data`   | `BlogInfo` | 블로그 메타 정보 객체 |
+|   Name    |   Data Type   | Description | 
+|:---------:|:-------------:|:-----------:|
+| `message` |   `string`    |   응답 메시지    |
+| `status`  |   `String`    | HTTP 상태 메시지 |
+|  `data`   | `BlogInfoDto` |  블로그 정보 객체  |
 
 ##### BlogInfo
 
