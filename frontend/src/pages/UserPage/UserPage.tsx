@@ -9,6 +9,8 @@ import { DropBox } from "../../components/common/DropBox";
 const UserPage = () => {
 
     // @TODO: 본인 아이디 받아오기
+    const userId = 'shlee';
+
     const tabBarMenu: TabBarMenuType[] = [
         {
             text: '포스트',
@@ -28,8 +30,6 @@ const UserPage = () => {
     const navigate = useNavigate();
 
     const handleTabBar = (tab: TabBarMenuType) => {
-        const userId = 'shlee';
-
         setSelectedTab(tab.text);
         navigate(`/${userId}${tab.link}`);
     }
@@ -43,7 +43,7 @@ const UserPage = () => {
 
     const handleCategory = (category: string) => {
         // category가 선택됨
-        navigate(`/shlee/category/${category}`);
+        navigate(`/${userId}/category/${category}`);
         setSelectedTab('포스트');
     }
 

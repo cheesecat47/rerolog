@@ -32,10 +32,12 @@ const Header = ({ blogName }: { blogName: string }) => {
         navigate('/write');
     }
 
+    const userId = 'shlee';
+
     const popOverList: PopOverType[] = [
         {
             text: '내 블로그',
-            link: '/shlee/posts'
+            link: `/${userId}/posts`
         },
         {
             text: '설정하기',
@@ -64,7 +66,7 @@ const Header = ({ blogName }: { blogName: string }) => {
                         <div className="hidden sm:flex w-full justify-end">
                             <HeaderIconText icon={pencil} alt="pencil" text="Write" onClick={goWrite} />
                             <PopOver popOverList={popOverList} handlePopOver={handlePopOver}>
-                                <HeaderIconText icon={my} alt="my" text="My" onClick={() => { }} />
+                                <HeaderIconText icon={my} alt="my" text="My" />
                             </PopOver>
 
                             <HeaderIconText icon={logout} alt="logout" text="Logout" onClick={handleLogout} />
