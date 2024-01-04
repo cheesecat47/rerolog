@@ -55,7 +55,7 @@
 |   Name    |   Data Type   |                       Description                       | 
 |:---------:|:-------------:|:-------------------------------------------------------:|
 | `message` |   `String`    |                         응답 메시지                          |
-| `errors`  | `Exception[]` |      오류 발생 시 발생한 오류 모두를 배열로 포함.<br/>처리 성공 시 `null`      |
+| `status`  |   `String`    |                       HTTP 상태 메시지                       |
 |  `data`   | `Object\|Map` | 요청 성공시 데이터 객체 포함.<br/>오류 발생 시 `Map` 타입으로 오류 관련 키-값 쌍 포함 |
 
 ---
@@ -67,30 +67,30 @@
 - 유저 아이디를 사용해 해당 유저 정보를 얻어옴.
 
 ```http request
-GET /api/user/{id_str}
+GET /api/user/{id}
 ```
 
 #### 요청
 
-| Param Type |   Name   | Data Type | Required | Description |  Validation   |
-|:----------:|:--------:|:---------:|:--------:|:-----------:|:-------------:|
-|    Path    | `id_str` | `string`  |    O     |   유저 아이디    | 존재하는 아이디인지 확인 |
+| Param Type | Name | Data Type | Required |      Description       |  Validation   |
+|:----------:|:----:|:---------:|:--------:|:----------------------:|:-------------:|
+|    Path    | `id` | `string`  |    O     | 유저 아이디. DB의 `id_str` 값 | 존재하는 아이디인지 확인 |
 
 #### 응답
 
 ##### 응답 본문
 
-|   Name    |     Data Type     |          Description           | 
-|:---------:|:-----------------:|:------------------------------:|
-| `message` |     `string`      |             응답 메시지             |
-| `errors`  |   `Exception[]`   |          응답 공통 형식과 동일          |
-|  `data`   | `UserInfo \| Map` | 유저 정보 객체. 오류 발생 시 응답 공통 형식과 동일 |
+|   Name    |   Data Type   | Description | 
+|:---------:|:-------------:|:-----------:|
+| `message` |   `string`    |   응답 메시지    |
+| `status`  |   `String`    | HTTP 상태 메시지 |
+|  `data`   |  `UserInfo`   |  유저 정보 객체   |
 
 ##### UserInfo
 
 |    Name     | Data Type |          Description          | 
 |:-----------:|:---------:|:-----------------------------:|
-|   user_id   |  string   |      유저 아이디. `id_str` 값       |
+|     id      |  string   |    유저 아이디. DB의 `id_str` 값     |
 |    name     |  string   |              유저명              |
 |   content   |  string   |       유저 소개. `null` 가능        |
 | created_at  |  string   |  회원 가입일. ISO 8601 형식. UTC 기준  |
@@ -111,9 +111,9 @@ GET /api/user/{id_str}
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "유저 정보 조회 성공",
-  "errors": null,
+  "status": "OK",
   "data": {
-    "user_id": "cheesecat47",
+    "id": "cheesecat47",
     "name": "신주용",
     "content": "안녕하세요, 신주용입니다.",
     "created_at": "2023-12-20T09:00:00Z",
@@ -134,10 +134,7 @@ GET /api/user/{id_str}
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "블로그 정보 조회 실패",
-  "errors": [
-    error1,
-    ...
-  ],
+  "status": "BAD_REQUEST",
   "data": {
     "error_related_key": error_related_value,
     // 만약 해당 user_id가 없어서 못 불러온 경우는 "user_id": "파라미터로 입력한 id" 포함.
