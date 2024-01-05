@@ -6,11 +6,23 @@ services:
     env_file:
       - .env
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${MYSQL_EXTERNAL_PORT}:3306"
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
     volumes:
       - "./myBlog-api/resources/sql/:/docker-entrypoint-initdb.d/"
       - "mysql_data:/var/lib/mysql"
+
+  api:
+    build: ./myBlog-api
+    env_file:
+      - .env
+    ports:
+      - "${API_PORT}:8080"
+    volumes:
+      - "./wait-for-it.sh:/wait-for-it.sh"
+    command: bash -c "/wait-for-it.sh -h db -p 3306 -t 30 -- ./mvnw spring-boot:run"
+    depends_on:
+      - db
 
 volumes:
   mysql_data:
