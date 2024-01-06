@@ -1,18 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { useUserStore } from '../stores/userStore.js';
+import { storeToRefs } from 'pinia';
 
-// Todo: 추후 API 응답 데이터로 변경 필요.
-const user = ref({
-  id_str: 'cheesecat47',
-  name: '신주용',
-  content:
-    '안녕하세요, 신주용입니다. 저는 고양이를 좋아합니다. 사실 이런 곳에는 Lorem Ipsum 문자열을 채워넣으면 가장 편하긴 한데 그러기에는 재미가 없잖아요. 근데 안그러려니 딱히 채울 내용이 없긴 해요. 그래서 한 세 줄만 넣어봐야겠어요. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dictum, nunc at posuere iaculis, augue lectus efficitur dolor, ac facilisis metus ipsum ac sem. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In hac habitasse platea dictumst. Nulla elementum facilisis velit, quis varius ante venenatis nec.',
-  contacts: [
-    { type: 'Email', value: 'cheesecat47@gmail.com' },
-    { type: 'GitHub', value: 'https://github.com/cheesecat47' },
-    { type: 'LinkedIn', value: 'https://www.linkedin.com/in/shinjuyong' },
-  ],
-});
+const userStore = useUserStore();
+const { user_info } = storeToRefs(userStore);
 
 const contactIcon = (type) => {
   switch (type) {
@@ -32,10 +23,9 @@ const contactIcon = (type) => {
   <hr class="border border-gray-500 my-6" />
   <footer class="footer my-6 text-lg">
     <div class="flex flex-col lg:flex-row justify-center items-center mx-auto">
-      <span> Blog Title &copy; 2023 {{ user.name }}. </span>
+      <span> Blog Title &copy; 2023 {{ user_info.name }}. </span>
       <div class="flex items-center lg:ml-4 gap-2">
-        <!-- Todo: 여기 들어갈 내용은 추후 API로 받아온 유저 정보 객체에 따라 동적으로 처리 필요. -->
-        <template v-for="(item, index) in user.contacts" :key="index">
+        <template v-for="(item, index) in user_info.contacts" :key="index">
           <a :href="(item.type === 'Email' ? 'mailto:' : '') + item.value">
             <font-awesome-icon :icon="contactIcon(item.type)" />
           </a>

@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-import { useUserStore } from '../stores/user.js';
+import { useUserStore } from '../stores/userStore.js';
 import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
