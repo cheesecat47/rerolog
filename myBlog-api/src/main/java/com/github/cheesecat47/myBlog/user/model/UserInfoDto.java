@@ -1,5 +1,7 @@
 package com.github.cheesecat47.myBlog.user.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,7 +14,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Schema(description = "사용자 정보 객체.")
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonPropertyOrder({"id", "name", "content", "created_at", "profile_img", "contacts"})
 public class UserInfoDto {
+    @JsonProperty("id")
     @Schema(name = "id", description = "유저 아이디. DB의 `id_str` 값.")
     String idStr;
 
