@@ -3,7 +3,7 @@
 * [API 명세서](#api-명세서)
   * [응답 공통 형식](#응답-공통-형식)
   * [User](#user)
-    * [getUserInfo 유저 정보 얻기](#getuserinfo-유저-정보-얻기)
+    * [getUserInfo 유저 정보 조회](#getuserinfo-유저-정보-조회)
       * [요청](#요청)
       * [응답](#응답)
         * [응답 본문](#응답-본문)
@@ -11,7 +11,7 @@
         * [Contact](#contact)
         * [예시](#예시)
   * [Blog](#blog)
-    * [getBlogInfo 블로그 정보 얻기](#getbloginfo-블로그-정보-얻기)
+    * [getBlogInfo 블로그 정보 조회](#getbloginfo-블로그-정보-조회)
       * [요청](#요청-1)
       * [응답](#응답-1)
         * [응답 본문](#응답-본문-1)
@@ -74,7 +74,7 @@ GET /api/user/{id}
 
 | Param Type | Name | Data Type | Required |      Description       |  Validation   |
 |:----------:|:----:|:---------:|:--------:|:----------------------:|:-------------:|
-|    Path    | `id` | `string`  |    O     | 유저 아이디. DB의 `id_str` 값 | 존재하는 아이디인지 확인 |
+|    Path    | `id` | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 | 존재하는 아이디인지 확인 |
 
 #### 응답
 
@@ -82,7 +82,7 @@ GET /api/user/{id}
 
 |   Name    |   Data Type   | Description | 
 |:---------:|:-------------:|:-----------:|
-| `message` |   `string`    |   응답 메시지    |
+| `message` |   `String`    |   응답 메시지    |
 | `status`  |   `String`    | HTTP 상태 메시지 |
 |  `data`   | `UserInfoDto` |  유저 정보 객체   |
 
@@ -90,19 +90,19 @@ GET /api/user/{id}
 
 |    Name     |  Data Type   |          Description          | 
 |:-----------:|:------------:|:-----------------------------:|
-|     id      |    string    |    유저 아이디. DB의 `id_str` 값     |
-|    name     |    string    |              유저명              |
-|   content   |    string    |       유저 소개. `null` 가능        |
-| created_at  |    string    |  회원 가입일. ISO 8601 형식. UTC 기준  |
-| profile_img |    string    |    프로필 이미지 URL. `null` 가능     |
+|     id      |    String    |    유저 아이디. DB의 `id_str` 값     |
+|    name     |    String    |              유저명              |
+|   content   |    String    |       유저 소개. `null` 가능        |
+| created_at  |    String    |  회원 가입일. ISO 8601 형식. UTC 기준  |
+| profile_img |    String    |    프로필 이미지 URL. `null` 가능     |
 |   contact   | ContactDto[] | 연락처 배열. 등록된 연락처가 없으면 길이 0인 배열 |
 
 ##### Contact
 
 |    Name    | Data Type |                  Description                  | 
 |:----------:|:---------:|:---------------------------------------------:|
-|    type    |  string   | "Email", "GitHub", "LinkedIn", "WebSite" 중 하나 |
-|   value    |  string   |                     연락처 값                     |
+|    type    |  String   | "Email", "GitHub", "LinkedIn", "WebSite" 중 하나 |
+|   value    |  String   |                     연락처 값                     |
 
 ##### 예시
 
@@ -159,7 +159,7 @@ GET /api/blog/{id}
 
 | Param Type | Name | Data Type | Required |      Description       |  Validation   |
 |:----------:|:----:|:---------:|:--------:|:----------------------:|:-------------:|
-|    Path    | `id` | `string`  |    O     | 유저 아이디. DB의 `id_str` 값 | 존재하는 아이디인지 확인 |
+|    Path    | `id` | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 | 존재하는 아이디인지 확인 |
 
 #### 응답
 
@@ -167,7 +167,7 @@ GET /api/blog/{id}
 
 |   Name    |   Data Type   | Description | 
 |:---------:|:-------------:|:-----------:|
-| `message` |   `string`    |   응답 메시지    |
+| `message` |   `String`    |   응답 메시지    |
 | `status`  |   `String`    | HTTP 상태 메시지 |
 |  `data`   | `BlogInfoDto` |  블로그 정보 객체  |
 
@@ -175,9 +175,9 @@ GET /api/blog/{id}
 
 |    Name    | Data Type |          Description          | 
 |:----------:|:---------:|:-----------------------------:|
-|     id     |  string   | 블로그 주인 유저 아이디. DB의 `id_str` 값 |
-|    name    |  string   |            블로그 이름             |
-| created_at |  string   | 블로그 개설일. ISO 8601 형식. UTC 기준  |
+|     id     |  String   | 블로그 주인 유저 아이디. DB의 `id_str` 값 |
+|    name    |  String   |            블로그 이름             |
+| created_at |  String   | 블로그 개설일. ISO 8601 형식. UTC 기준  |
 
 ##### 예시
 
@@ -208,34 +208,31 @@ GET /api/blog/{id}
 }
 ``` 
 
----
-
 ## Category
 
 ### getCategories 게시판 목록 조회
 
-- 게시판 목록 조회.
+- 블로그에 있는 게시판 목록 조회.
 
 ```http request
-GET /api/category?user_id=
+GET /api/blog/{id}/category
 ```
 
 #### 요청
 
-| Param Type |   Name    | Data Type | Required |    Description     |  Validation   |
-|:----------:|:---------:|:---------:|:--------:|:------------------:|:-------------:|
-|   Query    | `user_id` | `string`  |    O     |       유저 아이디       | 존재하는 아이디인지 확인 |
-|   Query    |    `n`    |   `int`   |    -     | N개의 최근 글 조회. 기본값 4 |   n은 1이상 정수   |
+| Param Type | Name | Data Type | Required |      Description       |  Validation   |
+|:----------:|:----:|:---------:|:--------:|:----------------------:|:-------------:|
+|    Path    | `id` | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 | 존재하는 아이디인지 확인 |
 
 #### 응답
 
 ##### 응답 본문
 
-|   Name    |     Data Type     |           Description           | 
-|:---------:|:-----------------:|:-------------------------------:|
-| `message` |     `string`      |             응답 메시지              |
-| `errors`  |   `Exception[]`   |          응답 공통 형식과 동일           |
-|  `data`   | `String[] \| Map` | 게시판 이름 배열. 오류 발생 시 응답 공통 형식과 동일 |
+|   Name    | Data Type  | Description | 
+|:---------:|:----------:|:-----------:|
+| `message` |  `String`  |   응답 메시지    |
+| `status`  |  `String`  | HTTP 상태 메시지 |
+|  `data`   | `String[]` |  게시판 이름 배열  |
 
 ##### 예시
 
@@ -244,7 +241,7 @@ GET /api/category?user_id=
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "게시판 목록 조회 성공",
-  "errors": null,
+  "status": "OK",
   "data": [ 
     "Java", 
     ...
@@ -257,10 +254,7 @@ GET /api/category?user_id=
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "게시판 목록 조회 실패",
-  "errors": [
-    error1,
-    ...
-  ],
+  "status": "BAD_REQUEST",
   "data": {
     "error_related_key": error_related_value,
     ...
