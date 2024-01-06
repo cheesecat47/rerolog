@@ -42,19 +42,6 @@ public class SwaggerConfiguration {
                 .build();
     }
 
-    // TODO: 유저 API 페이지 추가
-
-    /**
-     * 블로그 관련 API만 보여주는 페이지
-     */
-    @Bean
-    public GroupedOpenApi blogApis() {
-        return GroupedOpenApi.builder()
-                .group("Blog APIs")
-                .pathsToMatch("/blog/**")
-                .build();
-    }
-
     /**
      * Swagger Web UI에서 보여줄 정보
      */
