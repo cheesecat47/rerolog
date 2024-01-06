@@ -1,14 +1,22 @@
 <script setup>
 import { RouterView } from 'vue-router';
+
 import NavbarTop from './components/NavbarTop.vue';
 import TheFooter from './components/TheFooter.vue';
+
+import { useBlogStore } from './stores/blogStore';
 import { useUserStore } from './stores/userStore.js';
 
 const userStore = useUserStore();
+const blogStore = useBlogStore();
 
 // 블로그 방문 시 주인 유저 정보 조회
 const { getBloggerInfo } = userStore;
 getBloggerInfo('cheesecat47');
+
+// 카테고리 목록 조회
+const { getCategoriesWrapper } = blogStore;
+getCategoriesWrapper('cheesecat47');
 </script>
 
 <template>
