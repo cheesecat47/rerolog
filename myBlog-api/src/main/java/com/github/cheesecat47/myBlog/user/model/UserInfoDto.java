@@ -1,5 +1,7 @@
 package com.github.cheesecat47.myBlog.user.model;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 @Schema(description = "사용자 정보 객체.")
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserInfoDto {
     @Schema(name = "id", description = "유저 아이디. DB의 `id_str` 값.")
     String idStr;
