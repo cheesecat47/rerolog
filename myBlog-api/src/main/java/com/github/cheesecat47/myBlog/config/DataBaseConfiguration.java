@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -22,8 +24,11 @@ import javax.sql.DataSource;
  */
 @Configuration
 @PropertySource("classpath:/application.properties")
+@MapperScan(basePackages = {"com.github.cheesecat47.myBlog.*.model.mapper"})
 @RequiredArgsConstructor
 public class DataBaseConfiguration {
+
+    private final ApplicationContext applicationContext;
 
     /**
      * application.properties 파일에서 설정한 hikari 설정값을 불러와 HikariConfig 객체 생성.
@@ -52,11 +57,14 @@ public class DataBaseConfiguration {
      * @return SqlSessionFactory의 instance.
      * @throws Exception
      */
+    @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         // 인스턴스 생성
         SqlSessionFactoryBean session = new SqlSessionFactoryBean();
         // DataSource 등록
         session.setDataSource(dataSource());
+        session.setMapperLocations(applicationContext.getResources("classpath:mapper/**/*.xml"));
+        session.setTypeAliasesPackage("com.github.cheesecat47.myBlog.*.model");
 
         return session.getObject();
     }
@@ -67,6 +75,7 @@ public class DataBaseConfiguration {
      * @return
      * @see <a href="https://mybatis.org/spring/ko/sqlsession.html">MyBatis Docs. "SqlSession 사용"</a>
      */
+    @Bean
     public SqlSessionTemplate sqlSessionTemplate() throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory());
     }
