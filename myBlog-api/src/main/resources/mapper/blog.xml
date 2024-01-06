@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.cheesecat47.myBlog.blog.model.mapper.BlogMapper">
+
+    <!--  getBlogInfo 결과 매핑 -->
+    <resultMap id="getBlogInfoResultMap" type="BlogInfoDto">
+        <result property="idStr" column="id_str"/>
+        <result property="name" column="name"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <!--  getBlogInfo 쿼리 -->
+    <select id="getBlogInfo" parameterType="String" resultMap="getBlogInfoResultMap">
+        select User.id_str,
+               Blog.name,
+               User.created_at
+        from Blog
+                 left outer join User on Blog.id = User.id
+        where User.id_str = #{idStr}
+          and User.deleted_at is null; -- 탈퇴한 유저 정보 제외
+    </select>
+
+    <!--  getCategories 쿼리 -->
+    <select id="getCategories" parameterType="String" resultType="String">
+        select Category.name
+        from Category
+                 left outer join User on Category.blog_id = User.id
+        where User.id_str = #{idStr}
+          and User.deleted_at is null -- 탈퇴한 유저 정보 제외
+          and Category.deleted_at is null; -- 삭제한 게시판 정보 제외
+    </select>
+
+</mapper>
