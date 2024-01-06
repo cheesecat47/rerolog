@@ -1,11 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
-import { useUserStore } from '../stores/userStore.js';
-import { storeToRefs } from 'pinia';
-
-const userStore = useUserStore();
-const { user_info } = storeToRefs(userStore);
 
 // Todo: API로 카테고리 목록 받아와서 동적 생성
 const categories = ref(['Java', 'Spring Boot', 'Vue.js', '알고리즘 문제']);
@@ -19,15 +14,15 @@ const categories = ref(['Java', 'Spring Boot', 'Vue.js', '알고리즘 문제'])
       :to="{ name: 'about' }"
       class="flex flex-row lg:flex-col items-center justify-center"
     >
-      <!-- Todo: API로 받아온 유저 정보에 프로필 이미지 url도 추가 필요 -->
+      <!-- Todo: API로 받아온 유저 정보로 변경 -->
       <img
         class="rounded-sm p-2 w-40 lg:w-full"
         src="../assets/6B152AA5-CC62-49B6-913A-7C702AF22F1E_1_102_o.jpeg"
         alt="profile image"
       />
       <div class="flex flex-col items-center">
-        <p class="pt-2 text-xl">{{ user_info.name }}</p>
-        <p class="pb-2 text-sm text-gray-500">{{ user_info.id }}</p>
+        <p class="pt-2 text-xl">신주용</p>
+        <p class="pb-2 text-sm text-gray-500">cheesecat47</p>
       </div>
     </RouterLink>
     <hr class="m-2" />
