@@ -1,0 +1,30 @@
+{
+    "postId": 4,
+    "categoryId": 1,
+    "categoryName": "Java",
+    "title": "내 아이디가 왜 cheesecat이냐면",
+    "author": {
+        "userId": "cheesecat47",
+        "nickName": "신주용",
+        "profileImage": null
+    },
+    "createdAt": "2023-12-02T23:00:00Z",
+    "hit": 21,
+    "excerpt": "2018년 10월에 동촌 유원지에 사진 찍으러 나갔다가 만난 아기 고양이. 진짜 예뻤다.",
+    "thumbnail": "...",
+    "content": "2018년 10월에 동촌 유원지에 사진 찍으러 나갔다가 만난 아기 고양이. 진짜 예뻤다. 사람을 경계는 하면서도 멀리 도망가지는 않고 웅크리고 앉아서 지켜보는데 얼마나 귀엽던지.",
+    "comments": [
+        {
+            "commentId": 2,
+            "userId": "cheesecat47",
+            "content": "그치? ㅋㅋㅋ",
+            "createdAt": "2023-12-02T23:02:00Z"
+        },
+        {
+            "commentId": 1,
+            "userId": "rosielsh",
+            "content": "짱 귀여워!",
+            "createdAt": "2023-12-02T23:01:00Z"
+        }
+    ]
+}
