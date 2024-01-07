@@ -30,12 +30,15 @@ const router = createBrowserRouter([
                 element: <UserPage />,
                 children: [
                     { index: true, element: <PostList /> },
-                    { path: ':postId', element: <PostDetail /> },
                     { path: 'posts', element: <PostList /> },
                     { path: 'category/:categoryName?', element: <PostList /> },
                     { path: 'guestbook', element: <GuestBook /> },
                     { path: 'introduce', element: <Introduce /> },
                 ]
+            },
+            {
+                path: ':userId/:postId',
+                element: <PostDetail />,
             }
         ]
     },
