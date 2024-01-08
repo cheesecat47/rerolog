@@ -1,12 +1,12 @@
 package com.github.cheesecat47.myBlog.user.service;
 
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
+import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -23,23 +23,23 @@ public class UserServiceImpl implements UserService {
     /**
      * 입력 받은 유저 아이디에 해당하는 유저 정보를 조회.
      *
-     * @param idStr 조회할 유저의 아이디.
+     * @param userId 조회할 유저의 아이디.
      * @return 입력 받은 아이디에 해당하는 유저 정보 객체.
      * @throws SQLException          DB 조회 중 오류 발생.
      * @throws MyBlogCommonException 입력 받은 유저 아이디에 문제가 있는 경우 발생.
      */
     @Override
-    public UserInfoDto getUserInfo(Optional<String> idStr) throws Exception {
-        logger.info("getUserInfo: idStr: {}", idStr);
+    public UserInfoDto getUserInfo(Optional<String> userId) throws Exception {
+        logger.info("getUserInfo: userId: {}", userId);
 
         // 입력한 아이디가 없는 경우
-        if (idStr.isEmpty()) {
+        if (userId.isEmpty()) {
             logger.error("getUserInfo: 유저 아이디는 필수입니다.");
             throw new MyBlogCommonException(
-                    HttpStatus.BAD_REQUEST,
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
                     "유저 아이디는 필수입니다",
                     new HashMap<>() {{
-                        put("id", idStr);
+                        put("userId", userId);
                     }}
             );
         }
@@ -47,26 +47,26 @@ public class UserServiceImpl implements UserService {
         // DB에서 유저 조회
         UserInfoDto userInfoDto;
         try {
-            userInfoDto = userMapper.getUserInfo(idStr.get());
+            userInfoDto = userMapper.getUserInfo(userId.get());
             logger.info("getUserInfo: userInfo: {}", userInfoDto);
 
             // 조회된 유저가 없는 경우
             if (userInfoDto == null) {
                 logger.error("getUserInfo: 입력한 아이디에 해당하는 유저가 없습니다.");
                 throw new MyBlogCommonException(
-                        HttpStatus.NOT_FOUND,
+                        ResponseCode.NO_RESULT,
                         "입력한 아이디에 해당하는 유저가 없습니다.",
                         new HashMap<>() {{
-                            put("id", idStr);
+                            put("userId", userId);
                         }}
                 );
             }
         } catch (SQLException e) {
             throw new MyBlogCommonException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    ResponseCode.SQL_ERROR,
                     "DB 조회 중 오류가 발생했습니다.",
                     new HashMap<>() {{
-                        put("id", idStr);
+                        put("userId", userId);
                         put("error", e.getMessage());
                     }}
             );

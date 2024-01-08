@@ -32,17 +32,15 @@ public class SwaggerConfiguration {
     }
 
     /**
-     * 게시판 관련 API만 보여주는 페이지
+     * 유저 관련 API만 보여주는 페이지
      */
     @Bean
-    public GroupedOpenApi boardApis() {
+    public GroupedOpenApi userApis() {
         return GroupedOpenApi.builder()
-                .group("Board APIs")
-                .pathsToMatch("/board/**")
+                .group("User APIs")
+                .pathsToMatch("/user/**")
                 .build();
     }
-
-    // TODO: 유저 API 페이지 추가
 
     /**
      * 블로그 관련 API만 보여주는 페이지
