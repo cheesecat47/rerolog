@@ -8,6 +8,7 @@
     <resultMap id="getBlogInfoResultMap" type="BlogInfoDto">
         <result property="userId" column="id_str"/>
         <result property="blogName" column="name"/>
+        <result property="content" column="content"/>
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
@@ -15,6 +16,7 @@
     <select id="getBlogInfo" parameterType="String" resultMap="getBlogInfoResultMap">
         select User.id_str,
                Blog.name,
+               Blog.content,
                User.created_at
         from Blog
                  left outer join User on Blog.id = User.id
