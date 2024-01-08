@@ -7,5 +7,5 @@ import java.sql.SQLException;
 
 @Mapper
 public interface UserMapper {
-    UserInfoDto getUserInfo(String idStr) throws SQLException;
+    UserInfoDto getUserInfo(String userId) throws SQLException;
 }

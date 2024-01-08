@@ -94,7 +94,7 @@ GET /api/user/:userId
 // HTTP/1.1 200 OK
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "NORMAL_SERVICE",
+  "message": "유저 정보 조회 성공",
   "code": "00",
   "data": {
     "userId": "cheesecat47",
@@ -117,11 +117,11 @@ GET /api/user/:userId
 // HTTP/1.1 400 BAD REQUEST
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "INVALID_REQUEST_PARAMETER",
-  "code": "11",
+  "code": "13",
   "data": {
     "userId": "cheesecat$&"
-  }
+  },
+  "message": "입력한 아이디에 해당하는 유저가 없습니다."
 }
 ``` 
 
@@ -631,6 +631,10 @@ GET /api/post/:userId/:postId
 |    400     |  10   | NO_REQUIRED_REQUEST_PARAMETER | 필수 요청 파라미터 없음 |
 |    400     |  11   |   INVALID_REQUEST_PARAMETER   |  파라미터 값이 잘못됨  |
 |    401     |  12   |         UNAUTHORIZED          |  미인증 상태에서 요청  |
+|    404     |  13   |           NO_RESULT           | 결과 값이 존재하지 않음 |
+|    404     |  14   |          NO_RESOURCE          | URI가 존재하지 않음  |
+|    500     |  20   |     INTERNAL_SERVER_ERROR     |   서버 내부 오류    |
+|    500     |  21   |           SQL_ERROR           |     DB 오류     |
 
 ---
 
