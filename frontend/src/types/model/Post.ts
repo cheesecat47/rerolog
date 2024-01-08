@@ -7,12 +7,13 @@ export type PostOptionType = {
 };
 
 export type Post = {
-    id: string;
-    createdAt: string;
+    post_id: number;
+    category_id: number;
     title: string;
+    author: string;
+    datetime: string;
     description: string;
-    category: string;
-    commentsCount: number;
-    thumbNail: string;
-    hits: number;
+    hit: number;
+    excerpt: string;
+    thumbnail: string;
 };

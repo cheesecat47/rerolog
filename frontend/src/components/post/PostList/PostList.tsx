@@ -25,7 +25,7 @@ const PostList = ({ selectedOption }: { selectedOption?: string }) => {
         <div className="w-full p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" >
             {
                 posts.map((post: Post) => {
-                    return <PostCard key={post.id} post={post} />
+                    return <PostCard key={post.post_id} post={post} />
                 })
 
             }
