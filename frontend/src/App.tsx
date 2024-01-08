@@ -7,13 +7,13 @@ import { ManagePage } from './pages/ManagePage';
 import { UserPage } from './pages/UserPage';
 import { LoginPage } from './pages/LoginPage';
 import { PostList } from './components/post/PostList';
-import { PostDetail } from './pages/PostDetailPage/components/PostDetail';
 import { GuestBook } from './pages/UserPage/components/GuestBook';
 import { Introduce } from './pages/UserPage/components/Introduce';
 
 import { Layout } from './components/layout/Layout';
 import { MainPage } from './pages/MainPage';
 import { SignupPage } from './pages/SignupPage';
+import { PostDetailPage } from './pages/PostDetailPage';
 
 const queryClient = new QueryClient();
 
@@ -30,12 +30,15 @@ const router = createBrowserRouter([
                 element: <UserPage />,
                 children: [
                     { index: true, element: <PostList /> },
-                    { path: ':postId', element: <PostDetail /> },
                     { path: 'posts', element: <PostList /> },
                     { path: 'category/:categoryName?', element: <PostList /> },
                     { path: 'guestbook', element: <GuestBook /> },
                     { path: 'introduce', element: <Introduce /> },
                 ]
+            },
+            {
+                path: ':userId/:postId',
+                element: <PostDetailPage />,
             }
         ]
     },
