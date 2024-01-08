@@ -2,6 +2,7 @@ package com.github.cheesecat47.myBlog.blog.service;
 
 import com.github.cheesecat47.myBlog.blog.model.BlogInfoDto;
 import com.github.cheesecat47.myBlog.blog.model.mapper.BlogMapper;
+import com.github.cheesecat47.myBlog.blog.model.response.CategoryDto;
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -79,51 +80,51 @@ public class BlogServiceImpl implements BlogService {
     /**
      * 입력 받은 유저 아이디에 해당하는 블로그의 게시판 목록을 조회.
      *
-     * @param idStr 조회할 블로그 주인 유저의 아이디.
+     * @param userId 조회할 블로그 주인 유저의 아이디.
      * @return 입력 받은 아이디에 해당하는 게시판 이름 배열.
      * @throws SQLException          DB 조회 중 오류 발생.
      * @throws MyBlogCommonException 입력 받은 유저 아이디에 문제가 있는 경우 발생.
      */
     @Override
-    public List<String> getCategories(String idStr) throws Exception {
-        logger.info("getCategories: idStr: {}", idStr);
+    public List<CategoryDto> getCategories(String userId) throws Exception {
+        logger.info("getCategories: userId: {}", userId);
 
         // 공백인 경우
-        if (idStr.isEmpty() || idStr.isBlank()) {
+        if (userId.isEmpty() || userId.isBlank()) {
             logger.error("getCategories: 유저 아이디는 필수입니다.");
             throw new MyBlogCommonException(
-                    HttpStatus.BAD_REQUEST,
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
                     "유저 아이디는 필수입니다",
                     new HashMap<>() {{
-                        put("id", idStr);
+                        put("userId", userId);
                     }}
             );
         }
 
         // DB에서 조회
-        List<String> categoryNames;
+        List<CategoryDto> categoryNames;
         try {
             // 존재하지 않는 블로그인 경우
-            BlogInfoDto blogInfoDto = blogMapper.getBlogInfo(idStr);
+            BlogInfoDto blogInfoDto = blogMapper.getBlogInfo(userId);
             if (blogInfoDto == null) {
                 logger.error("getCategories: 입력한 아이디에 해당하는 블로그가 없습니다.");
                 throw new MyBlogCommonException(
-                        HttpStatus.NOT_FOUND,
+                        ResponseCode.NO_RESULT,
                         "입력한 아이디에 해당하는 블로그가 없습니다.",
                         new HashMap<>() {{
-                            put("id", idStr);
+                            put("userId", userId);
                         }}
                 );
             }
 
-            categoryNames = blogMapper.getCategories(idStr);
+            categoryNames = blogMapper.getCategories(userId);
             logger.info("getCategories: categoryNames: {}", categoryNames);
         } catch (SQLException e) {
             throw new MyBlogCommonException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    ResponseCode.SQL_ERROR,
                     "DB 조회 중 오류가 발생했습니다.",
                     new HashMap<>() {{
-                        put("id", idStr);
+                        put("userId", userId);
                         put("error", e.getMessage());
                     }}
             );

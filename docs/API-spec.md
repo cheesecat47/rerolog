@@ -330,7 +330,7 @@ GET /api/blog/:userId/category
 // HTTP/1.1 200 OK
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "NORMAL_SERVICE",
+  "message": "게시판 목록 조회 성공",
   "code": "00",
   "data": [
     {
@@ -346,8 +346,8 @@ GET /api/blog/:userId/category
 // HTTP/1.1 400 BAD REQUEST
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "INVALID_REQUEST_PARAMETER",
-  "code": "11",
+  "message": "입력한 아이디에 해당하는 블로그가 없습니다.",
+  "code": "13",
   "data": {
     "userId": "cheesecat$&"
   }
