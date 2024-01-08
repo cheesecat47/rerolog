@@ -449,17 +449,18 @@ GET /api/post/:userId?categoryId=&order=recent&offset=0&limit=10
 
 ##### PostDto
 
-|     Name     |   Data Type   |       Description        |
-|:------------:|:-------------:|:------------------------:|
-|    postId    |     `int`     |          글 아이디           |
-|  categoryId  |     `int`     |         게시판 아이디          |
-| categoryName |   `String`    |          게시판 이름          |
-|    title     |   `String`    |            제목            |
-|    author    | `UserInfoDto` |          작성자 정보          |
-|  createdAt   |   `String`    | 작성일. ISO 8601 형식. UTC 기준 |
-|     hit      |     `int`     |           조회수            |
-|   excerpt    |   `String`    |            요약            |
-|  thumbnail   |   `String`    |         썸네일 URL          |
+|     Name      |   Data Type   |       Description        |
+|:-------------:|:-------------:|:------------------------:|
+|    postId     |     `int`     |          글 아이디           |
+|  categoryId   |     `int`     |         게시판 아이디          |
+| categoryName  |   `String`    |          게시판 이름          |
+|     title     |   `String`    |            제목            |
+|    author     | `UserInfoDto` |          작성자 정보          |
+|   createdAt   |   `String`    | 작성일. ISO 8601 형식. UTC 기준 |
+|      hit      |     `int`     |           조회수            |
+|    excerpt    |   `String`    |            요약            |
+|   thumbnail   |   `String`    |         썸네일 URL          |
+| numOfComments |     `int`     |          댓글 개수           |
 
 ##### UserInfoDto
 
@@ -491,7 +492,8 @@ GET /api/post/:userId?categoryId=&order=recent&offset=0&limit=10
       "createdAt": "2023-12-02T23:00:00Z",
       "hit": 21,
       "excerpt": "2018년 10월에 동촌 유원지에 사진 찍으러 나갔다가 만난 아기 고양이. 진짜 예뻤다.",
-      "thumbnail": "..."
+      "thumbnail": "...",
+      "numOfComments": 2
     },
     ...
   ]
@@ -537,19 +539,20 @@ GET /api/post/:userId/:postId
 
 ##### PostDto
 
-|     Name     |   Data Type    |              Description              | 
-|:------------:|:--------------:|:-------------------------------------:|
-|    postId    |     `int`      |                 글 아이디                 |
-|  categoryId  |     `int`      |                게시판 아이디                |
-| categoryName |    `String`    |                게시판 이름                 |
-|    title     |    `String`    |                  제목                   |
-|    author    | `UserInfoDto`  |                작성자 정보                 |
-|  createdAt   |    `String`    |       작성일. ISO 8601 형식. UTC 기준        |
-|     hit      |     `int`      |                  조회수                  |
-|   excerpt    |    `String`    |                  요약                   |
-|  thumbnail   |    `String`    |                썸네일 URL                |
-|   content    |    `String`    |                  본문                   |
-|   comments   | `CommentDto[]` | 댓글 배열. 최근순 정렬. 댓글이 없으면 길이가 0인 배열 `[]` |
+|     Name      |   Data Type    |              Description              | 
+|:-------------:|:--------------:|:-------------------------------------:|
+|    postId     |     `int`      |                 글 아이디                 |
+|  categoryId   |     `int`      |                게시판 아이디                |
+| categoryName  |    `String`    |                게시판 이름                 |
+|     title     |    `String`    |                  제목                   |
+|    author     | `UserInfoDto`  |                작성자 정보                 |
+|   createdAt   |    `String`    |       작성일. ISO 8601 형식. UTC 기준        |
+|      hit      |     `int`      |                  조회수                  |
+|    excerpt    |    `String`    |                  요약                   |
+|   thumbnail   |    `String`    |                썸네일 URL                |
+|    content    |    `String`    |                  본문                   |
+|   comments    | `CommentDto[]` | 댓글 배열. 최근순 정렬. 댓글이 없으면 길이가 0인 배열 `[]` |
+| numOfComments |     `int`      |       댓글 개수 (`comments` 배열 길이)        |
 
 ##### UserInfoDto
 
@@ -604,7 +607,8 @@ GET /api/post/:userId/:postId
         "content": "짱 귀여워!",
         "createdAt": "2023-12-02T23:01:00Z"
       }
-    ]
+    ],
+    "numOfComments": 2
   }
 }
 ```
