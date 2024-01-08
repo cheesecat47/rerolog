@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { CategoryBadge } from '../../components/common/CategoryBadge';
 import { CommentBoxList } from './components/CommentBoxList';
@@ -8,9 +9,9 @@ import calendar from '../../assets/icons/ML_calendar-icon.png';
 import comment from '../../assets/icons/ML_comment-icon.png';
 
 const PostDetailPage = () => {
-    const [postId] = useState<number>(3);
-    const [postAuthor] = useState<string>('cheesecat47');
+    const { userId, postId } = useParams();
 
+    // @TODO userId, postId를 가지고 통신
     const { isLoading, error, data: post } = useQuery({
         queryKey: [`posts${postId}`],
         queryFn: async () => axios.get('/data/posts/detail.json').then((res) => {
@@ -29,7 +30,7 @@ const PostDetailPage = () => {
             <div className="mt-14 mb-4 flex justify-between">
                 <span className="text-3xl font-bold text-gray-600">{post.title}</span>
                 {
-                    post.author.userId === postAuthor
+                    post.author.userId === userId
                     &&
                     <div className="pr-2 text-sm text-gray-500">
                         <button className="px-1 hover:text-gray-800" type="button">수정</button>
