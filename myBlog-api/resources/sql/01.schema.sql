@@ -58,8 +58,9 @@ CREATE TABLE IF NOT EXISTS `myBlog`.`Contact`
 
 CREATE TABLE IF NOT EXISTS `myBlog`.`Blog`
 (
-    `id`   int         NOT NULL AUTO_INCREMENT,
-    `name` varchar(20) NOT NULL COMMENT '블로그 이름',
+    `id`   int             NOT NULL AUTO_INCREMENT,
+    `name` varchar(20)     NOT NULL COMMENT '블로그 이름',
+    `content` varchar(200)          DEFAULT null COMMENT '블로그 소개',
     PRIMARY KEY (`id`),
     CONSTRAINT `Blog_id_fk`
         FOREIGN KEY (`id`)
