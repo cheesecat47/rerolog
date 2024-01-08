@@ -6,8 +6,8 @@
 
     <!--  getBlogInfo 결과 매핑 -->
     <resultMap id="getBlogInfoResultMap" type="BlogInfoDto">
-        <result property="idStr" column="id_str"/>
-        <result property="name" column="name"/>
+        <result property="userId" column="id_str"/>
+        <result property="blogName" column="name"/>
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
@@ -18,7 +18,7 @@
                User.created_at
         from Blog
                  left outer join User on Blog.id = User.id
-        where User.id_str = #{idStr}
+        where User.id_str = #{userId}
           and User.deleted_at is null; -- 탈퇴한 유저 정보 제외
     </select>
 

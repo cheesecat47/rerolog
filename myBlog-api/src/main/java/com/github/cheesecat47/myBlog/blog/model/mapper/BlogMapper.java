@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface BlogMapper {
-    BlogInfoDto getBlogInfo(String idStr) throws SQLException;
+    BlogInfoDto getBlogInfo(String userId) throws SQLException;
 
     List<String> getCategories(String idStr) throws SQLException;
 }
