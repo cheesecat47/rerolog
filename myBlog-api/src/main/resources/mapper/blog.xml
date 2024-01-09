@@ -17,7 +17,7 @@
         select User.id_str,
                Blog.name,
                Blog.content,
-               User.created_at
+               DATE_FORMAT(User.created_at, '%Y-%m-%dT%TZ') as created_at
         from Blog
                  left outer join User on Blog.id = User.id
         where User.id_str = #{userId}

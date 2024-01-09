@@ -21,7 +21,7 @@
         select User.id_str,
                User.name,
                User.content,
-               User.created_at,
+               DATE_FORMAT(User.created_at, '%Y-%m-%dT%TZ') as created_at,
                ContactType.type,
                Contact.value
         from User
