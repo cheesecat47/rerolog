@@ -38,7 +38,7 @@ const UserProfileBox = () => {
                     <div className="pt-2 text-sm">
                         개발을 잘하고 싶으요
                     </div>
-                    <Link to='/my/setting' className="px-3 py-2 bg-ml-pink-100 rounded-10 text-ml-pink-300">프로필 편집</Link>
+                    <Link to='/manage' className="px-3 py-2 bg-ml-pink-100 rounded-10 text-ml-pink-300">프로필 편집</Link>
                 </div>
             </div>
         </div>
