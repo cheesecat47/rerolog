@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 interface State {
     [key: string]: string;

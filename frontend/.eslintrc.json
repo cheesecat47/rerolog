@@ -8,8 +8,7 @@
         "airbnb",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended",
-        "prettier",
-        "prettier/prettier"
+        "prettier"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -27,6 +26,7 @@
                 "tsx": "never"
             }
         ],
+        "arrow-body-style": "off",
         "import/prefer-default-export": "off",
         "react/react-in-jsx-scope": "off",
         "react/require-default-props": "off", // 기본 props 미설정
