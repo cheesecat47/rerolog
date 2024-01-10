@@ -1,10 +1,12 @@
 package com.github.cheesecat47.myBlog.blog.controller;
 
 import com.github.cheesecat47.myBlog.blog.model.BlogInfoDto;
+import com.github.cheesecat47.myBlog.blog.model.response.CategoryDto;
 import com.github.cheesecat47.myBlog.blog.model.response.GetBlogInfoResponse;
 import com.github.cheesecat47.myBlog.blog.model.response.GetCategoriesResponse;
 import com.github.cheesecat47.myBlog.blog.service.BlogService;
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
+import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -47,20 +49,20 @@ public class BlogController {
             @ApiResponse(responseCode = "404", description = "블로그 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
             @ApiResponse(responseCode = "500", description = "블로그 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))})
     })
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{userId}")
     public ResponseEntity<GetBlogInfoResponse> getBlogInfo(
-            @Parameter(description = "유저 아이디") @PathVariable(value = "id") String idStr
+            @Parameter(description = "유저 아이디") @PathVariable String userId
     ) throws Exception {
         logger.info("getBlogInfo");
         GetBlogInfoResponse response = new GetBlogInfoResponse();
 
-        BlogInfoDto blogInfoDto = blogService.getBlogInfo(idStr);
+        BlogInfoDto blogInfoDto = blogService.getBlogInfo(userId);
 
-        response.setStatus(HttpStatus.OK);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
         response.setMessage("블로그 정보 조회 성공");
         response.setData(blogInfoDto);
 
-        return ResponseEntity.status(response.getStatus()).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Operation(summary = "getCategories 게시판 목록 조회", description = "블로그에 있는 게시판 목록 조회.<br/>만약 조회 조건은 문제가 없지만 해당하는 게시판이 없다면 상태코드는 200, data는 길이가 0인 배열 반환.")
@@ -70,20 +72,20 @@ public class BlogController {
             @ApiResponse(responseCode = "404", description = "게시판 목록 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
             @ApiResponse(responseCode = "500", description = "게시판 목록 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))})
     })
-    @GetMapping(value = "/{id}/category")
+    @GetMapping(value = "/{userId}/category")
     public ResponseEntity<GetCategoriesResponse> getCategories(
-            @Parameter(description = "유저 아이디") @PathVariable(value = "id") String idStr
+            @Parameter(description = "유저 아이디") @PathVariable String userId
     ) throws Exception {
         logger.info("getCategories");
         GetCategoriesResponse response = new GetCategoriesResponse();
 
-        List<String> categoryNames = blogService.getCategories(idStr);
+        List<CategoryDto> categoryNames = blogService.getCategories(userId);
 
-        response.setStatus(HttpStatus.OK);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
         response.setMessage("게시판 목록 조회 성공");
         response.setData(categoryNames);
 
-        return ResponseEntity.status(response.getStatus()).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.github.cheesecat47.myBlog.user.controller;
 
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
+import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.response.GetUserInfoResponse;
 import com.github.cheesecat47.myBlog.user.service.UserService;
@@ -52,19 +53,19 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "유저 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
             @ApiResponse(responseCode = "500", description = "유저 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))})
     })
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{userId}")
     public ResponseEntity<GetUserInfoResponse> getUserInfo(
-            @Parameter(description = "유저 아이디") @PathVariable(value = "id") Optional<String> idStr
+            @Parameter(description = "유저 아이디") @PathVariable Optional<String> userId
     ) throws Exception {
         logger.info("getUserInfo");
         GetUserInfoResponse response = new GetUserInfoResponse();
 
-        UserInfoDto userInfoDto = userService.getUserInfo(idStr);
+        UserInfoDto userInfoDto = userService.getUserInfo(userId);
 
-        response.setStatus(HttpStatus.OK);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
         response.setMessage("유저 정보 조회 성공");
         response.setData(userInfoDto);
 
-        return ResponseEntity.status(response.getStatus()).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

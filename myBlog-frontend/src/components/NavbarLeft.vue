@@ -1,14 +1,16 @@
 <script setup>
-import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
+
+import { useBlogStore } from '../stores/blogStore';
 import { useUserStore } from '../stores/userStore.js';
+
 import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
-const { user_info } = storeToRefs(userStore);
+const blogStore = useBlogStore();
 
-// Todo: API로 카테고리 목록 받아와서 동적 생성
-const categories = ref(['Java', 'Spring Boot', 'Vue.js', '알고리즘 문제']);
+const { user_info } = storeToRefs(userStore);
+const { categories } = storeToRefs(blogStore);
 </script>
 
 <template>

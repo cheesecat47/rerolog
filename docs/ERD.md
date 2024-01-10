@@ -1,5 +1,13 @@
 # ERD
 
+## 2024.01.09.
+
+![ERD](resources/ERD-240109.png)
+
+### 변경 내역
+
+- `Blog` 테이블에 소개 멘트를 저장할 컬럼 `content` 추가.
+
 ## 2023.12.19.
 
 ![ERD](resources/ERD-231219.png)

@@ -6,8 +6,8 @@
 
     <!--  getUserInfo 결과 매핑 -->
     <resultMap id="getUserInfoResultMap" type="UserInfoDto">
-        <result property="idStr" column="id_str"/>
-        <result property="name" column="name"/>
+        <result property="userId" column="id_str"/>
+        <result property="nickName" column="name"/>
         <result property="content" column="content"/>
         <result property="createdAt" column="created_at"/>
         <collection property="contacts" javaType="List" ofType="ContactDto">
@@ -21,13 +21,13 @@
         select User.id_str,
                User.name,
                User.content,
-               User.created_at,
+               DATE_FORMAT(User.created_at, '%Y-%m-%dT%TZ') as created_at,
                ContactType.type,
                Contact.value
         from User
                  left outer join Contact on User.id = Contact.user_id
                  left outer join ContactType on Contact.type_id = ContactType.id
-        where id_str = #{idStr}
+        where id_str = #{userId}
           and deleted_at is null -- 탈퇴한 유저 정보 제외
         order by User.id, Contact.id;
     </select>
