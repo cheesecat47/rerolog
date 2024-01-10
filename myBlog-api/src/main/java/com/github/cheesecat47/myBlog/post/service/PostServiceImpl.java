@@ -4,6 +4,7 @@ import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.mapper.PostMapper;
+import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class PostServiceImpl implements PostService {
     private final UserMapper userMapper;
 
     @Override
-    public List<PostDto> getPosts(String userId) throws Exception {
+    public List<PostDto> getPosts(String userId, String categoryId, String order, String offset, String limit) throws Exception {
         logger.info("getPosts: userId: {}", userId);
 
         // 공백인 경우
@@ -55,7 +56,14 @@ public class PostServiceImpl implements PostService {
                 );
             }
 
-            posts = postMapper.getPosts(userId, null, null, null, null);
+            GetPostsRequest params = new GetPostsRequest();
+            params.setUserId(userId);
+            params.setCategoryId(categoryId == null ? 0 : Integer.parseInt(categoryId));
+            params.setOrder(order);
+            params.setOffset(Integer.parseInt(offset));
+            params.setLimit(Integer.parseInt(limit));
+
+            posts = postMapper.getPosts(params);
             logger.info("getPosts: # of posts: {}", posts.size());
         } catch (SQLException e) {
             throw new MyBlogCommonException(

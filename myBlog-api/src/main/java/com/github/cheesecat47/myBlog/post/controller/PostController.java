@@ -18,10 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,12 +46,15 @@ public class PostController {
     })
     @GetMapping(value = "/{userId}")
     public ResponseEntity<GetPostsResponse> getPosts(
-            @Parameter(description = "유저 아이디") @PathVariable String userId
+            @Parameter(description = "유저 아이디") @PathVariable String userId,
+            @RequestParam(required = false) String categoryId,
+            @RequestParam(required = false, defaultValue = "latest") String order,
+            @RequestParam(required = false, defaultValue = "0") String offset,
+            @RequestParam(required = false, defaultValue = "10") String limit
     ) throws Exception {
         GetPostsResponse response = new GetPostsResponse();
 
-        // TODO: Optional query params (categoryId, order, offset, limit) 핸들링 필요
-        List<PostDto> posts = postService.getPosts(userId);
+        List<PostDto> posts = postService.getPosts(userId, categoryId, order, offset, limit);
 
         response.setCode(ResponseCode.NORMAL_SERVICE);
         response.setMessage("글 목록 조회 성공");

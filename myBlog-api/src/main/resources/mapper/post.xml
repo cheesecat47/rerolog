@@ -21,7 +21,7 @@
     </resultMap>
 
     <!--  getPosts 쿼리 -->
-    <select id="getPosts" parameterType="String" resultMap="getPostsResultMap">
+    <select id="getPosts" parameterType="GetPostsRequest" resultMap="getPostsResultMap">
         select Post.id,
                Post.category_id,
                Category.name                                                  as category_name,
@@ -41,11 +41,20 @@
                  left outer join myBlog.Category on Post.category_id = Category.id
         where myBlog.User.id_str = #{userId}
           and Post.deleted_at is null -- 삭제된 글 정보 제외
-#           and Category.id = 1 -- Optional query params (categoryId, order, offset, limit) 핸들링 필요
-        order by Post.created_at desc,
-                 Post.id desc
-#         limit 3 offset 1 -- Optional query params (categoryId, order, offset, limit) 핸들링 필요
-        ;
+          <if test="categoryId > 0">
+            and Category.id = #{categoryId}
+          </if>
+        order by
+          <if test="order == 'latest'">
+            Post.created_at desc
+          </if>
+          <if test="order == 'oldest'">
+            Post.created_at asc
+          </if>
+          <if test="order == 'popular'">
+            Post.hit desc, Post.created_at desc
+          </if>
+        limit #{offset}, #{limit};
     </select>
 
 </mapper>
