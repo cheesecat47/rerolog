@@ -3,6 +3,7 @@ package com.github.cheesecat47.myBlog.post.controller;
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
+import com.github.cheesecat47.myBlog.post.model.response.GetPostByIdResponse;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostsResponse;
 import com.github.cheesecat47.myBlog.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,6 +60,29 @@ public class PostController {
         response.setCode(ResponseCode.NORMAL_SERVICE);
         response.setMessage("글 목록 조회 성공");
         response.setData(posts);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Operation(summary = "getPostById 글 상세 조회", description = "글 상세 조회. 이 글과 연결된 댓글 포함.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "글 조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GetPostsResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "글 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
+            @ApiResponse(responseCode = "404", description = "글 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
+            @ApiResponse(responseCode = "500", description = "글 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))})
+    })
+    @GetMapping(value = "/{userId}/{postId}")
+    public ResponseEntity<GetPostByIdResponse> getPostById(
+            @Parameter(description = "유저 아이디") @PathVariable String userId,
+            @Parameter(description = "글 아이디") @PathVariable String postId
+    ) throws Exception {
+        GetPostByIdResponse response = new GetPostByIdResponse();
+
+        PostDto postDto = postService.getPostById(userId, postId);
+
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+        response.setMessage("글 상세 조회 성공");
+        response.setData(postDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
