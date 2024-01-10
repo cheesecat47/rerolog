@@ -48,10 +48,10 @@ public class UserController {
      */
     @Operation(summary = "getUserInfo 유저 정보 조회", description = "아이디에 해당하는 유저 정보 조회")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "유저 정보 조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GetUserInfoResponse.class))}),
-            @ApiResponse(responseCode = "400", description = "유저 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
-            @ApiResponse(responseCode = "404", description = "유저 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
-            @ApiResponse(responseCode = "500", description = "유저 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))})
+            @ApiResponse(responseCode = "200", description = "유저 정보 조회 성공", content = {@Content(schema = @Schema(implementation = GetUserInfoResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "유저 정보 조회 실패"),
+            @ApiResponse(responseCode = "404", description = "유저 정보 조회 실패"),
+            @ApiResponse(responseCode = "500", description = "유저 정보 조회 실패")
     })
     @GetMapping(value = "/{userId}")
     public ResponseEntity<GetUserInfoResponse> getUserInfo(
