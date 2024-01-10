@@ -1,7 +1,4 @@
-export type TabBarMenuType = {
-    text: string;
-    link: string;
-};
+import { ITabBarProps, TabBarPropsList } from 'interfaces/common/TabBarProps';
 
 const TabBar = ({
     selectedTab,
@@ -9,8 +6,8 @@ const TabBar = ({
     handleOption,
 }: {
     selectedTab: string;
-    tabList: TabBarMenuType[];
-    handleOption: (tab: TabBarMenuType) => void;
+    tabList: TabBarPropsList;
+    handleOption: (tab: ITabBarProps) => void;
 }) => (
     <div className="flex flex-cols w-full h-full items-center">
         {tabList &&

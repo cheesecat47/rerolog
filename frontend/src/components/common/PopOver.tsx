@@ -1,14 +1,14 @@
 import { Popover, Transition } from '@headlessui/react';
+import { IPopOverProps } from 'interfaces/common/PopOverProps';
 import { Fragment, ReactElement } from 'react';
-import { PopOverType } from '../layout/Header';
 
 const PopOver = ({
     popOverList,
     handlePopOver,
     children,
 }: {
-    popOverList: PopOverType[];
-    handlePopOver: (pop: PopOverType) => void;
+    popOverList: IPopOverProps[];
+    handlePopOver: (pop: IPopOverProps) => void;
     children: ReactElement;
 }) => (
     <Popover className="relative">

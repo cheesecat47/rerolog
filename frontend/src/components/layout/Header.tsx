@@ -1,6 +1,7 @@
 // import React, { useEffect, useState } from 'react';
 
 import { HeaderIconText, PopOver } from 'components/common';
+import { IPopOverProps } from 'interfaces/common/PopOverProps';
 import { Link, useNavigate } from 'react-router-dom';
 
 import flower from 'assets/icons/ML_flower-icon.png';
@@ -10,11 +11,6 @@ import moon from 'assets/icons/ML_moon-icon.png';
 import my from 'assets/icons/ML_my-icon.png';
 import pencil from 'assets/icons/ML_pencil-icon.png';
 import sun from 'assets/icons/ML_sun-icon.png';
-
-export type PopOverType = {
-    text: string;
-    link: string;
-};
 
 const Header = ({ blogName }: { blogName: string }) => {
     // 추후 로그인 여부 확인
@@ -30,7 +26,7 @@ const Header = ({ blogName }: { blogName: string }) => {
 
     const userId = 'shlee';
 
-    const popOverList: PopOverType[] = [
+    const popOverList: IPopOverProps[] = [
         {
             text: '내 블로그',
             link: `/${userId}/posts`,
@@ -41,7 +37,7 @@ const Header = ({ blogName }: { blogName: string }) => {
         },
     ];
 
-    const handlePopOver = (pop: PopOverType) => {
+    const handlePopOver = (pop: IPopOverProps) => {
         navigate(pop.link);
     };
 

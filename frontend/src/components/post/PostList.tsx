@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { POST_OPTION } from 'constants/post';
-import { PostType } from 'types/model';
+import { IPost } from 'interfaces/model';
 import PostCard from './PostCard';
 
 const PostList = ({ selectedOption }: { selectedOption?: string }) => {
@@ -28,7 +28,7 @@ const PostList = ({ selectedOption }: { selectedOption?: string }) => {
 
     return (
         <div className="w-full p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {posts.map((post: PostType) => (
+            {posts.map((post: IPost) => (
                 <PostCard key={post.postId} post={post} />
             ))}
         </div>

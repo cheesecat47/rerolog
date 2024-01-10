@@ -1,8 +1,8 @@
 import { DropBox } from 'components/common';
+import { ITabBarProps, TabBarPropsList } from 'interfaces/common/TabBarProps';
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Category, TabBar, UserProfileBox } from './components';
-import { TabBarMenuType } from './components/TabBar';
 
 const UserPage = () => {
     // @TODO: 본인 아이디 받아오기
@@ -30,7 +30,7 @@ const UserPage = () => {
         return tab;
     };
 
-    const tabBarMenu: TabBarMenuType[] = [
+    const tabBarMenu: TabBarPropsList = [
         {
             text: '포스트',
             link: 'posts',
@@ -48,7 +48,7 @@ const UserPage = () => {
     const [selecteTab, setSelectedTab] = useState<string>(getCurrentTabUrl());
     const navigate = useNavigate();
 
-    const handleTabBar = (tab: TabBarMenuType) => {
+    const handleTabBar = (tab: ITabBarProps) => {
         setSelectedTab(tab.text);
         navigate(`/${userId}/${tab.link}`);
     };

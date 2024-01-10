@@ -1,24 +1,11 @@
 import profile from 'assets/images/ML_test-profile.png';
+import { IBlog } from 'interfaces/model/Blog';
+import { CategoryListType } from 'interfaces/model/Category';
+import { IUser } from 'interfaces/model/User';
 import React, { useState } from 'react';
 
 const ManagePage = () => {
-    type ContactValueType = 'Email' | 'GitHub' | 'LinkedIn' | 'WebSite';
-
-    type ContactType = {
-        type: ContactValueType;
-        value: string;
-    };
-
-    type UserType = {
-        userId: string;
-        nickName: string;
-        content: string;
-        createdAt: string;
-        profileImage: string | null;
-        contacts: ContactType[];
-    };
-
-    const [userInfo, setUserInfo] = useState<UserType>({
+    const [userInfo, setUserInfo] = useState<IUser>({
         userId: 'shlee',
         nickName: '춘장이',
         content: '개발을 잘하고 싶으요',
@@ -36,14 +23,7 @@ const ManagePage = () => {
         ],
     });
 
-    type BlogType = {
-        userId: string;
-        blogName: string;
-        content: string;
-        createdAt: string;
-    };
-
-    const [blogInfo, setBlogInfo] = useState<BlogType>({
+    const [blogInfo, setBlogInfo] = useState<IBlog>({
         userId: 'shlee',
         blogName: 'myBlog',
         content: '개발자 지망생 임니당..',
@@ -56,13 +36,6 @@ const ManagePage = () => {
         contact: false,
         category: false,
     });
-
-    type CategoryType = {
-        categoryId: number;
-        categoryName: string;
-    };
-
-    type CategoryListType = CategoryType[];
 
     const [categoryList, setCategoryList] = useState<CategoryListType>([
         {
