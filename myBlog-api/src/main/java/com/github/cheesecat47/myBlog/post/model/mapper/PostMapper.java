@@ -10,4 +10,6 @@ import java.util.List;
 @Mapper
 public interface PostMapper {
     List<PostDto> getPosts(GetPostsRequest params) throws SQLException;
+
+    PostDto getPostById(String userId, String postId) throws SQLException;
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PostService {
     List<PostDto> getPosts(String userId, String categoryId, String order, String offset, String limit) throws Exception;
+
+    PostDto getPostById(String userId, String postId) throws Exception;
 }
