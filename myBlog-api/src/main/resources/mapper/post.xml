@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.cheesecat47.myBlog.post.model.mapper.PostMapper">
+
+    <!--  getPosts 결과 매핑 -->
+    <resultMap id="getPostsResultMap" type="PostDto">
+        <result property="postId" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="title" column="title"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="hit" column="hit"/>
+        <result property="excerpt" column="excerpt"/>
+        <result property="numOfComments" column="num_of_comments"/>
+        <association property="author" column="author" javaType="AuthorDto">
+            <result property="userId" column="id_str"/>
+            <result property="nickName" column="name"/>
+        </association>
+    </resultMap>
+
+    <!--  getPosts 쿼리 -->
+    <select id="getPosts" parameterType="GetPostsRequest" resultMap="getPostsResultMap">
+        select Post.id,
+               Post.category_id,
+               Category.name                                                  as category_name,
+               Post.title,
+               User.id_str,
+               User.name,
+               DATE_FORMAT(Post.created_at, '%Y-%m-%dT%TZ') as created_at,
+               Post.hit,
+               ifnull(Post.excerpt, concat(substr(Post.content, 197), '...')) as excerpt, -- 본문이 200자보다 길다면 197자까지 자르고 '...' 붙이기
+               (select count(*)
+                from Comment c,
+                     User u
+                where c.post_id = Post.id
+                  and u.id = User.id)                                         as num_of_comments
+        from myBlog.Post
+                 left outer join myBlog.User on Post.user_id = User.id
+                 left outer join myBlog.Category on Post.category_id = Category.id
+        where myBlog.User.id_str = #{userId}
+          and Post.deleted_at is null -- 삭제된 글 정보 제외
+          <if test="categoryId > 0">
+            and Category.id = #{categoryId}
+          </if>
+        order by
+          <if test="order == 'latest'">
+            Post.created_at desc
+          </if>
+          <if test="order == 'oldest'">
+            Post.created_at asc
+          </if>
+          <if test="order == 'popular'">
+            Post.hit desc, Post.created_at desc
+          </if>
+        limit #{offset}, #{limit};
+    </select>
+
+</mapper>
