@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
 import Parser from 'html-react-parser';
+import { useState } from 'react';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from 'react-router-dom';
 import './PostWritePage.css';
@@ -13,7 +13,7 @@ const PostWritePage = () => {
         '#856325',
         '#963254',
         '#254563',
-        'white'
+        'white',
     ];
     const modules = {
         toolbar: [
@@ -23,8 +23,8 @@ const PostWritePage = () => {
             [{ list: 'ordered' }, { list: 'bullet' }],
             ['link', 'image'],
             [{ color: myColors }],
-            [{ background: myColors }]
-        ]
+            [{ background: myColors }],
+        ],
     };
 
     const formats = [
@@ -40,7 +40,7 @@ const PostWritePage = () => {
         'color',
         'image',
         'background',
-        'align'
+        'align',
     ];
 
     const [title, setTitle] = useState<string>('');
@@ -56,12 +56,10 @@ const PostWritePage = () => {
 
     const goBack = () => {
         navigate(-1);
-    }
+    };
 
     // @TODO: post 작성 메서드 작성
-    const writePost = () => {
-
-    }
+    const writePost = () => {};
 
     return (
         <div className="grid grid-cols-2">
@@ -69,16 +67,30 @@ const PostWritePage = () => {
             <div className="h-screen flex flex-col">
                 {/* 헤더 => 뒤로가기, 작성하기 버튼 포함 */}
                 <div className="h-15 flex justify-between my-2 mx-1 text-sm">
-                    <button type="button" className="text-gray-800 mx-3 my-2 rounded-md hover:bg-gray-100" onClick={goBack}>
+                    <button
+                        type="button"
+                        className="text-gray-800 mx-3 my-2 rounded-md hover:bg-gray-100"
+                        onClick={goBack}
+                    >
                         뒤로가기
                     </button>
-                    <button type="button" className="text-white bg-ml-pink-200 px-3 py-2 rounded-md hover:bg-ml-pink-300" onClick={writePost}>
+                    <button
+                        type="button"
+                        className="text-white bg-ml-pink-200 px-3 py-2 rounded-md hover:bg-ml-pink-300"
+                        onClick={writePost}
+                    >
                         작성하기
                     </button>
                 </div>
                 {/* 제목 */}
                 <div className="h-16">
-                    <input className='text-4xl m-2 w-full' type="text" placeholder="제목을 입력하세요" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <input
+                        className="text-4xl m-2 w-full"
+                        type="text"
+                        placeholder="제목을 입력하세요"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
                 </div>
                 {/* 에디터 */}
                 <ReactQuill
@@ -97,6 +109,6 @@ const PostWritePage = () => {
             </div>
         </div>
     );
-}
+};
 
 export default PostWritePage;

@@ -27,6 +27,7 @@
                 "tsx": "never"
             }
         ],
+        "arrow-body-style": "off",
         "import/prefer-default-export": "off",
         "react/react-in-jsx-scope": "off",
         "react/require-default-props": "off", // 기본 props 미설정
