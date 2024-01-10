@@ -1,7 +1,7 @@
 import calendar from 'assets/icons/ML_calendar-icon.png';
-import { CommentType } from './CommentBoxList';
+import { IComment } from 'interfaces/model/Comment';
 
-const CommentBox = ({ comment }: { comment: CommentType }) => (
+const CommentBox = ({ comment }: { comment: IComment }) => (
     <div className="p-3 py-5">
         <div className="flex justify-between">
             <span className="text-md">{comment.userId}</span>

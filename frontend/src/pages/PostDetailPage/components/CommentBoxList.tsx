@@ -1,13 +1,5 @@
+import { CommentListType } from 'interfaces/model/Comment';
 import CommentBox from './CommentBox';
-
-export type CommentType = {
-    commentId: string;
-    content: string;
-    createdAt: string;
-    userId: string;
-};
-
-type CommentListType = CommentType[];
 
 const CommentBoxList = ({ comments }: { comments: CommentListType }) => (
     <div>

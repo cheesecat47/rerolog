@@ -4,9 +4,9 @@ import thumbnail from 'assets/images/ML_test-thumbnail.png';
 import CategoryBadge from 'components/common/CategoryBadge';
 import { useNavigate } from 'react-router-dom';
 
-import { PostType } from 'types/model';
+import { IPost } from 'interfaces/model';
 
-const PostCard = ({ post }: { post: PostType }) => {
+const PostCard = ({ post }: { post: IPost }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
