@@ -5,7 +5,6 @@ import com.github.cheesecat47.myBlog.blog.model.response.CategoryDto;
 import com.github.cheesecat47.myBlog.blog.model.response.GetBlogInfoResponse;
 import com.github.cheesecat47.myBlog.blog.model.response.GetCategoriesResponse;
 import com.github.cheesecat47.myBlog.blog.service.BlogService;
-import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,10 +43,10 @@ public class BlogController {
 
     @Operation(summary = "getBlogInfo 블로그 정보 조회", description = "아이디에 해당하는 블로그 정보 조회")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "블로그 정보 조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GetBlogInfoResponse.class))}),
-            @ApiResponse(responseCode = "400", description = "블로그 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
-            @ApiResponse(responseCode = "404", description = "블로그 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
-            @ApiResponse(responseCode = "500", description = "블로그 정보 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))})
+            @ApiResponse(responseCode = "200", description = "블로그 정보 조회 성공", content = {@Content(schema = @Schema(implementation = GetBlogInfoResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "블로그 정보 조회 실패"),
+            @ApiResponse(responseCode = "404", description = "블로그 정보 조회 실패"),
+            @ApiResponse(responseCode = "500", description = "블로그 정보 조회 실패")
     })
     @GetMapping(value = "/{userId}")
     public ResponseEntity<GetBlogInfoResponse> getBlogInfo(
@@ -67,10 +66,10 @@ public class BlogController {
 
     @Operation(summary = "getCategories 게시판 목록 조회", description = "블로그에 있는 게시판 목록 조회.<br/>만약 조회 조건은 문제가 없지만 해당하는 게시판이 없다면 상태코드는 200, data는 길이가 0인 배열 반환.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "게시판 목록 조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = GetCategoriesResponse.class))}),
-            @ApiResponse(responseCode = "400", description = "게시판 목록 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
-            @ApiResponse(responseCode = "404", description = "게시판 목록 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))}),
-            @ApiResponse(responseCode = "500", description = "게시판 목록 조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = MyBlogCommonException.class))})
+            @ApiResponse(responseCode = "200", description = "게시판 목록 조회 성공", content = {@Content(schema = @Schema(implementation = GetCategoriesResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "게시판 목록 조회 실패"),
+            @ApiResponse(responseCode = "404", description = "게시판 목록 조회 실패"),
+            @ApiResponse(responseCode = "500", description = "게시판 목록 조회 실패")
     })
     @GetMapping(value = "/{userId}/category")
     public ResponseEntity<GetCategoriesResponse> getCategories(
