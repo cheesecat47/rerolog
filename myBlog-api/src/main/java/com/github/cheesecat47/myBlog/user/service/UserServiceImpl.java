@@ -5,6 +5,7 @@ import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.mapper.UserMapper;
 import com.github.cheesecat47.myBlog.user.model.request.LoginRequestDto;
+import com.github.cheesecat47.myBlog.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
+    private final JWTUtil jwtUtil;
 
     /**
      * 입력 받은 유저 아이디에 해당하는 유저 정보를 조회.
@@ -131,10 +133,17 @@ public class UserServiceImpl implements UserService {
             }
 
             userInfoDto = userMapper.getUserInfo(params.getUserId());
+
+            // 로그인 성공 시 토큰 발급
+            String accessToken = jwtUtil.createAccessToken(params.getUserId());
+            userInfoDto.setAccessToken(accessToken);
+
+            String refreshToken = jwtUtil.createRefreshToken(params.getUserId());
+            userInfoDto.setRefresnToken(refreshToken);
+
+            // TODO: DB에 Refresh Token 업데이트
+
             log.debug("login: userInfoDto: {}", userInfoDto);
-
-            // TODO: 로그인 성공 했으면 토큰 발급
-
         } catch (SQLException e) {
             throw new MyBlogCommonException(
                     ResponseCode.SQL_ERROR,
