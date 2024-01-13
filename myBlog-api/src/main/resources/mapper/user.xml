@@ -32,4 +32,13 @@
         order by User.id, Contact.id;
     </select>
 
+    <!-- login 쿼리 -->
+    <select id="login" parameterType="LoginRequestDto" resultType="int">
+        select count(User.id)
+        from User
+        where User.id_str = #{userId}
+          and User.pw = #{userPw}
+          and User.deleted_at is null;
+    </select>
+
 </mapper>

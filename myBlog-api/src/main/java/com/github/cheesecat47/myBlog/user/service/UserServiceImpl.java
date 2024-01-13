@@ -4,6 +4,7 @@ import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.mapper.UserMapper;
+import com.github.cheesecat47.myBlog.user.model.request.LoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +68,75 @@ public class UserServiceImpl implements UserService {
                     "DB 조회 중 오류가 발생했습니다.",
                     new HashMap<>() {{
                         put("userId", userId);
+                        put("error", e.getMessage());
+                    }}
+            );
+        }
+
+        return userInfoDto;
+    }
+
+    @Override
+    public UserInfoDto login(LoginRequestDto params) throws Exception {
+        logger.debug("login: params: {}", params);
+
+        // 입력한 아이디가 없는 경우
+        if (params.getUserId().isEmpty()) {
+            logger.error("login: 유저 아이디는 필수입니다.");
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    "유저 아이디는 필수입니다",
+                    new HashMap<>() {{
+                        put("userId", params.getUserId());
+                    }}
+            );
+        }
+
+        // 입력한 비밀번호가 없는 경우
+        if (params.getUserPw().isEmpty()) {
+            logger.error("login: 유저 비밀번호는 필수입니다.");
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    "유저 비밀번호는 필수입니다",
+                    new HashMap<>() {{
+                        put("userPw", params.getUserPw());
+                    }}
+            );
+        }
+
+        // DB에서 유저 조회
+        UserInfoDto userInfoDto;
+        try {
+            // 아이디, 비밀번호 일치하는 유저 존재하는지 확인
+            int count = userMapper.login(params);
+            logger.debug("login: count: {}", count);
+
+            // 조회된 유저가 없는 경우
+            if (count != 1) {
+                String msg = "로그인에 실패했습니다";
+                logger.error("login: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.UNAUTHORIZED,
+                        msg,
+                        new HashMap<>() {{
+                            put("userId", params.getUserId());
+                            put("userPw", params.getUserPw());
+                        }}
+                );
+            }
+
+            userInfoDto = userMapper.getUserInfo(params.getUserId());
+            logger.debug("login: userInfoDto: {}", userInfoDto);
+
+            // TODO: 로그인 성공 했으면 토큰 발급
+
+        } catch (SQLException e) {
+            throw new MyBlogCommonException(
+                    ResponseCode.SQL_ERROR,
+                    "DB 조회 중 오류가 발생했습니다.",
+                    new HashMap<>() {{
+                        put("userId", params.getUserId());
+                        put("userPw", params.getUserPw());
                         put("error", e.getMessage());
                     }}
             );

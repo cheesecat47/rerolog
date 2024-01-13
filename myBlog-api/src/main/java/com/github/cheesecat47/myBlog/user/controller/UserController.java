@@ -3,7 +3,9 @@ package com.github.cheesecat47.myBlog.user.controller;
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
+import com.github.cheesecat47.myBlog.user.model.request.LoginRequestDto;
 import com.github.cheesecat47.myBlog.user.model.response.GetUserInfoResponse;
+import com.github.cheesecat47.myBlog.user.model.response.LoginResponseDto;
 import com.github.cheesecat47.myBlog.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,10 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -43,7 +42,7 @@ public class UserController {
     /**
      * 입력 받은 유저 아이디에 해당하는 유저 정보를 조회.
      *
-     * @param idStr 조회할 유저의 아이디. DB에서는 PK로 사용하는 int `id`와 구분하기 위해 유저 문자열 아이디를 `id_str`로 사용했으나, API 사용자에게는 pk id는 보일 필요가 없고, `id`가 더 익숙하므로 API 파라미터는 `id`로 받음.
+     * @param userId 조회할 유저의 아이디. DB에서는 PK로 사용하는 int `id`와 구분하기 위해 유저 문자열 아이디를 `id_str`로 사용했으나, API 사용자에게는 pk id는 보일 필요가 없고, `id`가 더 익숙하므로 API 파라미터는 `id`로 받음.
      * @see MyBlogCommonException
      */
     @Operation(summary = "getUserInfo 유저 정보 조회", description = "아이디에 해당하는 유저 정보 조회")
@@ -64,6 +63,32 @@ public class UserController {
 
         response.setCode(ResponseCode.NORMAL_SERVICE);
         response.setMessage("유저 정보 조회 성공");
+        response.setData(userInfoDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Operation(summary = "login 로그인", description = "아이디와 비밀번호를 입력 받아 로그인 처리")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "로그인 성공", content = {@Content(schema = @Schema(implementation = LoginResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "로그인 실패"),
+            @ApiResponse(responseCode = "401", description = "로그인 실패"),
+            @ApiResponse(responseCode = "500", description = "로그인 실패")
+    })
+    @PostMapping(value = "/login")
+    public ResponseEntity<LoginResponseDto> login(
+            @RequestBody LoginRequestDto params
+    ) throws MyBlogCommonException {
+        log.debug("login: params: {}", params);
+
+        LoginResponseDto response = new LoginResponseDto();
+
+        UserInfoDto userInfoDto = userService.login(params);
+
+        String msg = "로그인 성공";
+        log.info("login: {}", msg);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+        response.setMessage(msg);
         response.setData(userInfoDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

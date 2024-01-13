@@ -194,6 +194,26 @@ DELETE /api/user/:userId
 POST /api/user/login
 ```
 
+#### 요청
+
+| Param Type |   Name   | Data Type | Required |      Description       |
+|:----------:|:--------:|:---------:|:--------:|:----------------------:|
+|    Body    | `userId` | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 |
+|    Body    | `userPw` | `String`  |    O     |        유저 비밀번호         |
+
+##### 예시
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/user/login' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+  "userPw": "1234"
+}'
+```
+
 #### 응답
 
 ##### 예시
@@ -201,6 +221,39 @@ POST /api/user/login
 ```json
 // HTTP/1.1 200 OK
 // Content-Type: application/json;charset=UTF-8
+{
+  "code": "00",
+  "message": "로그인 성공",
+  "data": {
+    "userId": "cheesecat47",
+    "nickName": "신주용",
+    "content": "안녕하세요, 신주용입니다.",
+    "createdAt": "2024-01-13T07:25:26Z",
+    "profileImage": null,
+    "contacts": [
+      {
+        "type": "Email",
+        "value": "cheesecat47@gmail.com"
+      },
+      ...
+    ],
+    "accessToken": null,
+    "refresnToken": null
+  }
+}
+```
+
+```json
+// HTTP/1.1 401 UNAUTHORIZED
+// Content-Type: application/json;charset=UTF-8
+{
+  "code": "12",
+  "data": {
+    "userPw": "123!",
+    "userId": "cheesecat47"
+  },
+  "message": "로그인에 실패했습니다"
+}
 ```
 
 ### logOut 로그 아웃
