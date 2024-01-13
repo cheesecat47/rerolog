@@ -1,5 +1,13 @@
 # ERD
 
+## 2024.01.13.
+
+![ERD](resources/ERD-240113.png)
+
+### 변경 내역
+
+- 인증 방법을 토큰 기반으로 변경하여 `Session` 테이블을 `Auth` 테이블로 변경하고, 컬럼명을 `rerfresh_token`으로 변경.
+
 ## 2024.01.09.
 
 ![ERD](resources/ERD-240109.png)
