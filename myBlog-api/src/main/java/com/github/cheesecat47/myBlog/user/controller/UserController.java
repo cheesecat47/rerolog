@@ -78,7 +78,7 @@ public class UserController {
     @PostMapping(value = "/login")
     public ResponseEntity<LoginResponseDto> login(
             @RequestBody LoginRequestDto params
-    ) throws MyBlogCommonException {
+    ) throws Exception {
         log.debug("login: params: {}", params);
 
         LoginResponseDto response = new LoginResponseDto();

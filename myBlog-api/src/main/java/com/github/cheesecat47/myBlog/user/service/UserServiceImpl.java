@@ -81,14 +81,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoDto login(LoginRequestDto params) throws Exception {
-        logger.debug("login: params: {}", params);
+        log.debug("login: params: {}", params);
 
         // 입력한 아이디가 없는 경우
         if (params.getUserId().isEmpty()) {
-            logger.error("login: 유저 아이디는 필수입니다.");
+            String msg = "유저 아이디는 필수입니다";
+            log.error("login: {}", msg);
             throw new MyBlogCommonException(
                     ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
-                    "유저 아이디는 필수입니다",
+                    msg,
                     new HashMap<>() {{
                         put("userId", params.getUserId());
                     }}
@@ -97,10 +98,11 @@ public class UserServiceImpl implements UserService {
 
         // 입력한 비밀번호가 없는 경우
         if (params.getUserPw().isEmpty()) {
-            logger.error("login: 유저 비밀번호는 필수입니다.");
+            String msg = "유저 비밀번호는 필수입니다";
+            log.error("login: {}", msg);
             throw new MyBlogCommonException(
                     ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
-                    "유저 비밀번호는 필수입니다",
+                    msg,
                     new HashMap<>() {{
                         put("userPw", params.getUserPw());
                     }}
@@ -112,12 +114,12 @@ public class UserServiceImpl implements UserService {
         try {
             // 아이디, 비밀번호 일치하는 유저 존재하는지 확인
             int count = userMapper.login(params);
-            logger.debug("login: count: {}", count);
+            log.debug("login: count: {}", count);
 
             // 조회된 유저가 없는 경우
             if (count != 1) {
                 String msg = "로그인에 실패했습니다";
-                logger.error("login: {}", msg);
+                log.error("login: {}", msg);
                 throw new MyBlogCommonException(
                         ResponseCode.UNAUTHORIZED,
                         msg,
@@ -129,7 +131,7 @@ public class UserServiceImpl implements UserService {
             }
 
             userInfoDto = userMapper.getUserInfo(params.getUserId());
-            logger.debug("login: userInfoDto: {}", userInfoDto);
+            log.debug("login: userInfoDto: {}", userInfoDto);
 
             // TODO: 로그인 성공 했으면 토큰 발급
 
