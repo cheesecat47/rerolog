@@ -14,8 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +32,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
 
-    private final Logger logger = LoggerFactory.getLogger(PostController.class);
     private final PostService postService;
 
     @Operation(summary = "getPosts 글 목록 조회", description = "조건에 맞는 글 목록 조회.<br/>만약 조회 조건은 문제가 없지만 해당하는 글이 없다면 data는 길이가 0인 배열 반환.")
@@ -52,12 +49,20 @@ public class PostController {
             @RequestParam(required = false, defaultValue = "0") String offset,
             @RequestParam(required = false, defaultValue = "10") String limit
     ) throws Exception {
+        log.debug("getPosts: userId: {}", userId);
+        log.debug("getPosts: categoryId: {}", categoryId);
+        log.debug("getPosts: order: {}", order);
+        log.debug("getPosts: offset: {}", offset);
+        log.debug("getPosts: limit: {}", limit);
+
         GetPostsResponse response = new GetPostsResponse();
 
         List<PostDto> posts = postService.getPosts(userId, categoryId, order, offset, limit);
 
+        String msg = "글 목록 조회 성공";
+        log.info("getPosts: {}, size: {}", msg, posts.size());
         response.setCode(ResponseCode.NORMAL_SERVICE);
-        response.setMessage("글 목록 조회 성공");
+        response.setMessage(msg);
         response.setData(posts);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -75,12 +80,17 @@ public class PostController {
             @Parameter(description = "유저 아이디") @PathVariable String userId,
             @Parameter(description = "글 아이디") @PathVariable String postId
     ) throws Exception {
+        log.debug("getPostById: userId: {}", userId);
+        log.debug("getPostById: postId: {}", postId);
+
         GetPostByIdResponse response = new GetPostByIdResponse();
 
         PostDto postDto = postService.getPostById(userId, postId);
 
+        String msg = "글 상세 조회 성공";
+        log.info("getPostById: {}", msg);
         response.setCode(ResponseCode.NORMAL_SERVICE);
-        response.setMessage("글 상세 조회 성공");
+        response.setMessage(msg);
         response.setData(postDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

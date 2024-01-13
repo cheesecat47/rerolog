@@ -1,7 +1,6 @@
 package com.github.cheesecat47.myBlog.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -16,8 +15,8 @@ import java.util.List;
  */
 @Configuration
 @EnableWebMvc
+@Slf4j
 public class WebMvcConfiguration implements WebMvcConfigurer {
-    private static final Logger logger = LoggerFactory.getLogger(WebMvcConfiguration.class);
 
     /**
      * CORS 허용 설정. 허용할 Origin을 CORS Registry에 추가.
@@ -26,8 +25,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        List<String> origins = List.of("http://localhost:5173", "https://localhost:5173");
-        logger.info("CORS 허용 origins: {}", origins);
+        List<String> origins = List.of("http://localhost", "http://localhost:3000", "http://localhost:5173");
+        log.info("CORS 허용 origins: {}", origins);
 
         registry.addMapping("/**") // 모든 하위 경로
                 .allowedOrigins(String.join(",", origins)) // 허용할 Origin
