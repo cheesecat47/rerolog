@@ -88,6 +88,7 @@ public class JWTUtil {
         try {
             token = token.replaceAll("^Bearer ", "");
             log.debug("checkToken: token: {}", token);
+            log.debug("checkToken: userId: {}", userId);
 
             Jwts.parser()
                     .verifyWith(generateKey())
