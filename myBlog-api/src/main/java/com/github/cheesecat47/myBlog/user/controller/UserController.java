@@ -16,8 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +34,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
     /**
@@ -56,13 +53,16 @@ public class UserController {
     public ResponseEntity<GetUserInfoResponse> getUserInfo(
             @Parameter(description = "유저 아이디") @PathVariable Optional<String> userId
     ) throws Exception {
-        logger.info("getUserInfo");
+        log.debug("getUserInfo: userId: {}", userId);
+
         GetUserInfoResponse response = new GetUserInfoResponse();
 
         UserInfoDto userInfoDto = userService.getUserInfo(userId);
 
+        String msg = "유저 정보 조회 성공";
+        log.info("getUserInfo: {}", msg);
         response.setCode(ResponseCode.NORMAL_SERVICE);
-        response.setMessage("유저 정보 조회 성공");
+        response.setMessage(msg);
         response.setData(userInfoDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
