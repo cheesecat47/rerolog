@@ -15,8 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +36,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BlogController {
 
-    private final Logger logger = LoggerFactory.getLogger(BlogController.class);
     private final BlogService blogService;
 
     @Operation(summary = "getBlogInfo 블로그 정보 조회", description = "아이디에 해당하는 블로그 정보 조회")
@@ -52,13 +49,16 @@ public class BlogController {
     public ResponseEntity<GetBlogInfoResponse> getBlogInfo(
             @Parameter(description = "유저 아이디") @PathVariable String userId
     ) throws Exception {
-        logger.info("getBlogInfo");
+        log.debug("getBlogInfo: userId: {}", userId);
+
         GetBlogInfoResponse response = new GetBlogInfoResponse();
 
         BlogInfoDto blogInfoDto = blogService.getBlogInfo(userId);
 
+        String msg = "블로그 정보 조회 성공";
+        log.info("getBlogInfo: {}", msg);
         response.setCode(ResponseCode.NORMAL_SERVICE);
-        response.setMessage("블로그 정보 조회 성공");
+        response.setMessage(msg);
         response.setData(blogInfoDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -75,13 +75,16 @@ public class BlogController {
     public ResponseEntity<GetCategoriesResponse> getCategories(
             @Parameter(description = "유저 아이디") @PathVariable String userId
     ) throws Exception {
-        logger.info("getCategories");
+        log.debug("getCategories: userId: {}", userId);
+
         GetCategoriesResponse response = new GetCategoriesResponse();
 
         List<CategoryDto> categoryNames = blogService.getCategories(userId);
 
+        String msg = "게시판 목록 조회 성공";
+        log.info("getCategories: {}, size: {}", msg, categoryNames.size());
         response.setCode(ResponseCode.NORMAL_SERVICE);
-        response.setMessage("게시판 목록 조회 성공");
+        response.setMessage(msg);
         response.setData(categoryNames);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

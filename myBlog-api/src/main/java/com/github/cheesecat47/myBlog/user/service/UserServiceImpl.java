@@ -5,8 +5,7 @@ import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -14,10 +13,10 @@ import java.util.HashMap;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserMapper userMapper;
 
     /**
@@ -30,14 +29,15 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserInfoDto getUserInfo(Optional<String> userId) throws Exception {
-        logger.info("getUserInfo: userId: {}", userId);
+        log.debug("getUserInfo: userId: {}", userId);
 
         // 입력한 아이디가 없는 경우
         if (userId.isEmpty()) {
-            logger.error("getUserInfo: 유저 아이디는 필수입니다.");
+            String msg = "유저 아이디는 필수입니다";
+            log.error("getUserInfo: {}", msg);
             throw new MyBlogCommonException(
                     ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
-                    "유저 아이디는 필수입니다",
+                    msg,
                     new HashMap<>() {{
                         put("userId", userId);
                     }}
@@ -48,23 +48,26 @@ public class UserServiceImpl implements UserService {
         UserInfoDto userInfoDto;
         try {
             userInfoDto = userMapper.getUserInfo(userId.get());
-            logger.info("getUserInfo: userInfo: {}", userInfoDto);
+            log.debug("getUserInfo: userInfo: {}", userInfoDto);
 
             // 조회된 유저가 없는 경우
             if (userInfoDto == null) {
-                logger.error("getUserInfo: 입력한 아이디에 해당하는 유저가 없습니다.");
+                String msg = "입력한 아이디에 해당하는 유저가 없습니다";
+                log.error("getUserInfo: {}", msg);
                 throw new MyBlogCommonException(
                         ResponseCode.NO_RESULT,
-                        "입력한 아이디에 해당하는 유저가 없습니다.",
+                        msg,
                         new HashMap<>() {{
                             put("userId", userId);
                         }}
                 );
             }
         } catch (SQLException e) {
+            String msg = "DB 조회 중 오류가 발생했습니다";
+            log.error("getUserInfo: {}", msg);
             throw new MyBlogCommonException(
                     ResponseCode.SQL_ERROR,
-                    "DB 조회 중 오류가 발생했습니다.",
+                    msg,
                     new HashMap<>() {{
                         put("userId", userId);
                         put("error", e.getMessage());

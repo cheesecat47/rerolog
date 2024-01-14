@@ -62,8 +62,10 @@ public class PostController {
 
         List<PostDto> posts = postService.getPosts(params);
 
+        String msg = "글 목록 조회 성공";
+        log.info("getPosts: {}, size: {}", msg, posts.size());
         response.setCode(ResponseCode.NORMAL_SERVICE);
-        response.setMessage("글 목록 조회 성공");
+        response.setMessage(msg);
         response.setData(posts);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -81,12 +83,17 @@ public class PostController {
             @Parameter(description = "유저 아이디") @PathVariable String userId,
             @Parameter(description = "글 아이디") @PathVariable String postId
     ) throws Exception {
+        log.debug("getPostById: userId: {}", userId);
+        log.debug("getPostById: postId: {}", postId);
+
         GetPostByIdResponse response = new GetPostByIdResponse();
 
         PostDto postDto = postService.getPostById(userId, postId);
 
+        String msg = "글 상세 조회 성공";
+        log.info("getPostById: {}", msg);
         response.setCode(ResponseCode.NORMAL_SERVICE);
-        response.setMessage("글 상세 조회 성공");
+        response.setMessage(msg);
         response.setData(postDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
