@@ -25,10 +25,4 @@ public class UserInfoDto {
 
     @Schema(description = "연락처 배열. 등록된 연락처가 없으면 길이가 0인 배열.")
     List<ContactDto> contacts;
-
-    @Schema(description = "엑세스 토큰")
-    String accessToken;
-
-    @Schema(description = "리프레시 토큰")
-    String refresnToken;
 }

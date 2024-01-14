@@ -1,6 +1,6 @@
 package com.github.cheesecat47.myBlog.user.model.response;
 
-import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
+import com.github.cheesecat47.myBlog.user.model.AuthTokenDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -13,5 +13,5 @@ public class LoginResponseDto {
     String message;
 
     @Schema(description = "유저 정보 객체")
-    UserInfoDto data;
+    AuthTokenDto data;
 }

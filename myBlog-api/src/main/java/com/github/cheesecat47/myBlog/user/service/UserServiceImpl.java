@@ -2,6 +2,7 @@ package com.github.cheesecat47.myBlog.user.service;
 
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
+import com.github.cheesecat47.myBlog.user.model.AuthTokenDto;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.mapper.UserMapper;
 import com.github.cheesecat47.myBlog.user.model.request.LoginRequestDto;
@@ -84,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = {MyBlogCommonException.class})
-    public UserInfoDto login(LoginRequestDto params) throws Exception {
+    public AuthTokenDto login(LoginRequestDto params) throws Exception {
         log.debug("login: params: {}", params);
 
         // 입력한 아이디가 없는 경우
@@ -113,8 +114,8 @@ public class UserServiceImpl implements UserService {
             );
         }
 
-        // DB에서 유저 조회
-        UserInfoDto userInfoDto;
+        // DB에서 유저 조회 후 토큰 발급
+        AuthTokenDto authTokenDto = new AuthTokenDto();
         try {
             // 아이디, 비밀번호 일치하는 유저 존재하는지 확인
             int count = userMapper.login(params);
@@ -133,15 +134,14 @@ public class UserServiceImpl implements UserService {
                         }}
                 );
             }
-
-            userInfoDto = userMapper.getUserInfo(params.getUserId());
+            authTokenDto.setUserId(params.getUserId());
 
             // 로그인 성공 시 토큰 발급
             String accessToken = jwtUtil.createAccessToken(params.getUserId());
-            userInfoDto.setAccessToken(accessToken);
+            authTokenDto.setAccessToken(accessToken);
 
             String refreshToken = jwtUtil.createRefreshToken(params.getUserId());
-            userInfoDto.setRefresnToken(refreshToken);
+            authTokenDto.setRefreshToken(refreshToken);
 
             // DB에 Refresh Token 업데이트
             count = userMapper.updateRefreshToken(params.getUserId(), refreshToken);
@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
                 );
             }
 
-            log.debug("login: userInfoDto: {}", userInfoDto);
+            log.debug("login: authTokenDto: {}", authTokenDto);
         } catch (SQLException e) {
             throw new MyBlogCommonException(
                     ResponseCode.SQL_ERROR,
@@ -171,6 +171,6 @@ public class UserServiceImpl implements UserService {
             );
         }
 
-        return userInfoDto;
+        return authTokenDto;
     }
 }

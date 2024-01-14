@@ -2,6 +2,7 @@ package com.github.cheesecat47.myBlog.user.controller;
 
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
+import com.github.cheesecat47.myBlog.user.model.AuthTokenDto;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.request.LoginRequestDto;
 import com.github.cheesecat47.myBlog.user.model.response.GetUserInfoResponse;
@@ -83,13 +84,13 @@ public class UserController {
 
         LoginResponseDto response = new LoginResponseDto();
 
-        UserInfoDto userInfoDto = userService.login(params);
+        AuthTokenDto authTokenDto = userService.login(params);
 
         String msg = "로그인 성공";
         log.info("login: {}", msg);
         response.setCode(ResponseCode.NORMAL_SERVICE);
         response.setMessage(msg);
-        response.setData(userInfoDto);
+        response.setData(authTokenDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

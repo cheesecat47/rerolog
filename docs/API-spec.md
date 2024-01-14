@@ -226,19 +226,8 @@ curl -X 'POST' \
   "message": "로그인 성공",
   "data": {
     "userId": "cheesecat47",
-    "nickName": "신주용",
-    "content": "안녕하세요, 신주용입니다.",
-    "createdAt": "2024-01-13T07:25:26Z",
-    "profileImage": null,
-    "contacts": [
-      {
-        "type": "Email",
-        "value": "cheesecat47@gmail.com"
-      },
-      ...
-    ],
-    "accessToken": null,
-    "refresnToken": null
+    "accessToken": "eyJ0eXAiOi...",
+    "refreshToken": "eyJ0eXAiOi..."
   }
 }
 ```
