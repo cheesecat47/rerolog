@@ -25,17 +25,17 @@ public class PostServiceImpl implements PostService {
     private final UserMapper userMapper;
 
     @Override
-    public List<PostDto> getPosts(String userId, String categoryId, String order, String offset, String limit) throws Exception {
-        logger.info("getPosts: userId: {}", userId);
+    public List<PostDto> getPosts(GetPostsRequest params) throws Exception {
+        logger.debug("getPosts: params: {}", params);
 
         // 공백인 경우
-        if (userId.isEmpty() || userId.isBlank()) {
+        if (params.getUserId().isEmpty() || params.getUserId().isBlank()) {
             logger.error("getPosts: 유저 아이디는 필수입니다.");
             throw new MyBlogCommonException(
                     ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
                     "유저 아이디는 필수입니다",
                     new HashMap<>() {{
-                        put("userId", userId);
+                        put("userId", params.getUserId());
                     }}
             );
         }
@@ -44,24 +44,17 @@ public class PostServiceImpl implements PostService {
         List<PostDto> posts;
         try {
             // 존재하는 유저인지 확인
-            UserInfoDto userInfoDto = userMapper.getUserInfo(userId);
+            UserInfoDto userInfoDto = userMapper.getUserInfo(params.getUserId());
             if (userInfoDto == null) {
                 logger.error("getPosts: 입력한 아이디에 해당하는 유저가 없습니다.");
                 throw new MyBlogCommonException(
                         ResponseCode.NO_RESULT,
                         "입력한 아이디에 해당하는 블로그가 없습니다.",
                         new HashMap<>() {{
-                            put("userId", userId);
+                            put("userId", params.getUserId());
                         }}
                 );
             }
-
-            GetPostsRequest params = new GetPostsRequest();
-            params.setUserId(userId);
-            params.setCategoryId(categoryId == null ? 0 : Integer.parseInt(categoryId));
-            params.setOrder(order);
-            params.setOffset(Integer.parseInt(offset));
-            params.setLimit(Integer.parseInt(limit));
 
             posts = postMapper.getPosts(params);
             logger.info("getPosts: # of posts: {}", posts.size());
@@ -70,7 +63,7 @@ public class PostServiceImpl implements PostService {
                     ResponseCode.SQL_ERROR,
                     "DB 조회 중 오류가 발생했습니다.",
                     new HashMap<>() {{
-                        put("userId", userId);
+                        put("userId", params.getUserId());
                         put("error", e.getMessage());
                     }}
             );
