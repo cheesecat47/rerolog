@@ -9,6 +9,7 @@ import com.github.cheesecat47.myBlog.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -82,6 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = {MyBlogCommonException.class})
     public UserInfoDto login(LoginRequestDto params) throws Exception {
         log.debug("login: params: {}", params);
 
@@ -141,7 +143,20 @@ public class UserServiceImpl implements UserService {
             String refreshToken = jwtUtil.createRefreshToken(params.getUserId());
             userInfoDto.setRefresnToken(refreshToken);
 
-            // TODO: DB에 Refresh Token 업데이트
+            // DB에 Refresh Token 업데이트
+            count = userMapper.updateRefreshToken(params.getUserId(), refreshToken);
+            if (!(count == 1 || count == 2)) {
+                String msg = "로그인에 실패했습니다";
+                log.error("login: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.UNAUTHORIZED,
+                        msg,
+                        new HashMap<>() {{
+                            put("userId", params.getUserId());
+                            put("userPw", params.getUserPw());
+                        }}
+                );
+            }
 
             log.debug("login: userInfoDto: {}", userInfoDto);
         } catch (SQLException e) {

@@ -11,4 +11,6 @@ public interface UserMapper {
     UserInfoDto getUserInfo(String userId) throws SQLException;
 
     int login(LoginRequestDto params) throws SQLException;
+
+    int updateRefreshToken(String userId, String refreshToken) throws SQLException;
 }
