@@ -6,6 +6,7 @@ import com.github.cheesecat47.myBlog.user.model.AuthTokenDto;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.mapper.UserMapper;
 import com.github.cheesecat47.myBlog.user.model.request.LoginRequestDto;
+import com.github.cheesecat47.myBlog.user.model.request.LogoutRequestDto;
 import com.github.cheesecat47.myBlog.user.model.request.RefreshRequestDto;
 import com.github.cheesecat47.myBlog.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -173,6 +174,64 @@ public class UserServiceImpl implements UserService {
         }
 
         return authTokenDto;
+    }
+
+    @Override
+    public void logout(LogoutRequestDto params) throws Exception {
+        log.debug("logout: params: {}", params);
+
+        // 입력한 아이디가 없는 경우
+        if (params.getUserId().isEmpty()) {
+            String msg = "유저 아이디는 필수입니다";
+            log.error("logout: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    msg,
+                    new HashMap<>() {{
+                        put("userId", params.getUserId());
+                    }}
+            );
+        }
+
+        // 입력한 액세스 토큰이 없는 경우
+        if (params.getAccessToken().isEmpty()) {
+            String msg = "액세스 토큰은 필수입니다";
+            log.error("logout: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    msg,
+                    new HashMap<>() {{
+                        put("Authorization", params.getAccessToken());
+                    }}
+            );
+        }
+
+        if (!jwtUtil.checkToken(params.getAccessToken(), params.getUserId())) {
+            String msg = "로그인 후 이용 바랍니다";
+            log.error("logout: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.UNAUTHORIZED,
+                    msg,
+                    new HashMap<>() {{
+                        put("userId", params.getUserId());
+                        put("Authorization", params.getAccessToken());
+                    }}
+            );
+        }
+
+        try {
+            userMapper.logout(params);
+        } catch (SQLException e) {
+            throw new MyBlogCommonException(
+                    ResponseCode.SQL_ERROR,
+                    "DB 조회 중 오류가 발생했습니다.",
+                    new HashMap<>() {{
+                        put("userId", params.getUserId());
+                        put("Authorization", params.getAccessToken());
+                        put("error", e.getMessage());
+                    }}
+            );
+        }
     }
 
     @Transactional(rollbackFor = {MyBlogCommonException.class})

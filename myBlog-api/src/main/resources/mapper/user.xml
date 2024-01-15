@@ -41,6 +41,17 @@
           and User.deleted_at is null;
     </select>
 
+    <!-- logout 쿼리 -->
+    <update id="logout" parameterType="LogoutRequestDto">
+        update Auth
+            left outer join User
+            on Auth.id = (select User.id
+                          from User
+                          where User.id_str = #{userId}
+                            and User.deleted_at is null)
+        set Auth.refresh_token = null;
+    </update>
+
     <!-- updateRefreshToken 쿼리 -->
     <insert id="updateRefreshToken" parameterType="String">
         <selectKey keyProperty="uid" resultType="String" order="BEFORE">

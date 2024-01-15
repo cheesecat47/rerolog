@@ -5,9 +5,11 @@ import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.user.model.AuthTokenDto;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.request.LoginRequestDto;
+import com.github.cheesecat47.myBlog.user.model.request.LogoutRequestDto;
 import com.github.cheesecat47.myBlog.user.model.request.RefreshRequestDto;
 import com.github.cheesecat47.myBlog.user.model.response.GetUserInfoResponse;
 import com.github.cheesecat47.myBlog.user.model.response.LoginResponseDto;
+import com.github.cheesecat47.myBlog.user.model.response.LogoutResponseDto;
 import com.github.cheesecat47.myBlog.user.model.response.RefreshResponseDto;
 import com.github.cheesecat47.myBlog.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +18,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -93,6 +97,33 @@ public class UserController {
         response.setCode(ResponseCode.NORMAL_SERVICE);
         response.setMessage(msg);
         response.setData(authTokenDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Operation(summary = "logout 로그 아웃", description = "유저 로그 아웃 처리", security = {@SecurityRequirement(name = "Access Token")})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "로그 아웃 성공", content = {@Content(schema = @Schema(implementation = LogoutResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "로그 아웃 실패"),
+            @ApiResponse(responseCode = "401", description = "로그 아웃 실패"),
+            @ApiResponse(responseCode = "500", description = "로그 아웃 실패")
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<LogoutResponseDto> logout(
+            @Parameter(description = "로그 아웃 하려는 유저 아이디") @RequestBody LogoutRequestDto params,
+            HttpServletRequest request
+    ) throws Exception {
+        log.debug("logout: params: {}", params);
+
+        LogoutResponseDto response = new LogoutResponseDto();
+
+        params.setAccessToken(request.getHeader("Authorization"));
+        userService.logout(params);
+
+        String msg = "로그 아웃 성공";
+        log.info("logout: {}", msg);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+        response.setMessage(msg);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

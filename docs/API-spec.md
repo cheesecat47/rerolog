@@ -253,6 +253,26 @@ curl -X 'POST' \
 POST /api/user/logout
 ```
 
+#### 요청
+
+| Param Type |      Name       | Data Type | Required |                   Description                    |
+|:----------:|:---------------:|:---------:|:--------:|:------------------------------------------------:|
+|   Header   | `Authorization` | `String`  |    O     | `Bearer` + (공백 하나 포함) + `로그인할 때 받은 Access Token` |
+|    Body    |    `userId`     | `String`  |    O     |         로그 아웃 하려는 유저 아이디. DB의 `id_str` 값         |
+
+##### 예시
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/user/logout' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47"
+}'
+```
+
 #### 응답
 
 ##### 예시
@@ -260,11 +280,24 @@ POST /api/user/logout
 ```json
 // HTTP/1.1 200 OK
 // Content-Type: application/json;charset=UTF-8
+{
+  "code": "00",
+  "message": "로그 아웃 성공",
+  "data": null
+}
 ```
 
 ```json
 // HTTP/1.1 401 UNAUTHORIZED
 // Content-Type: application/json;charset=UTF-8
+{
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "cheesecat4"
+  },
+  "message": "로그인 후 이용 바랍니다"
+}
 ```
 
 ### refresh 액세스 토큰 재발급
