@@ -5,8 +5,10 @@ import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.user.model.AuthTokenDto;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.request.LoginRequestDto;
+import com.github.cheesecat47.myBlog.user.model.request.RefreshRequestDto;
 import com.github.cheesecat47.myBlog.user.model.response.GetUserInfoResponse;
 import com.github.cheesecat47.myBlog.user.model.response.LoginResponseDto;
+import com.github.cheesecat47.myBlog.user.model.response.RefreshResponseDto;
 import com.github.cheesecat47.myBlog.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -87,6 +89,32 @@ public class UserController {
         AuthTokenDto authTokenDto = userService.login(params);
 
         String msg = "로그인 성공";
+        log.info("login: {}", msg);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+        response.setMessage(msg);
+        response.setData(authTokenDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Operation(summary = "refresh 액세스 토큰 재발급", description = "만료된 액세스 토큰을 재발급.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "액세스 토큰 재발급 성공", content = {@Content(schema = @Schema(implementation = RefreshResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "액세스 토큰 재발급 실패"),
+            @ApiResponse(responseCode = "401", description = "액세스 토큰 재발급 실패"),
+            @ApiResponse(responseCode = "500", description = "액세스 토큰 재발급 실패")
+    })
+    @PostMapping(value = "/refresh")
+    public ResponseEntity<RefreshResponseDto> refresh(
+            @Parameter(description = "토큰 재발급 시 필요한 정보") @RequestBody RefreshRequestDto params
+    ) throws Exception {
+        log.debug("refresh: params: {}", params);
+
+        RefreshResponseDto response = new RefreshResponseDto();
+
+        AuthTokenDto authTokenDto = userService.refresh(params);
+
+        String msg = "액세스 토큰 재발급 성공";
         log.info("login: {}", msg);
         response.setCode(ResponseCode.NORMAL_SERVICE);
         response.setMessage(msg);

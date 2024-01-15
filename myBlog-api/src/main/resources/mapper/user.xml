@@ -55,4 +55,14 @@
         Auth.refresh_token = #{refreshToken};
     </insert>
 
+    <!-- getRefreshToken 쿼리 -->
+    <select id="getRefreshToken" parameterType="String" resultType="String">
+        select Auth.refresh_token
+        from Auth
+                 left outer join User
+                                 on Auth.id = User.id
+        where User.id_str = #{userId}
+          and User.deleted_at is null;
+    </select>
+
 </mapper>

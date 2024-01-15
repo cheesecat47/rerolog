@@ -267,6 +267,64 @@ POST /api/user/logout
 // Content-Type: application/json;charset=UTF-8
 ```
 
+### refresh 액세스 토큰 재발급
+
+- 만료된 액세스 토큰을 재발급.
+
+```http request
+POST /api/user/refresh
+```
+
+#### 요청
+
+| Param Type |      Name      | Data Type | Required |                    Description                    |
+|:----------:|:--------------:|:---------:|:--------:|:-------------------------------------------------:|
+|    Body    |    `userId`    | `String`  |    O     |         토큰을 재발급하려는 유저 아이디. DB의 `id_str` 값         |
+|    Body    | `refreshToken` | `String`  |    O     | `Bearer` + (공백 하나 포함) + `로그인할 때 받은 refresh Token` |
+
+##### 예시
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/user/refresh' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+  "refreshToken": "Bearer eyJ0eXAiOi..."
+}'
+```
+
+#### 응답
+
+##### 예시
+
+```json
+// HTTP/1.1 200 OK
+// Content-Type: application/json;charset=UTF-8
+{
+  "code": "00",
+  "message": "액세스 토큰 재발급 성공",
+  "data": {
+    "userId": "cheesecat47",
+    "accessToken": "eyJ0eXAiOi...",
+    "refreshToken": null
+  }
+}
+```
+
+```json
+// HTTP/1.1 401 UNAUTHORIZED
+// Content-Type: application/json;charset=UTF-8
+{
+  "code": "12",
+  "data": {
+    "refreshToken": "Bearer eyJ0eXAiOi..."
+  },
+  "message": "유효하지 않은 리프레시 토큰입니다"
+}
+```
+
 ---
 
 ## Blog
@@ -671,16 +729,16 @@ GET /api/post/:userId/:postId
 
 ## 에러 코드 정리
 
-| HTTP 응답 코드 | 응답 코드 |            응답 메시지             |      설명       |
-|:----------:|:-----:|:-----------------------------:|:-------------:|
-|    200     |  00   |        NORMAL_SERVICE         |      정상       |
-|    400     |  10   | NO_REQUIRED_REQUEST_PARAMETER | 필수 요청 파라미터 없음 |
-|    400     |  11   |   INVALID_REQUEST_PARAMETER   |  파라미터 값이 잘못됨  |
-|    401     |  12   |         UNAUTHORIZED          |  미인증 상태에서 요청  |
-|    404     |  13   |           NO_RESULT           | 결과 값이 존재하지 않음 |
-|    404     |  14   |          NO_RESOURCE          | URI가 존재하지 않음  |
-|    500     |  20   |     INTERNAL_SERVER_ERROR     |   서버 내부 오류    |
-|    500     |  21   |           SQL_ERROR           |     DB 오류     |
+| HTTP 응답 코드 | 응답 코드 |            응답 메시지             |            설명             |
+|:----------:|:-----:|:-----------------------------:|:-------------------------:|
+|    200     |  00   |        NORMAL_SERVICE         |            정상             |
+|    400     |  10   | NO_REQUIRED_REQUEST_PARAMETER |       필수 요청 파라미터 없음       |
+|    400     |  11   |   INVALID_REQUEST_PARAMETER   |        파라미터 값이 잘못됨        |
+|    401     |  12   |         UNAUTHORIZED          | 미인증 상태에서 요청 또는 유효하지 않은 토큰 |
+|    404     |  13   |           NO_RESULT           |       결과 값이 존재하지 않음       |
+|    404     |  14   |          NO_RESOURCE          |       URI가 존재하지 않음        |
+|    500     |  20   |     INTERNAL_SERVER_ERROR     |         서버 내부 오류          |
+|    500     |  21   |           SQL_ERROR           |           DB 오류           |
 
 ---
 

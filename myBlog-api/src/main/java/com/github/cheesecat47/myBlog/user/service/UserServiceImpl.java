@@ -6,6 +6,7 @@ import com.github.cheesecat47.myBlog.user.model.AuthTokenDto;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.mapper.UserMapper;
 import com.github.cheesecat47.myBlog.user.model.request.LoginRequestDto;
+import com.github.cheesecat47.myBlog.user.model.request.RefreshRequestDto;
 import com.github.cheesecat47.myBlog.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -166,6 +167,84 @@ public class UserServiceImpl implements UserService {
                     new HashMap<>() {{
                         put("userId", params.getUserId());
                         put("userPw", params.getUserPw());
+                        put("error", e.getMessage());
+                    }}
+            );
+        }
+
+        return authTokenDto;
+    }
+
+    @Transactional(rollbackFor = {MyBlogCommonException.class})
+    @Override
+    public AuthTokenDto refresh(RefreshRequestDto params) throws Exception {
+        log.debug("refresh: params: {}", params);
+
+        // 입력한 아이디가 없는 경우
+        if (params.getUserId().isEmpty()) {
+            String msg = "유저 아이디는 필수입니다";
+            log.error("refresh: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    msg,
+                    new HashMap<>() {{
+                        put("userId", params.getUserId());
+                    }}
+            );
+        }
+
+        // 입력한 리프레시 토큰이 없는 경우
+        if (params.getRefreshToken().isEmpty()) {
+            String msg = "리프레시 토큰은 필수입니다";
+            log.error("refresh: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    msg,
+                    new HashMap<>() {{
+                        put("refreshToken", params.getRefreshToken());
+                    }}
+            );
+        }
+
+        // 유효하지 않은 리프레시 토큰인 경우
+        if (!jwtUtil.checkToken(params.getRefreshToken(), params.getUserId())) {
+            String msg = "유효하지 않은 리프레시 토큰입니다";
+            log.error("refresh: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.UNAUTHORIZED,
+                    msg,
+                    new HashMap<>() {{
+                        put("refreshToken", params.getRefreshToken());
+                    }}
+            );
+        }
+
+        AuthTokenDto authTokenDto = new AuthTokenDto();
+        try {
+            String refreshToken = userMapper.getRefreshToken(params.getUserId());
+            if (!refreshToken.equals(params.getRefreshToken().replaceAll("^Bearer ", ""))) {
+                String msg = "유효하지 않은 리프레시 토큰입니다";
+                log.error("refresh: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.UNAUTHORIZED,
+                        msg,
+                        new HashMap<>() {{
+                            put("refreshToken", params.getRefreshToken());
+                        }}
+                );
+            }
+
+            authTokenDto.setUserId(params.getUserId());
+            authTokenDto.setAccessToken(jwtUtil.createAccessToken(params.getUserId()));
+
+            log.debug("refresh: authTokenDto: {}", authTokenDto);
+        } catch (SQLException e) {
+            throw new MyBlogCommonException(
+                    ResponseCode.SQL_ERROR,
+                    "DB 조회 중 오류가 발생했습니다.",
+                    new HashMap<>() {{
+                        put("userId", params.getUserId());
+                        put("refreshToken", params.getRefreshToken());
                         put("error", e.getMessage());
                     }}
             );
