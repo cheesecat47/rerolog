@@ -24,22 +24,18 @@ public class PostServiceImpl implements PostService {
     private final UserMapper userMapper;
 
     @Override
-    public List<PostDto> getPosts(String userId, String categoryId, String order, String offset, String limit) throws Exception {
-        log.debug("getPosts: userId: {}", userId);
-        log.debug("getPosts: categoryId: {}", categoryId);
-        log.debug("getPosts: order: {}", order);
-        log.debug("getPosts: offset: {}", offset);
-        log.debug("getPosts: limit: {}", limit);
+    public List<PostDto> getPosts(GetPostsRequest params) throws Exception {
+        log.debug("getPosts: params: {}", params);
 
         // 공백인 경우
-        if (userId.isEmpty() || userId.isBlank()) {
+        if (params.getUserId().isEmpty() || params.getUserId().isBlank()) {
             String msg = "유저 아이디는 필수입니다";
             log.error("getPosts: {}", msg);
             throw new MyBlogCommonException(
                     ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
                     msg,
                     new HashMap<>() {{
-                        put("userId", userId);
+                        put("userId", params.getUserId());
                     }}
             );
         }
@@ -48,9 +44,7 @@ public class PostServiceImpl implements PostService {
         List<PostDto> posts;
         try {
             // 존재하는 유저인지 확인
-            UserInfoDto userInfoDto = userMapper.getUserInfo(userId);
-            log.debug("getPosts: userInfoDto: {}", userInfoDto);
-
+            UserInfoDto userInfoDto = userMapper.getUserInfo(params.getUserId());
             if (userInfoDto == null) {
                 String msg = "입력한 아이디에 해당하는 유저가 없습니다";
                 log.error("getPosts: {}", msg);
@@ -58,21 +52,13 @@ public class PostServiceImpl implements PostService {
                         ResponseCode.NO_RESULT,
                         msg,
                         new HashMap<>() {{
-                            put("userId", userId);
+                            put("userId", params.getUserId());
                         }}
                 );
             }
 
-            GetPostsRequest params = new GetPostsRequest();
-            params.setUserId(userId);
-            params.setCategoryId(categoryId == null ? 0 : Integer.parseInt(categoryId));
-            params.setOrder(order);
-            params.setOffset(Integer.parseInt(offset));
-            params.setLimit(Integer.parseInt(limit));
-            log.debug("getPosts: params: {}", params);
-
             posts = postMapper.getPosts(params);
-            log.debug("getPosts: size: {}", posts.size());
+            log.debug("getPosts: posts size: {}", posts.size());
         } catch (SQLException e) {
             String msg = "DB 조회 중 오류가 발생했습니다";
             log.error("getPosts: {}", msg);
@@ -80,7 +66,7 @@ public class PostServiceImpl implements PostService {
                     ResponseCode.SQL_ERROR,
                     msg,
                     new HashMap<>() {{
-                        put("userId", userId);
+                        put("userId", params.getUserId());
                         put("error", e.getMessage());
                     }}
             );
@@ -125,8 +111,6 @@ public class PostServiceImpl implements PostService {
         try {
             // 존재하는 유저인지 확인
             UserInfoDto userInfoDto = userMapper.getUserInfo(userId);
-            log.debug("getPostById: userInfoDto: {}", userInfoDto);
-
             if (userInfoDto == null) {
                 String msg = "입력한 아이디에 해당하는 유저가 없습니다";
                 log.error("getPostById: {}", msg);
@@ -139,10 +123,8 @@ public class PostServiceImpl implements PostService {
                 );
             }
 
-            postDto = postMapper.getPostById(userId, postId);
-            log.debug("getPostById: postDto: {}", postDto);
-
             // 존재하는 글인지 확인
+            postDto = postMapper.getPostById(userId, postId);
             if (postDto == null) {
                 String msg = "해당하는 글이 없습니다";
                 log.error("getPostById: {}", msg);
@@ -157,6 +139,7 @@ public class PostServiceImpl implements PostService {
 
             // 댓글 개수 업데이트
             postDto.setNumOfComments(postDto.getComments().size());
+
             log.debug("getPostById: postDto: {}", postDto);
         } catch (SQLException e) {
             String msg = "DB 조회 중 오류가 발생했습니다";

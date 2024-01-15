@@ -2,6 +2,7 @@ package com.github.cheesecat47.myBlog.post.controller;
 
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
+import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostByIdResponse;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostsResponse;
 import com.github.cheesecat47.myBlog.post.service.PostService;
@@ -49,15 +50,17 @@ public class PostController {
             @RequestParam(required = false, defaultValue = "0") String offset,
             @RequestParam(required = false, defaultValue = "10") String limit
     ) throws Exception {
-        log.debug("getPosts: userId: {}", userId);
-        log.debug("getPosts: categoryId: {}", categoryId);
-        log.debug("getPosts: order: {}", order);
-        log.debug("getPosts: offset: {}", offset);
-        log.debug("getPosts: limit: {}", limit);
+        GetPostsRequest params = new GetPostsRequest();
+        params.setUserId(userId);
+        params.setCategoryId(categoryId == null ? 0 : Integer.parseInt(categoryId));
+        params.setOrder(order);
+        params.setOffset(Integer.parseInt(offset));
+        params.setLimit(Integer.parseInt(limit));
+        log.debug("getPosts: params: {}", params);
 
         GetPostsResponse response = new GetPostsResponse();
 
-        List<PostDto> posts = postService.getPosts(userId, categoryId, order, offset, limit);
+        List<PostDto> posts = postService.getPosts(params);
 
         String msg = "글 목록 조회 성공";
         log.info("getPosts: {}, size: {}", msg, posts.size());
