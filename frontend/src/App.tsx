@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import UserPostList from 'components/post/UserPostList';
 import { GuestBook, Introduce } from 'pages/UserPage/components';
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Layout } from './components/layout';
-import PostList from './components/post/PostList';
 import {
     LoginPage,
     MainPage,
@@ -28,9 +28,12 @@ const router = createBrowserRouter([
                 path: ':userId',
                 element: <UserPage />,
                 children: [
-                    { index: true, element: <PostList /> },
-                    { path: 'posts', element: <PostList /> },
-                    { path: 'category/:categoryName?', element: <PostList /> },
+                    { index: true, element: <UserPostList /> },
+                    { path: 'posts', element: <UserPostList /> },
+                    {
+                        path: 'category/:categoryName?',
+                        element: <UserPostList />,
+                    },
                     { path: 'guestbook', element: <GuestBook /> },
                     { path: 'introduce', element: <Introduce /> },
                 ],

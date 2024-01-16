@@ -1,8 +1,10 @@
+import { CategoryListType } from 'interfaces/model';
+
 const Category = ({
     categoryList,
     handleCategory,
 }: {
-    categoryList: string[];
+    categoryList: CategoryListType;
     handleCategory: (category: string) => void;
 }) => {
     return (
@@ -13,10 +15,10 @@ const Category = ({
                     <button
                         type="button"
                         className="p-2 text-start rounded-md hover:bg-gray-100"
-                        key={category}
-                        onClick={() => handleCategory(category)}
+                        key={category.categoryName}
+                        onClick={() => handleCategory(category.categoryName)}
                     >
-                        {category}
+                        {category.categoryName}
                     </button>
                 ))}
             </div>

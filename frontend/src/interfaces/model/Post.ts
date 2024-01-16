@@ -1,12 +1,5 @@
-import { POST_OPTION } from '../../constants/post';
 import { IAuthor } from './Author';
 import { CommentListType } from './Comment';
-
-export type PostOption = keyof typeof POST_OPTION;
-
-export type PostOptionType = {
-    option: keyof typeof POST_OPTION;
-};
 
 export interface IPost {
     postId: number;

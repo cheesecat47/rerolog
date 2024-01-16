@@ -1,18 +1,17 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { DropBox } from 'components/common';
 import PostList from 'components/post/PostList';
-import { POST_OPTION } from 'constants/post';
 
 const MainPage = () => {
     const navigate = useNavigate();
 
-    const postOptionList: string[] = [POST_OPTION.recent, POST_OPTION.trend];
+    const [searchParams] = useSearchParams();
+    const sort = searchParams.get('sort');
 
-    const { sort } = useParams();
     const [selectedOption, setSelectedOption] = useState<string>(
-        sort || POST_OPTION.recent
+        sort || 'recent'
     );
 
     const handleOption = (option: string) => {
@@ -25,7 +24,7 @@ const MainPage = () => {
             <div className=" mt-20 flex items-center">
                 <div className="flex-1">&nbsp;</div>
                 <div className="w-[250px] text-center text-4xl font-semibold">
-                    {selectedOption === POST_OPTION.recent
+                    {selectedOption === 'recent'
                         ? 'Recent Posts'
                         : 'Trend Posts'}
                 </div>
@@ -33,7 +32,7 @@ const MainPage = () => {
                 {/* <div className="flex-1 cursor-pointer">&nbsp;&nbsp;See all posts</div> */}
             </div>
             <p className="text-center mt-2">
-                {selectedOption === POST_OPTION.recent
+                {selectedOption === 'recent'
                     ? '최근 업로드한'
                     : '최근 인기있는'}{' '}
                 포스트입니다
@@ -42,7 +41,7 @@ const MainPage = () => {
                 <div className="h-10 float-right">
                     <DropBox
                         showText={selectedOption}
-                        menuList={postOptionList}
+                        menuList={['recent', 'trend']}
                         handleOption={handleOption}
                     />
                 </div>

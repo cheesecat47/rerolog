@@ -6,7 +6,7 @@ export type orderType = 'latest' | 'oldest' | 'popular';
 export type getPostListRequest = {
     userId?: string;
     categoryId?: string;
-    order?: orderType;
+    order?: string;
     offset?: string;
     limit?: string;
 };

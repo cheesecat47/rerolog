@@ -2,14 +2,14 @@ import { usePost } from 'hooks/usePost';
 import { IPost } from 'interfaces/model';
 import PostCard from './PostCard';
 
-const PostList = ({ selectedOption }: { selectedOption?: string }) => {
+const UserPostList = ({ selectedOption }: { selectedOption?: string }) => {
+    const userId = 'rosielsh';
     const { getUserPostList } = usePost();
-
     const {
         isLoading,
         error,
         data: posts,
-    } = getUserPostList({ order: selectedOption });
+    } = getUserPostList({ userId, order: selectedOption });
 
     if (isLoading) return <div>로딩중입니다</div>;
 
@@ -25,4 +25,4 @@ const PostList = ({ selectedOption }: { selectedOption?: string }) => {
     );
 };
 
-export default PostList;
+export default UserPostList;
