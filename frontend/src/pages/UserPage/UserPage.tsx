@@ -1,20 +1,18 @@
 import { DropBox } from 'components/common';
-import { ITabBarProps, TabBarPropsList } from 'interfaces/common/TabBarProps';
+import { tabBarMenus } from 'constants/tabBarMenus';
+import { tabBarProps } from 'constants/tabBarProps';
+import { useCategory } from 'hooks/useCategory';
+import { ITabBarProps } from 'interfaces/common/TabBarProps';
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Category, TabBar, UserProfileBox } from './components';
 
 const UserPage = () => {
     // @TODO: 본인 아이디 받아오기
-    const userId = 'shlee';
-
-    const tabBarMenus = [
-        ['posts', '포스트'],
-        ['guestbook', '방명록'],
-        ['introduce', '한줄소개'],
-    ];
+    const userId = 'rosielsh';
 
     const location = useLocation();
+
     const getCurrentTabUrl = (): string => {
         const path = location.pathname;
 
@@ -30,21 +28,6 @@ const UserPage = () => {
         return tab;
     };
 
-    const tabBarMenu: TabBarPropsList = [
-        {
-            text: '포스트',
-            link: 'posts',
-        },
-        {
-            text: '방명록',
-            link: 'guestbook',
-        },
-        {
-            text: '한줄소개',
-            link: 'introduce',
-        },
-    ];
-
     const [selecteTab, setSelectedTab] = useState<string>(getCurrentTabUrl());
     const navigate = useNavigate();
 
@@ -53,12 +36,11 @@ const UserPage = () => {
         navigate(`/${userId}/${tab.link}`);
     };
 
-    const categoryList: string[] = [
-        'Javascript',
-        'React',
-        '회고록',
-        'Algorithm',
-    ];
+    const { getCategoryList } = useCategory();
+
+    const { data: categoryList } = getCategoryList({ userId });
+
+    console.log(categoryList);
 
     const handleCategory = (category: string) => {
         // category가 선택됨
@@ -87,14 +69,14 @@ const UserPage = () => {
                 <div className="h-10 border-b-[1px]">
                     <TabBar
                         selectedTab={selecteTab}
-                        tabList={tabBarMenu}
+                        tabList={tabBarProps}
                         handleOption={handleTabBar}
                     />
                 </div>
                 <div className="grid grid-cols-5 p-4">
                     <div className="col-span-1">
                         <Category
-                            categoryList={categoryList}
+                            categoryList={categoryList || []}
                             handleCategory={handleCategory}
                         />
                     </div>
