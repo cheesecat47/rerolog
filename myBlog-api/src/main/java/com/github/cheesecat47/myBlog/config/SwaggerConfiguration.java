@@ -1,8 +1,10 @@
 package com.github.cheesecat47.myBlog.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,6 +69,15 @@ public class SwaggerConfiguration {
                                 .name("cheesecat47")
                                 .email("cheesecat47@gmail.com")
                                 .url("https://github.com/cheesecat47")
+                        )
+                )
+                .components(new Components()
+                        .addSecuritySchemes(
+                                "Access Token",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
                         )
                 );
     }
