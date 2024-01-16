@@ -1,25 +1,19 @@
-import { useQuery } from '@tanstack/react-query';
 import calendar from 'assets/icons/ML_calendar-icon.png';
 import comment from 'assets/icons/ML_comment-icon.png';
-import axios from 'axios';
 import CategoryBadge from 'components/common/CategoryBadge';
+import { usePost } from 'hooks/usePost';
 import { useParams } from 'react-router-dom';
 import CommentBoxList from './components/CommentBoxList';
 
 const PostDetailPage = () => {
     const { userId, postId } = useParams();
 
-    // @TODO userId, postId를 가지고 통신
-    const {
-        isLoading,
-        error,
-        data: post,
-    } = useQuery({
-        queryKey: [`posts${postId}`],
-        queryFn: async () =>
-            axios.get('/data/posts/detail.json').then((res) => res.data),
-        staleTime: 5 * 60 * 1000,
-    });
+    if (!userId || !postId) return <div>잘못된 경로입니다.</div>;
+
+    const { getPostDetail } = usePost();
+    const { isLoading, error, data: post } = getPostDetail({ userId, postId });
+
+    if (!post) return <div>잘못된 경로입니다.</div>;
 
     if (isLoading) return <div>로딩중입니다</div>;
 
