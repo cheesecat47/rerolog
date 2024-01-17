@@ -495,6 +495,14 @@ GET /api/blog/:userId/category
 POST /api/blog/:userId/category
 ```
 
+#### 요청
+
+| Param Type |      Name       | Data Type | Required |                         Description                         | 
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------------------------------------------:|
+|    Path    |    `userId`     | `String`  |    O     |                   유저 아이디. DB의 `id_str` 값                    |
+|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 로그인 유저와 블로그 유저가 동일할 때만 (본인 블로그 수정 시도일 때만) 게시판 생성 가능 |
+|    Body    | `categoryName`  | `String`  |    O     |                           게시판 이름                            |
+
 #### 응답
 
 ##### 예시
@@ -502,6 +510,23 @@ POST /api/blog/:userId/category
 ```json
 // HTTP/1.1 201 CREATED
 // Content-Type: application/json;charset=UTF-8
+{
+  "message": "NORMAL_SERVICE",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 401 UNAUTHORIZED
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "게시판 생성은 로그인 상태의 블로그 주인 유저만 가능합니다",
+  "code": "12",
+  "data": {
+    ...
+  }
+}
 ```
 
 ### updateCategory 게시판 정보 변경
