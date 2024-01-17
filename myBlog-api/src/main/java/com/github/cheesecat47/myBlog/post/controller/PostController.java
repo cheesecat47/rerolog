@@ -42,13 +42,13 @@ public class PostController {
             @ApiResponse(responseCode = "404", description = "글 목록 조회 실패"),
             @ApiResponse(responseCode = "500", description = "글 목록 조회 실패")
     })
-    @GetMapping(value = "/{userId}")
+    @GetMapping(value = "")
     public ResponseEntity<GetPostsResponse> getPosts(
-            @Parameter(description = "유저 아이디") @PathVariable String userId,
-            @RequestParam(required = false) String categoryId,
-            @RequestParam(required = false, defaultValue = "latest") String order,
-            @RequestParam(required = false, defaultValue = "0") String offset,
-            @RequestParam(required = false, defaultValue = "10") String limit
+            @Parameter(description = "유저 아이디") @RequestParam(required = false) String userId,
+            @Parameter(description = "게시판 아이디") @RequestParam(required = false) String categoryId,
+            @Parameter(description = "정렬 방법") @RequestParam(required = false, defaultValue = "latest") String order,
+            @Parameter(description = "offset: 몇 번째 글부터") @RequestParam(required = false, defaultValue = "0") String offset,
+            @Parameter(description = "limit: 몇 개의 글 조회 할지") @RequestParam(required = false, defaultValue = "10") String limit
     ) throws Exception {
         GetPostsRequest params = new GetPostsRequest();
         params.setUserId(userId);
