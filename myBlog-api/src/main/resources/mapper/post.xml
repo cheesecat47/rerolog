@@ -39,8 +39,10 @@
         from myBlog.Post
                  left outer join myBlog.User on Post.user_id = User.id
                  left outer join myBlog.Category on Post.category_id = Category.id
-        where myBlog.User.id_str = #{userId}
-          and Post.deleted_at is null -- 삭제된 글 정보 제외
+        where Post.deleted_at is null -- 삭제된 글 정보 제외
+          <if test="userId != null">
+              and myBlog.User.id_str = #{userId}
+          </if>
           <if test="categoryId > 0">
             and Category.id = #{categoryId}
           </if>

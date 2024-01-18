@@ -554,17 +554,17 @@ DELETE /api/blog/:userId/category/:categoryId
 
 ### getPosts 글 목록 조회
 
-- 아이디에 해당하는 유저가 쓴 글 중 조건에 일치하는 글 목록 조회
+- 조건에 일치하는 글 목록 조회
 
 ```http request
-GET /api/post/:userId?categoryId=&order=recent&offset=0&limit=10
+GET /api/post?userId=&categoryId=&order=recent&offset=0&limit=10
 ```
 
 #### 요청
 
 | Param Type |     Name     | Data Type | Required |                           Description                            |  
 |:----------:|:------------:|:---------:|:--------:|:----------------------------------------------------------------:|
-|    Path    |   `userId`   | `String`  |    O     |                              유저 아이디                              |
+|   Query    |   `userId`   | `String`  |    -     |                              유저 아이디                              |
 |   Query    | `categoryId` |   `int`   |    -     |          게시판 아이디. 특정 게시판에 속한 글만 필터링 할 때 사용. 없으면 전체 글 목록          |
 |   Query    |   `order`    | `String`  |    -     | `latest(최신순)`,`oldest(오래된순)`,`popular(인기순)` 중 택 1. 기본값은 `latest` |
 |   Query    |   `offset`   |   `int`   |    -     |                  정렬된 결과 중 `offset`부터 반환. 기본값 0                   |

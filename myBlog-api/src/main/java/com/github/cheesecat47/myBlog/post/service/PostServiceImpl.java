@@ -27,34 +27,23 @@ public class PostServiceImpl implements PostService {
     public List<PostDto> getPosts(GetPostsRequest params) throws Exception {
         log.debug("getPosts: params: {}", params);
 
-        // 공백인 경우
-        if (params.getUserId().isEmpty() || params.getUserId().isBlank()) {
-            String msg = "유저 아이디는 필수입니다";
-            log.error("getPosts: {}", msg);
-            throw new MyBlogCommonException(
-                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
-                    msg,
-                    new HashMap<>() {{
-                        put("userId", params.getUserId());
-                    }}
-            );
-        }
-
         // DB에서 조회
         List<PostDto> posts;
         try {
             // 존재하는 유저인지 확인
-            UserInfoDto userInfoDto = userMapper.getUserInfo(params.getUserId());
-            if (userInfoDto == null) {
-                String msg = "입력한 아이디에 해당하는 유저가 없습니다";
-                log.error("getPosts: {}", msg);
-                throw new MyBlogCommonException(
-                        ResponseCode.NO_RESULT,
-                        msg,
-                        new HashMap<>() {{
-                            put("userId", params.getUserId());
-                        }}
-                );
+            if (params.getUserId() != null) {
+                UserInfoDto userInfoDto = userMapper.getUserInfo(params.getUserId());
+                if (userInfoDto == null) {
+                    String msg = "입력한 아이디에 해당하는 유저가 없습니다";
+                    log.error("getPosts: {}", msg);
+                    throw new MyBlogCommonException(
+                            ResponseCode.NO_RESULT,
+                            msg,
+                            new HashMap<>() {{
+                                put("userId", params.getUserId());
+                            }}
+                    );
+                }
             }
 
             posts = postMapper.getPosts(params);
