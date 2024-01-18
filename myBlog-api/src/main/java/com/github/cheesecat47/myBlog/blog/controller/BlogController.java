@@ -1,7 +1,9 @@
 package com.github.cheesecat47.myBlog.blog.controller;
 
 import com.github.cheesecat47.myBlog.blog.model.BlogInfoDto;
+import com.github.cheesecat47.myBlog.blog.model.request.CreateCategoryRequestDto;
 import com.github.cheesecat47.myBlog.blog.model.response.CategoryDto;
+import com.github.cheesecat47.myBlog.blog.model.response.CreateCategoriesResponseDto;
 import com.github.cheesecat47.myBlog.blog.model.response.GetBlogInfoResponse;
 import com.github.cheesecat47.myBlog.blog.model.response.GetCategoriesResponse;
 import com.github.cheesecat47.myBlog.blog.service.BlogService;
@@ -13,14 +15,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -75,6 +75,7 @@ public class BlogController {
     public ResponseEntity<GetCategoriesResponse> getCategories(
             @Parameter(description = "유저 아이디") @PathVariable String userId
     ) throws Exception {
+        // TODO: userId를 blogId로 수정 (1:1 매핑, 식별 관계여서 값은 같음)
         log.debug("getCategories: userId: {}", userId);
 
         GetCategoriesResponse response = new GetCategoriesResponse();
@@ -90,4 +91,33 @@ public class BlogController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @Operation(summary = "createCategory 게시판 생성", description = "게시판 생성.<br/>로그인 상태의 블로그 주인 유저만 생성 가능.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "게시판 생성 성공", content = {@Content(schema = @Schema(implementation = CreateCategoriesResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "게시판 생성 실패"),
+            @ApiResponse(responseCode = "401", description = "게시판 생성 실패"),
+            @ApiResponse(responseCode = "500", description = "게시판 생성 실패")
+    })
+    @PostMapping(value = "/{blogId}/category")
+    public ResponseEntity<CreateCategoriesResponseDto> createCategory(
+            @Parameter(description = "게시판을 생성할 블로그 아이디") @PathVariable String blogId,
+            @RequestBody CreateCategoryRequestDto params,
+            HttpServletRequest request
+    ) throws Exception {
+        log.debug("createCategory: blogId: {}", blogId);
+
+        CreateCategoriesResponseDto response = new CreateCategoriesResponseDto();
+
+        params.setBlogId(blogId);
+        params.setAccessToken(request.getHeader("Authorization"));
+
+        blogService.createCategory(params);
+
+        String msg = "게시판 생성 성공";
+        log.info("getCategories: {}", msg);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+        response.setMessage(msg);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 }

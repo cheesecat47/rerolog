@@ -2,9 +2,11 @@ package com.github.cheesecat47.myBlog.blog.service;
 
 import com.github.cheesecat47.myBlog.blog.model.BlogInfoDto;
 import com.github.cheesecat47.myBlog.blog.model.mapper.BlogMapper;
+import com.github.cheesecat47.myBlog.blog.model.request.CreateCategoryRequestDto;
 import com.github.cheesecat47.myBlog.blog.model.response.CategoryDto;
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
+import com.github.cheesecat47.myBlog.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.List;
 public class BlogServiceImpl implements BlogService {
 
     private final BlogMapper blogMapper;
+    private final JWTUtil jwtUtil;
 
     /**
      * 입력 받은 유저 아이디에 해당하는 블로그 정보를 조회.
@@ -139,5 +142,96 @@ public class BlogServiceImpl implements BlogService {
         }
 
         return categoryNames;
+    }
+
+    @Override
+    public void createCategory(CreateCategoryRequestDto params) throws Exception {
+        log.debug("createCategory: params: {}", params);
+
+        // 공백인 경우
+        if (params.getBlogId().isEmpty() || params.getBlogId().isBlank()) {
+            String msg = "블로그 아이디는 필수입니다";
+            log.error("createCategory: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    msg,
+                    new HashMap<>() {{
+                        put("blogId", params.getBlogId());
+                    }}
+            );
+        }
+
+        // 입력한 액세스 토큰이 없는 경우
+        if (params.getAccessToken() == null) {
+            String msg = "액세스 토큰은 필수입니다";
+            log.error("createCategory: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    msg,
+                    new HashMap<>() {{
+                        put("Authorization", params.getAccessToken());
+                    }}
+            );
+        }
+
+        if (!jwtUtil.checkToken(params.getAccessToken(), params.getBlogId())) {
+            String msg = "로그인 후 이용 바랍니다";
+            log.error("createCategory: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.UNAUTHORIZED,
+                    msg,
+                    new HashMap<>() {{
+                        put("blogId", params.getBlogId());
+                        put("Authorization", params.getAccessToken());
+                    }}
+            );
+        }
+
+        // DB에 삽입
+        try {
+            // 존재하지 않는 블로그인 경우
+            BlogInfoDto blogInfoDto = blogMapper.getBlogInfo(params.getBlogId());
+            log.debug("createCategory: blogInfo: {}", blogInfoDto);
+
+            if (blogInfoDto == null) {
+                String msg = "입력한 아이디에 해당하는 블로그가 없습니다";
+                log.error("createCategory: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.NO_RESULT,
+                        msg,
+                        new HashMap<>() {{
+                            put("blogId", params.getBlogId());
+                        }}
+                );
+            }
+
+            // TODO: 게시판 이름 중복 체크
+
+            int count = blogMapper.createCategory(params);
+            if (count != 1) {
+                String msg = "게시판 생성에 실패했습니다";
+                log.error("createCategory: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.INTERNAL_SERVER_ERROR,
+                        msg,
+                        new HashMap<>() {{
+                            put("blogId", params.getBlogId());
+                            put("categoryName", params.getCategoryName());
+                        }}
+                );
+            }
+            log.debug("createCategory: 게시판 생성 성공");
+        } catch (SQLException e) {
+            String msg = "DB 삽입 중 오류가 발생했습니다";
+            log.error("createCategory: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.SQL_ERROR,
+                    msg,
+                    new HashMap<>() {{
+                        put("blogId", params.getBlogId());
+                        put("error", e.getMessage());
+                    }}
+            );
+        }
     }
 }
