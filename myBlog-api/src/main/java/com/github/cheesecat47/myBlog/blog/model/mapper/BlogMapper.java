@@ -1,6 +1,7 @@
 package com.github.cheesecat47.myBlog.blog.model.mapper;
 
 import com.github.cheesecat47.myBlog.blog.model.BlogInfoDto;
+import com.github.cheesecat47.myBlog.blog.model.request.CreateCategoryRequestDto;
 import com.github.cheesecat47.myBlog.blog.model.response.CategoryDto;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,4 +13,6 @@ public interface BlogMapper {
     BlogInfoDto getBlogInfo(String userId) throws SQLException;
 
     List<CategoryDto> getCategories(String userId) throws SQLException;
+
+    int createCategory(CreateCategoryRequestDto params) throws SQLException;
 }
