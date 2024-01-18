@@ -194,6 +194,26 @@ DELETE /api/user/:userId
 POST /api/user/login
 ```
 
+#### 요청
+
+| Param Type |   Name   | Data Type | Required |      Description       |
+|:----------:|:--------:|:---------:|:--------:|:----------------------:|
+|    Body    | `userId` | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 |
+|    Body    | `userPw` | `String`  |    O     |        유저 비밀번호         |
+
+##### 예시
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/user/login' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+  "userPw": "1234"
+}'
+```
+
 #### 응답
 
 ##### 예시
@@ -201,6 +221,28 @@ POST /api/user/login
 ```json
 // HTTP/1.1 200 OK
 // Content-Type: application/json;charset=UTF-8
+{
+  "code": "00",
+  "message": "로그인 성공",
+  "data": {
+    "userId": "cheesecat47",
+    "accessToken": "eyJ0eXAiOi...",
+    "refreshToken": "eyJ0eXAiOi..."
+  }
+}
+```
+
+```json
+// HTTP/1.1 401 UNAUTHORIZED
+// Content-Type: application/json;charset=UTF-8
+{
+  "code": "12",
+  "data": {
+    "userPw": "123!",
+    "userId": "cheesecat47"
+  },
+  "message": "로그인에 실패했습니다"
+}
 ```
 
 ### logOut 로그 아웃
@@ -211,6 +253,26 @@ POST /api/user/login
 POST /api/user/logout
 ```
 
+#### 요청
+
+| Param Type |      Name       | Data Type | Required |                   Description                    |
+|:----------:|:---------------:|:---------:|:--------:|:------------------------------------------------:|
+|   Header   | `Authorization` | `String`  |    O     | `Bearer` + (공백 하나 포함) + `로그인할 때 받은 Access Token` |
+|    Body    |    `userId`     | `String`  |    O     |         로그 아웃 하려는 유저 아이디. DB의 `id_str` 값         |
+
+##### 예시
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/user/logout' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47"
+}'
+```
+
 #### 응답
 
 ##### 예시
@@ -218,11 +280,82 @@ POST /api/user/logout
 ```json
 // HTTP/1.1 200 OK
 // Content-Type: application/json;charset=UTF-8
+{
+  "code": "00",
+  "message": "로그 아웃 성공",
+  "data": null
+}
 ```
 
 ```json
 // HTTP/1.1 401 UNAUTHORIZED
 // Content-Type: application/json;charset=UTF-8
+{
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "cheesecat4"
+  },
+  "message": "로그인 후 이용 바랍니다"
+}
+```
+
+### refresh 액세스 토큰 재발급
+
+- 만료된 액세스 토큰을 재발급.
+
+```http request
+POST /api/user/refresh
+```
+
+#### 요청
+
+| Param Type |      Name      | Data Type | Required |                    Description                    |
+|:----------:|:--------------:|:---------:|:--------:|:-------------------------------------------------:|
+|    Body    |    `userId`    | `String`  |    O     |         토큰을 재발급하려는 유저 아이디. DB의 `id_str` 값         |
+|    Body    | `refreshToken` | `String`  |    O     | `Bearer` + (공백 하나 포함) + `로그인할 때 받은 refresh Token` |
+
+##### 예시
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/user/refresh' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+  "refreshToken": "Bearer eyJ0eXAiOi..."
+}'
+```
+
+#### 응답
+
+##### 예시
+
+```json
+// HTTP/1.1 200 OK
+// Content-Type: application/json;charset=UTF-8
+{
+  "code": "00",
+  "message": "액세스 토큰 재발급 성공",
+  "data": {
+    "userId": "cheesecat47",
+    "accessToken": "eyJ0eXAiOi...",
+    "refreshToken": null
+  }
+}
+```
+
+```json
+// HTTP/1.1 401 UNAUTHORIZED
+// Content-Type: application/json;charset=UTF-8
+{
+  "code": "12",
+  "data": {
+    "refreshToken": "Bearer eyJ0eXAiOi..."
+  },
+  "message": "유효하지 않은 리프레시 토큰입니다"
+}
 ```
 
 ---
@@ -421,17 +554,17 @@ DELETE /api/blog/:userId/category/:categoryId
 
 ### getPosts 글 목록 조회
 
-- 아이디에 해당하는 유저가 쓴 글 중 조건에 일치하는 글 목록 조회
+- 조건에 일치하는 글 목록 조회
 
 ```http request
-GET /api/post/:userId?categoryId=&order=recent&offset=0&limit=10
+GET /api/post?userId=&categoryId=&order=recent&offset=0&limit=10
 ```
 
 #### 요청
 
 | Param Type |     Name     | Data Type | Required |                           Description                            |  
 |:----------:|:------------:|:---------:|:--------:|:----------------------------------------------------------------:|
-|    Path    |   `userId`   | `String`  |    O     |                              유저 아이디                              |
+|   Query    |   `userId`   | `String`  |    -     |                              유저 아이디                              |
 |   Query    | `categoryId` |   `int`   |    -     |          게시판 아이디. 특정 게시판에 속한 글만 필터링 할 때 사용. 없으면 전체 글 목록          |
 |   Query    |   `order`    | `String`  |    -     | `latest(최신순)`,`oldest(오래된순)`,`popular(인기순)` 중 택 1. 기본값은 `latest` |
 |   Query    |   `offset`   |   `int`   |    -     |                  정렬된 결과 중 `offset`부터 반환. 기본값 0                   |
@@ -629,16 +762,16 @@ GET /api/post/:userId/:postId
 
 ## 에러 코드 정리
 
-| HTTP 응답 코드 | 응답 코드 |            응답 메시지             |      설명       |
-|:----------:|:-----:|:-----------------------------:|:-------------:|
-|    200     |  00   |        NORMAL_SERVICE         |      정상       |
-|    400     |  10   | NO_REQUIRED_REQUEST_PARAMETER | 필수 요청 파라미터 없음 |
-|    400     |  11   |   INVALID_REQUEST_PARAMETER   |  파라미터 값이 잘못됨  |
-|    401     |  12   |         UNAUTHORIZED          |  미인증 상태에서 요청  |
-|    404     |  13   |           NO_RESULT           | 결과 값이 존재하지 않음 |
-|    404     |  14   |          NO_RESOURCE          | URI가 존재하지 않음  |
-|    500     |  20   |     INTERNAL_SERVER_ERROR     |   서버 내부 오류    |
-|    500     |  21   |           SQL_ERROR           |     DB 오류     |
+| HTTP 응답 코드 | 응답 코드 |            응답 메시지             |            설명             |
+|:----------:|:-----:|:-----------------------------:|:-------------------------:|
+|    200     |  00   |        NORMAL_SERVICE         |            정상             |
+|    400     |  10   | NO_REQUIRED_REQUEST_PARAMETER |       필수 요청 파라미터 없음       |
+|    400     |  11   |   INVALID_REQUEST_PARAMETER   |        파라미터 값이 잘못됨        |
+|    401     |  12   |         UNAUTHORIZED          | 미인증 상태에서 요청 또는 유효하지 않은 토큰 |
+|    404     |  13   |           NO_RESULT           |       결과 값이 존재하지 않음       |
+|    404     |  14   |          NO_RESOURCE          |       URI가 존재하지 않음        |
+|    500     |  20   |     INTERNAL_SERVER_ERROR     |         서버 내부 오류          |
+|    500     |  21   |           SQL_ERROR           |           DB 오류           |
 
 ---
 
