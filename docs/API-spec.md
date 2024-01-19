@@ -274,7 +274,7 @@ curl -X 'PUT' \
   "code": "12",
   "data": {
     "Authorization": "Bearer eyJ0eXAiOi...",
-    "userId": "cheesecat4"
+    "userId": "cheesecat47"
   }
 }
 ```
@@ -287,6 +287,22 @@ curl -X 'PUT' \
 DELETE /api/user/:userId
 ```
 
+#### 요청
+
+| Param Type |        Name        |     Data Type      | Required |                   Description                    |
+|:----------:|:------------------:|:------------------:|:--------:|:------------------------------------------------:|
+|   Header   |  `Authorization`   |      `String`      |    O     | `Bearer` + (공백 하나 포함) + `로그인할 때 받은 Access Token` |
+|    Path    |      `userId`      |      `String`      |    O     |              유저 아이디. DB의 `id_str` 값              |
+
+##### 예시
+
+```bash
+curl -X 'DELETE' \
+  'http://localhost:8080/api/user/cheesecat47' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Content-Type: application/json'
+```
+
 #### 응답
 
 ##### 예시
@@ -294,11 +310,36 @@ DELETE /api/user/:userId
 ```json
 // HTTP/1.1 204 NO CONTENT
 // Content-Type: application/json;charset=UTF-8
+{
+  "message": "회원 탈퇴 성공",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 400 BAD REQUEST
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "입력 값 형식이 유효하지 않습니다",
+  "code": "11",
+  "data": {
+    "userId": "cheesecat$&"
+  }
+}
 ```
 
 ```json
 // HTTP/1.1 401 UNAUTHORIZED
 // Content-Type: application/json;charset=UTF-8
+{
+  "message": "로그인 후 이용 바랍니다",
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "cheesecat47"
+  }
+}
 ```
 
 ### logIn 로그인
@@ -409,7 +450,7 @@ curl -X 'POST' \
   "code": "12",
   "data": {
     "Authorization": "Bearer eyJ0eXAiOi...",
-    "userId": "cheesecat4"
+    "userId": "cheesecat47"
   },
   "message": "로그인 후 이용 바랍니다"
 }
