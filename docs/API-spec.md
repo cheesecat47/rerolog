@@ -22,6 +22,7 @@
     * [getPostById 글 상세 조회](#getpostbyid-글-상세-조회)
     * [createPost 글 작성](#createpost-글-작성)
     * [updatePost 글 수정](#updatepost-글-수정)
+    * [deletePost 글 삭제](#deletepost-글-삭제)
   * [에러 코드 정리](#에러-코드-정리)
   * [References](#references)
 
@@ -1184,6 +1185,62 @@ curl -X 'PUT' \
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "글 수정은 로그인 상태의 블로그 주인 유저만 가능합니다",
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "rosielsh"
+  }
+}
+```
+
+### deletePost 글 삭제
+
+- 글 삭제.
+
+```http request
+DELETE /api/post/:postId
+```
+
+#### 요청
+
+| Param Type |      Name       | Data Type | Required |       Description       |
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------:|
+|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 글 수정 가능  |
+|    Path    |    `postId`     |   `int`   |    O     |        수정할 글 아이디        |
+|    Body    |    `userId`     | `String`  |    O     | 유저 아이디. DB의 `id_str` 값  |
+
+##### 예시
+
+```bash
+curl -X 'DELETE' \
+  'http://localhost:8080/api/post/1' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+}'
+```
+
+#### 응답
+
+##### 예시
+
+```json
+// HTTP/1.1 204 NO CONTENT
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "글 삭제 성공",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 401 UNAUTHORIZED
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "글 삭제는 로그인 상태의 블로그 주인 유저만 가능합니다",
   "code": "12",
   "data": {
     "Authorization": "Bearer eyJ0eXAiOi...",
