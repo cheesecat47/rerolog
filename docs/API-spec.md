@@ -9,6 +9,7 @@
     * [deleteUserInfo 회원 탈퇴](#deleteuserinfo-회원-탈퇴)
     * [logIn 로그인](#login-로그인)
     * [logOut 로그 아웃](#logout-로그-아웃)
+    * [refresh 액세스 토큰 재발급](#refresh-액세스-토큰-재발급)
   * [Blog](#blog)
     * [getBlogInfo 블로그 정보 조회](#getbloginfo-블로그-정보-조회)
   * [Category](#category)
@@ -72,14 +73,14 @@ GET /api/user/:userId
 
 ##### UserInfoDto
 
-|     Name     |   Data Type    |               Description               | 
-|:------------:|:--------------:|:---------------------------------------:|
-|    userId    |    `String`    |         유저 아이디. DB의 `id_str` 값          |
-|   nickName   |    `String`    |                  유저 별명                  |
-|   content    |    `String`    |   유저 소개. 소개 멘트 부재 시 길이 0인 문자열 `""` 반환   |
-|  createdAt   |    `String`    |       회원 가입일. ISO 8601 형식. UTC 기준       |
-| profileImage | `String\|null` | 프로필 이미지 URL. `null`이면 임의의 기본 이미지로 대체 필요 |
-|   contacts   | `ContactDto[]` |   연락처 배열. 등록된 연락처가 없으면 길이 0인 배열 `[]`    |
+|     Name     |     Data Type      |               Description               | 
+|:------------:|:------------------:|:---------------------------------------:|
+|    userId    |      `String`      |         유저 아이디. DB의 `id_str` 값          |
+|   nickName   |      `String`      |                  유저 별명                  |
+|   content    |      `String`      |   유저 소개. 소개 멘트 부재 시 길이 0인 문자열 `""` 반환   |
+|  createdAt   |      `String`      |       회원 가입일. ISO 8601 형식. UTC 기준       |
+| profileImage |   `String\|null`   | 프로필 이미지 URL. `null`이면 임의의 기본 이미지로 대체 필요 |
+|   contacts   | `List<ContactDto>` |   연락처 배열. 등록된 연락처가 없으면 길이 0인 배열 `[]`    |
 
 ##### ContactDto
 
@@ -133,6 +134,46 @@ GET /api/user/:userId
 POST /api/user
 ```
 
+#### 요청
+
+| Param Type |        Name        |     Data Type      | Required |         Description         |
+|:----------:|:------------------:|:------------------:|:--------:|:---------------------------:|
+|    Body    |      `userId`      |      `String`      |    O     |   유저 아이디. DB의 `id_str` 값    |
+|    Body    |      `userPw`      |      `String`      |    O     |           유저 비밀번호           |
+|    Body    |     `nickName`     |      `String`      |    O     |     유저 별명. DB의 `name` 값     |
+|    Body    |     `content`      |      `String`      |    -     | 유저 소개 글. 최대 200자. 기본 값 `""` |
+|    Body    |     `contacts`     | `List<ContactDto>` |    -     |          연락처 객체 배열          |
+|  ~~Body~~  | ~~`profileImage`~~ |     ~~`File`~~     |    -     |       ~~프로필 이미지~~ 준비중       |
+
+##### ContactDto
+
+| Name  | Data Type |                  Description                  | 
+|:-----:|:---------:|:---------------------------------------------:|
+| type  | `String`  | "Email", "GitHub", "LinkedIn", "WebSite" 중 하나 |
+| value | `String`  |                     연락처 값                     |
+
+##### 예시
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/user' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+  "userPw": "1234",
+  "nickName": "refo",
+  "content": "안녕하세요!",
+  "contacts": [
+    {
+      "type": "Email",
+      "value": "cheesecat47@gmail.com"
+    },
+    ...
+  ]
+}'
+```
+
 #### 응답
 
 ##### 예시
@@ -140,6 +181,23 @@ POST /api/user
 ```json
 // HTTP/1.1 201 CREATED
 // Content-Type: application/json;charset=UTF-8
+{
+  "message": "회원 가입 성공",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 400 BAD REQUEST
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "입력 값 형식이 유효하지 않습니다",
+  "code": "11",
+  "data": {
+    "userId": "cheesecat$&"
+  }
+}
 ```
 
 ### updateUserInfo 유저 정보 변경
@@ -444,11 +502,11 @@ GET /api/blog/:userId/category
 
 ##### 응답 본문
 
-|   Name    |      Data Type       |     Description      | 
-|:---------:|:--------------------:|:--------------------:|
-| `message` |       `String`       |        응답 메시지        |
-|  `code`   |       `String`       |        응답 코드         |
-|  `data`   | `CategoryDto[]\|Map` | 게시판 정보 배열 또는 오류 정보 맵 |
+|   Name    |        Data Type         |     Description      | 
+|:---------:|:------------------------:|:--------------------:|
+| `message` |         `String`         |        응답 메시지        |
+|  `code`   |         `String`         |        응답 코드         |
+|  `data`   | `List<CategoryDto>\|Map` | 게시판 정보 배열 또는 오류 정보 맵 |
 
 ##### CategoryDto
 
@@ -599,11 +657,11 @@ GET /api/post?userId=&categoryId=&order=recent&offset=0&limit=10
 
 ##### 응답 본문
 
-|   Name    |    Data Type     |                          Description                           | 
-|:---------:|:----------------:|:--------------------------------------------------------------:|
-| `message` |     `String`     |                             응답 메시지                             |
-|  `code`   |     `String`     |                             응답 코드                              |
-|  `data`   | `PostDto[]\|Map` | 조건에 일치하는 글 목록 또는 해당하는 글이 없는 경우 길이가 0인 배열 `[]`. 오류 발생 시 오류 정보 맵 |
+|   Name    |      Data Type       |                          Description                           | 
+|:---------:|:--------------------:|:--------------------------------------------------------------:|
+| `message` |       `String`       |                             응답 메시지                             |
+|  `code`   |       `String`       |                             응답 코드                              |
+|  `data`   | `List<PostDto>\|Map` | 조건에 일치하는 글 목록 또는 해당하는 글이 없는 경우 길이가 0인 배열 `[]`. 오류 발생 시 오류 정보 맵 |
 
 ##### PostDto
 
@@ -697,20 +755,20 @@ GET /api/post/:userId/:postId
 
 ##### PostDto
 
-|     Name      |   Data Type    |              Description              | 
-|:-------------:|:--------------:|:-------------------------------------:|
-|    postId     |     `int`      |                 글 아이디                 |
-|  categoryId   |     `int`      |                게시판 아이디                |
-| categoryName  |    `String`    |                게시판 이름                 |
-|     title     |    `String`    |                  제목                   |
-|    author     | `UserInfoDto`  |                작성자 정보                 |
-|   createdAt   |    `String`    |       작성일. ISO 8601 형식. UTC 기준        |
-|      hit      |     `int`      |                  조회수                  |
-|    excerpt    |    `String`    |                  요약                   |
-|   thumbnail   |    `String`    |                썸네일 URL                |
-|    content    |    `String`    |                  본문                   |
-|   comments    | `CommentDto[]` | 댓글 배열. 최근순 정렬. 댓글이 없으면 길이가 0인 배열 `[]` |
-| numOfComments |     `int`      |       댓글 개수 (`comments` 배열 길이)        |
+|     Name      |     Data Type      |              Description              | 
+|:-------------:|:------------------:|:-------------------------------------:|
+|    postId     |       `int`        |                 글 아이디                 |
+|  categoryId   |       `int`        |                게시판 아이디                |
+| categoryName  |      `String`      |                게시판 이름                 |
+|     title     |      `String`      |                  제목                   |
+|    author     |   `UserInfoDto`    |                작성자 정보                 |
+|   createdAt   |      `String`      |       작성일. ISO 8601 형식. UTC 기준        |
+|      hit      |       `int`        |                  조회수                  |
+|    excerpt    |      `String`      |                  요약                   |
+|   thumbnail   |      `String`      |                썸네일 URL                |
+|    content    |      `String`      |                  본문                   |
+|   comments    | `List<CommentDto>` | 댓글 배열. 최근순 정렬. 댓글이 없으면 길이가 0인 배열 `[]` |
+| numOfComments |       `int`        |       댓글 개수 (`comments` 배열 길이)        |
 
 ##### UserInfoDto
 
