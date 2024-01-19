@@ -655,11 +655,11 @@ POST /api/blog/:userId/category
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |                         Description                         | 
-|:----------:|:---------------:|:---------:|:--------:|:-----------------------------------------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |                   유저 아이디. DB의 `id_str` 값                    |
-|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 로그인 유저와 블로그 유저가 동일할 때만 (본인 블로그 수정 시도일 때만) 게시판 생성 가능 |
-|    Body    | `categoryName`  | `String`  |    O     |                           게시판 이름                            |
+| Param Type |      Name       | Data Type | Required |                        Description                         | 
+|:----------:|:---------------:|:---------:|:--------:|:----------------------------------------------------------:|
+|    Path    |    `userId`     | `String`  |    O     |                   유저 아이디. DB의 `id_str` 값                   |
+|   Header   | `Authorization` | `String`  |    O     |                  액세스 토큰. 본인 블로그 게시판 생성 가능                  |
+|    Body    | `categoryName`  | `String`  |    O     |                           게시판 이름                           |
 
 ##### 예시
 
@@ -723,12 +723,12 @@ PUT /api/blog/:userId/category/:categoryId
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |                          Description                           |
-|:----------:|:---------------:|:---------:|:--------:|:--------------------------------------------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |                     유저 아이디. DB의 `id_str` 값                     |
-|    Path    |  `categoryId`   |   `int`   |    O     |                       정보를 변경하려는 게시판 아이디                        |
-|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 로그인 유저와 블로그 유저가 동일할 때만 (본인 블로그 수정 시도일 때만) 게시판 정보 변경 가능 |
-|    Body    | `categoryName`  | `String`  |    O     |                            새 게시판 이름                            |
+| Param Type |      Name       | Data Type | Required |                          Description                          |
+|:----------:|:---------------:|:---------:|:--------:|:-------------------------------------------------------------:|
+|    Path    |    `userId`     | `String`  |    O     |                    유저 아이디. DB의 `id_str` 값                     |
+|    Path    |  `categoryId`   |   `int`   |    O     |                       정보를 변경하려는 게시판 아이디                       |
+|   Header   | `Authorization` | `String`  |    O     |                  액세스 토큰. 본인 블로그 게시판 정보 변경 가능                  |
+|    Body    | `categoryName`  | `String`  |    O     |                           새 게시판 이름                            |
 
 ##### 예시
 
@@ -792,11 +792,11 @@ DELETE /api/blog/:userId/category/:categoryId
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |                         Description                         |
-|:----------:|:---------------:|:---------:|:--------:|:-----------------------------------------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |                   유저 아이디. DB의 `id_str` 값                    |
-|    Path    |  `categoryId`   |   `int`   |    O     |                        삭제하려는 게시판 아이디                        |
-|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 로그인 유저와 블로그 유저가 동일할 때만 (본인 블로그 수정 시도일 때만) 게시판 삭제 가능 |
+| Param Type |      Name       | Data Type | Required |                        Description                         |
+|:----------:|:---------------:|:---------:|:--------:|:----------------------------------------------------------:|
+|    Path    |    `userId`     | `String`  |    O     |                   유저 아이디. DB의 `id_str` 값                   |
+|    Path    |  `categoryId`   |   `int`   |    O     |                       삭제하려는 게시판 아이디                        |
+|   Header   | `Authorization` | `String`  |    O     |                  액세스 토큰. 본인 블로그 게시판 삭제 가능                  |
 
 ##### 예시
 
@@ -1055,14 +1055,14 @@ POST /api/post
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |                        Description                        |
-|:----------:|:---------------:|:---------:|:--------:|:---------------------------------------------------------:|
-|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 로그인 유저와 블로그 유저가 동일할 때만 (본인 블로그 수정 시도일 때만) 글 작성 가능 |
-|    Body    |    `userId`     | `String`  |    O     |                  유저 아이디. DB의 `id_str` 값                   |
-|    Body    |  `categoryId`   |   `int`   |    O     |                          게시판 아이디                          |
-|    Body    |     `title`     | `String`  |    O     |                           글 제목                            |
-|    Body    |    `excerpt`    | `String`  |    -     |                  글 요약. 최대 200자. 기본값 `""`                  |
-|    Body    |    `content`    | `String`  |    -     |                      글 본문. 최대 2000자                       |
+| Param Type |      Name       | Data Type | Required |       Description       |
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------:|
+|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 글 작성 가능  |
+|    Body    |    `userId`     | `String`  |    O     | 유저 아이디. DB의 `id_str` 값  |
+|    Body    |  `categoryId`   |   `int`   |    O     |         게시판 아이디         |
+|    Body    |     `title`     | `String`  |    O     |          글 제목           |
+|    Body    |    `excerpt`    | `String`  |    -     | 글 요약. 최대 200자. 기본값 `""` |
+|    Body    |    `content`    | `String`  |    -     |     글 본문. 최대 2000자      |
 
 ##### 예시
 
