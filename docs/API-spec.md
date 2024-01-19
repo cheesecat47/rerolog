@@ -21,6 +21,7 @@
     * [getPosts 글 목록 조회](#getposts-글-목록-조회)
     * [getPostById 글 상세 조회](#getpostbyid-글-상세-조회)
     * [createPost 글 작성](#createpost-글-작성)
+    * [updatePost 글 수정](#updatepost-글-수정)
   * [에러 코드 정리](#에러-코드-정리)
   * [References](#references)
 
@@ -1110,6 +1111,79 @@ curl -X 'POST' \
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "글 생성은 로그인 상태의 블로그 주인 유저만 가능합니다",
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "rosielsh"
+  }
+}
+```
+
+### updatePost 글 수정
+
+- 글 수정.
+
+```http request
+PUT /api/post/:postId
+```
+
+#### 요청
+
+| Param Type |      Name       | Data Type | Required |       Description       |
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------:|
+|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 글 수정 가능  |
+|    Path    |    `postId`     |   `int`   |    O     |        수정할 글 아이디        |
+|    Body    |    `userId`     | `String`  |    O     | 유저 아이디. DB의 `id_str` 값  |
+|    Body    |  `categoryId`   |   `int`   |    -     |         게시판 아이디         |
+|    Body    |     `title`     | `String`  |    -     |          글 제목           |
+|    Body    |    `excerpt`    | `String`  |    -     | 글 요약. 최대 200자. 기본값 `""` |
+|    Body    |    `content`    | `String`  |    -     |     글 본문. 최대 2000자      |
+
+##### 예시
+
+```bash
+curl -X 'PUT' \
+  'http://localhost:8080/api/post/1' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+  "title": "Spring Boot 공부 중",
+}'
+```
+
+#### 응답
+
+##### 예시
+
+```json
+// HTTP/1.1 204 NO CONTENT
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "글 수정 성공",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 400 BAD REQUEST
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "글 제목 형식에 맞지 않습니다",
+  "code": "11",
+  "data": {
+    "categoryName": "!Spring!"
+  }
+}
+```
+
+```json
+// HTTP/1.1 401 UNAUTHORIZED
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "글 수정은 로그인 상태의 블로그 주인 유저만 가능합니다",
   "code": "12",
   "data": {
     "Authorization": "Bearer eyJ0eXAiOi...",
