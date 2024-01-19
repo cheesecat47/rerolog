@@ -208,6 +208,38 @@ curl -X 'POST' \
 PUT /api/user/:userId
 ```
 
+#### 요청
+
+| Param Type |        Name        |     Data Type      | Required |                   Description                    |
+|:----------:|:------------------:|:------------------:|:--------:|:------------------------------------------------:|
+|   Header   |  `Authorization`   |      `String`      |    O     | `Bearer` + (공백 하나 포함) + `로그인할 때 받은 Access Token` |
+|    Path    |      `userId`      |      `String`      |    O     |              유저 아이디. DB의 `id_str` 값              |
+|    Body    |      `userPw`      |      `String`      |    -     |                     유저 비밀번호                      |
+|    Body    |     `nickName`     |      `String`      |    -     |               유저 별명. DB의 `name` 값                |
+|    Body    |     `content`      |      `String`      |    -     |           유저 소개 글. 최대 200자. 기본 값 `""`            |
+|    Body    |     `contacts`     | `List<ContactDto>` |    -     |                    연락처 객체 배열                     |
+|  ~~Body~~  | ~~`profileImage`~~ |     ~~`File`~~     |    -     |                 ~~프로필 이미지~~ 준비중                  |
+
+##### ContactDto
+
+| Name  | Data Type |                  Description                  | 
+|:-----:|:---------:|:---------------------------------------------:|
+| type  | `String`  | "Email", "GitHub", "LinkedIn", "WebSite" 중 하나 |
+| value | `String`  |                     연락처 값                     |
+
+##### 예시
+
+```bash
+curl -X 'PUT' \
+  'http://localhost:8080/api/user/cheesecat47' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userPw": "1235",
+  "content": "안녕하세요!!",
+}'
+```
+
 #### 응답
 
 ##### 예시
@@ -215,11 +247,36 @@ PUT /api/user/:userId
 ```json
 // HTTP/1.1 204 NO CONTENT
 // Content-Type: application/json;charset=UTF-8
+{
+  "message": "유저 정보 변경 성공",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 400 BAD REQUEST
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "입력 값 형식이 유효하지 않습니다",
+  "code": "11",
+  "data": {
+    "userId": "cheesecat$&"
+  }
+}
 ```
 
 ```json
 // HTTP/1.1 401 UNAUTHORIZED
 // Content-Type: application/json;charset=UTF-8
+{
+  "message": "로그인 후 이용 바랍니다",
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "cheesecat4"
+  }
+}
 ```
 
 ### deleteUserInfo 회원 탈퇴
