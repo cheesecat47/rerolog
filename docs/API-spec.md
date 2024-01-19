@@ -659,6 +659,19 @@ POST /api/blog/:userId/category
 |   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 로그인 유저와 블로그 유저가 동일할 때만 (본인 블로그 수정 시도일 때만) 게시판 생성 가능 |
 |    Body    | `categoryName`  | `String`  |    O     |                           게시판 이름                            |
 
+##### 예시
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/blog/cheesecat47/category' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "categoryName": "Spring 스터디",
+}'
+```
+
 #### 응답
 
 ##### 예시
@@ -667,9 +680,21 @@ POST /api/blog/:userId/category
 // HTTP/1.1 201 CREATED
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "NORMAL_SERVICE",
+  "message": "게시판 생성 성공",
   "code": "00",
   "data": null
+}
+```
+
+```json
+// HTTP/1.1 400 BAD REQUEST
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "게시판 이름 형식에 맞지 않습니다",
+  "code": "11",
+  "data": {
+    "categoryName": "!Spring!"
+  }
 }
 ```
 
@@ -680,7 +705,8 @@ POST /api/blog/:userId/category
   "message": "게시판 생성은 로그인 상태의 블로그 주인 유저만 가능합니다",
   "code": "12",
   "data": {
-    ...
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "rosielsh"
   }
 }
 ```
