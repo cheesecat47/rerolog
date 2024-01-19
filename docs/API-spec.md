@@ -788,6 +788,24 @@ curl -X 'PUT' \
 DELETE /api/blog/:userId/category/:categoryId
 ```
 
+#### 요청
+
+| Param Type |      Name       | Data Type | Required |                         Description                         |
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------------------------------------------:|
+|    Path    |    `userId`     | `String`  |    O     |                   유저 아이디. DB의 `id_str` 값                    |
+|    Path    |  `categoryId`   |   `int`   |    O     |                        삭제하려는 게시판 아이디                        |
+|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 로그인 유저와 블로그 유저가 동일할 때만 (본인 블로그 수정 시도일 때만) 게시판 삭제 가능 |
+
+##### 예시
+
+```bash
+curl -X 'DELETE' \
+  'http://localhost:8080/api/blog/cheesecat47/category/1' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Content-Type: application/json'
+```
+
 #### 응답
 
 ##### 예시
@@ -795,11 +813,24 @@ DELETE /api/blog/:userId/category/:categoryId
 ```json
 // HTTP/1.1 204 NO CONTENT
 // Content-Type: application/json;charset=UTF-8
+{
+  "message": "게시판 삭제 성공",
+  "code": "00",
+  "data": null
+}
 ```
 
 ```json
 // HTTP/1.1 401 UNAUTHORIZED
 // Content-Type: application/json;charset=UTF-8
+{
+  "message": "게시판 정보 변경은 로그인 상태의 블로그 주인 유저만 가능합니다",
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "rosielsh"
+  }
+}
 ```
 
 ---
