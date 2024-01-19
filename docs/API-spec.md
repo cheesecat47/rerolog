@@ -719,6 +719,28 @@ curl -X 'POST' \
 PUT /api/blog/:userId/category/:categoryId
 ```
 
+#### 요청
+
+| Param Type |      Name       | Data Type | Required |                          Description                           |
+|:----------:|:---------------:|:---------:|:--------:|:--------------------------------------------------------------:|
+|    Path    |    `userId`     | `String`  |    O     |                     유저 아이디. DB의 `id_str` 값                     |
+|    Path    |  `categoryId`   |   `int`   |    O     |                       정보를 변경하려는 게시판 아이디                        |
+|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 로그인 유저와 블로그 유저가 동일할 때만 (본인 블로그 수정 시도일 때만) 게시판 정보 변경 가능 |
+|    Body    | `categoryName`  | `String`  |    O     |                            새 게시판 이름                            |
+
+##### 예시
+
+```bash
+curl -X 'PUT' \
+  'http://localhost:8080/api/blog/cheesecat47/category/1' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "categoryName": "Spring Boot 스터디",
+}'
+```
+
 #### 응답
 
 ##### 예시
@@ -726,11 +748,36 @@ PUT /api/blog/:userId/category/:categoryId
 ```json
 // HTTP/1.1 204 NO CONTENT
 // Content-Type: application/json;charset=UTF-8
+{
+  "message": "게시판 정보 변경 성공",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 400 BAD REQUEST
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "게시판 이름 형식에 맞지 않습니다",
+  "code": "11",
+  "data": {
+    "categoryName": "!Spring!"
+  }
+}
 ```
 
 ```json
 // HTTP/1.1 401 UNAUTHORIZED
 // Content-Type: application/json;charset=UTF-8
+{
+  "message": "게시판 정보 변경은 로그인 상태의 블로그 주인 유저만 가능합니다",
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "rosielsh"
+  }
+}
 ```
 
 ### deleteCategory 게시판 삭제
