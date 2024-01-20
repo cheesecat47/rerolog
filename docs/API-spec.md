@@ -23,6 +23,10 @@
     * [createPost 글 작성](#createpost-글-작성)
     * [updatePost 글 수정](#updatepost-글-수정)
     * [deletePost 글 삭제](#deletepost-글-삭제)
+  * [Comment](#comment)
+    * [createComment 댓글 작성](#createcomment-댓글-작성)
+    * [updateComment 댓글 수정](#updatecomment-댓글-수정)
+    * [deleteComment 댓글 삭제](#deletecomment-댓글-삭제)
   * [에러 코드 정리](#에러-코드-정리)
   * [References](#references)
 
@@ -1241,6 +1245,200 @@ curl -X 'DELETE' \
 // Content-Type: application/json;charset=UTF-8
 {
   "message": "글 삭제는 로그인 상태의 블로그 주인 유저만 가능합니다",
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "rosielsh"
+  }
+}
+```
+
+## Comment
+
+### createComment 댓글 작성
+
+- 특정 글에 댓글 작성.
+
+```http request
+POST /api/post/:postId/comment
+```
+
+#### 요청
+
+| Param Type |      Name       | Data Type | Required |                    Description                    |
+|:----------:|:---------------:|:---------:|:--------:|:-------------------------------------------------:|
+|    Path    |    `postId`     |   `int`   |    O     |                       글 아이디                       |
+|    Body    |    `userId`     | `String`  |    -     |              유저 아이디. DB의 `id_str` 값               |
+|   Header   | `Authorization` | `String`  |    -     |         액세스 토큰. `userId`를 사용해 댓글 작성 시 필요          |
+|    Body    |    `content`    | `String`  |    -     |                  댓글 본문. 최대 300자                   |
+|    Body    |   `tmpUserId`   | `String`  |    -     | 비회원 댓글 시 유저 아이디. `userId` 또는 이 값 중 하나 필수. 둘 다는 불가 |
+|    Body    |   `tmpUserPw`   | `String`  |    -     |       비회원 댓글 시 유저 비밀번호. `tmpUserId` 사용 시 필요       |
+
+##### 예시
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/post/1/comment' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+  "content": "글 잘 보고 갑니다^^",
+}'
+```
+
+#### 응답
+
+##### 예시
+
+```json
+// HTTP/1.1 201 CREATED
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "댓글 생성 성공",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 400 BAD REQUEST
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "유저 아이디 형식에 맞지 않습니다",
+  "code": "11",
+  "data": {
+    "tmpUserId": "cheesecat$@"
+  }
+}
+```
+
+### updateComment 댓글 수정
+
+- 댓글 수정.
+
+```http request
+PUT /api/post/:postId/comment/:commentId
+```
+
+#### 요청
+
+| Param Type |      Name       | Data Type | Required |                          Description                           |
+|:----------:|:---------------:|:---------:|:--------:|:--------------------------------------------------------------:|
+|    Path    |    `postId`     |   `int`   |    O     |                             글 아이디                              |
+|    Path    |   `commentId`   |   `int`   |    O     |                             댓글 아이디                             |
+|    Body    |    `userId`     | `String`  |    -     |                     유저 아이디. DB의 `id_str` 값                     |
+|   Header   | `Authorization` | `String`  |    -     |              액세스 토큰. `userId`를 사용해 작성한 댓글 수정 시 필요              |
+|    Body    |    `content`    | `String`  |    -     |                      수정할 새 댓글 본문. 최대 300자                      |
+|    Body    |   `tmpUserId`   | `String`  |    -     | 비회원으로 작성한 댓글 수정 시 필요한 유저 아이디. `userId` 또는 이 값 중 하나 필수. 둘 다는 불가 |
+|    Body    |   `tmpUserPw`   | `String`  |    -     |            비회원 댓글 수정 시 유저 비밀번호. `tmpUserId` 사용 시 필요            |
+
+##### 예시
+
+```bash
+curl -X 'PUT' \
+  'http://localhost:8080/api/post/1/comment/1' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+  "content": "글 잘 보고 갑니다!!",
+}'
+```
+
+#### 응답
+
+##### 예시
+
+```json
+// HTTP/1.1 204 NO CONTENT
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "댓글 수정 성공",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 400 BAD REQUEST
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "파라미터 형식에 맞지 않습니다",
+  "code": "11",
+  "data": {
+    "userId": "cheesecat$@"
+  }
+}
+```
+
+```json
+// HTTP/1.1 401 UNAUTHORIZED
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "댓글 수정은 작성자만 가능합니다",
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "rosielsh"
+  }
+}
+```
+
+### deleteComment 댓글 삭제
+
+- 댓글 삭제.
+
+```http request
+DELETE /api/post/:postId/comment/:commentId
+```
+
+#### 요청
+
+| Param Type |      Name       | Data Type | Required |                          Description                           |
+|:----------:|:---------------:|:---------:|:--------:|:--------------------------------------------------------------:|
+|    Path    |    `postId`     |   `int`   |    O     |                             글 아이디                              |
+|    Path    |   `commentId`   |   `int`   |    O     |                             댓글 아이디                             |
+|    Body    |    `userId`     | `String`  |    -     |                     유저 아이디. DB의 `id_str` 값                     |
+|   Header   | `Authorization` | `String`  |    -     |              액세스 토큰. `userId`를 사용해 작성한 댓글 삭제 시 필요              |
+|    Body    |   `tmpUserId`   | `String`  |    -     | 비회원으로 작성한 댓글 삭제 시 필요한 유저 아이디. `userId` 또는 이 값 중 하나 필수. 둘 다는 불가 |
+|    Body    |   `tmpUserPw`   | `String`  |    -     |            비회원 댓글 삭제 시 유저 비밀번호. `tmpUserId` 사용 시 필요            |
+
+##### 예시
+
+```bash
+curl -X 'DELETE' \
+  'http://localhost:8080/api/post/1/comment/1' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+}'
+```
+
+
+#### 응답
+
+##### 예시
+
+```json
+// HTTP/1.1 204 NO CONTENT
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "댓글 삭제 성공",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 401 UNAUTHORIZED
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "댓글 삭제는 작성자만 가능합니다",
   "code": "12",
   "data": {
     "Authorization": "Bearer eyJ0eXAiOi...",
