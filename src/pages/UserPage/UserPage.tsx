@@ -5,11 +5,12 @@ import { useCategory } from 'hooks/useCategory';
 import { ITabBarProps } from 'interfaces/common/TabBarProps';
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { getUserId } from 'utils/localStorage';
 import { Category, TabBar, UserProfileBox } from './components';
 
 const UserPage = () => {
     // @TODO: 본인 아이디 받아오기
-    const userId = 'rosielsh';
+    const userId = getUserId() || '';
 
     const location = useLocation();
 

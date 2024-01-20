@@ -6,3 +6,19 @@ export type getUserInfoReqest = {
 };
 
 export type getUserInfoResponse = ApiResponse<IUser>;
+
+export type loginRequest = {
+    userId: string;
+    userPw: string;
+};
+
+export type loginResponse = {
+    userId: string;
+    accessToken: string;
+    refreshToken: string;
+};
+
+export type logoutRequest = {
+    userId: string | null;
+    accessToken: string | null;
+};
