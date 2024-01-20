@@ -24,6 +24,7 @@
     * [updatePost 글 수정](#updatepost-글-수정)
     * [deletePost 글 삭제](#deletepost-글-삭제)
   * [Comment](#comment)
+    * [getCommentsByPostId 특정 글에 달린 댓글 목록 조회](#getcommentsbypostid-특정-글에-달린-댓글-목록-조회)
     * [createComment 댓글 작성](#createcomment-댓글-작성)
     * [updateComment 댓글 수정](#updatecomment-댓글-수정)
     * [deleteComment 댓글 삭제](#deletecomment-댓글-삭제)
@@ -939,7 +940,7 @@ GET /api/post?userId=&categoryId=&order=recent&offset=0&limit=10
 
 ### getPostById 글 상세 조회
 
-- 글 상세 조회. 이 글과 연결된 댓글 포함.
+- 글 상세 조회. 이 글과 연결된 댓글은 [getCommentsByPostId 특정 글에 달린 댓글 목록 조회](#getcommentsbypostid-특정-글에-달린-댓글-목록-조회) API 사용.
 
 ```http request
 GET /api/post/:userId/:postId
@@ -976,8 +977,6 @@ GET /api/post/:userId/:postId
 |    excerpt    |      `String`      |                  요약                   |
 |   thumbnail   |      `String`      |                썸네일 URL                |
 |    content    |      `String`      |                  본문                   |
-|   comments    | `List<CommentDto>` | 댓글 배열. 최근순 정렬. 댓글이 없으면 길이가 0인 배열 `[]` |
-| numOfComments |       `int`        |       댓글 개수 (`comments` 배열 길이)        |
 
 ##### UserInfoDto
 
@@ -987,23 +986,14 @@ GET /api/post/:userId/:postId
 |   nickName   |    `String`    |                  유저 별명                  |
 | profileImage | `String\|null` | 프로필 이미지 URL. `null`이면 임의의 기본 이미지로 대체 필요 |
 
-##### CommentDto
-
-|   Name    | Data Type |         Description         | 
-|:---------:|:---------:|:---------------------------:|
-| commentId |   `int`   |           댓글 아이디            |
-|  userId   | `String`  |         댓글 작성자 아이디          |
-|  content  | `String`  |            댓글 내용            |
-| createdAt | `String`  | 댓글 작성일. ISO 8601 형식. UTC 기준 |
-
 ##### 예시
 
 ```json
 // HTTP/1.1 200 OK
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "인기 글 목록 조회 성공",
-  "errors": null,
+  "message": "글 상세 조회 성공",
+  "code": "00",
   "data": {
     "postId": 4,
     "categoryId": 1,
@@ -1018,22 +1008,7 @@ GET /api/post/:userId/:postId
     "hit": 21,
     "excerpt": "2018년 10월에 동촌 유원지에 사진 찍으러 나갔다가 만난 아기 고양이. 진짜 예뻤다.",
     "thumbnail": "...",
-    "content": "2018년 10월에 동촌 유원지에 사진 찍으러 나갔다가 만난 아기 고양이. 진짜 예뻤다. 사람을 경계는 하면서도 멀리 도망가지는 않고 웅크리고 앉아서 지켜보는데 얼마나 귀엽던지.",
-    "comments": [
-      {
-        "commentId": 2,
-        "userId": "cheesecat47",
-        "content": "그치? ㅋㅋㅋ",
-        "createdAt": "2023-12-02T23:02:00Z"
-      },
-      {
-        "commentId": 1,
-        "userId": "rosielsh",
-        "content": "짱 귀여워!",
-        "createdAt": "2023-12-02T23:01:00Z"
-      }
-    ],
-    "numOfComments": 2
+    "content": "2018년 10월에 동촌 유원지에 사진 찍으러 나갔다가 만난 아기 고양이. 진짜 예뻤다. 사람을 경계는 하면서도 멀리 도망가지는 않고 웅크리고 앉아서 지켜보는데 얼마나 귀엽던지."
   }
 }
 ```
@@ -1254,6 +1229,86 @@ curl -X 'DELETE' \
 ```
 
 ## Comment
+
+### getCommentsByPostId 특정 글에 달린 댓글 목록 조회
+
+- 특정 글에 달린 댓글 목록 조회.
+
+```http request
+GET /api/post/:postId/comment
+```
+
+#### 요청
+
+| Param Type |   Name   | Data Type | Required | Description |
+|:----------:|:--------:|:---------:|:--------:|:-----------:|
+|    Path    | `postId` |   `int`   |    O     |   게시글 아이디   |
+
+#### 응답
+
+##### 응답 본문
+
+|   Name    | Data Type |    Description    | 
+|:---------:|:---------:|:-----------------:|
+| `message` | `String`  |      응답 메시지       |
+|  `code`   | `String`  |       응답 코드       |
+|  `data`   |   `Map`   | 응답 데이터 또는 오류 정보 맵 |
+
+##### data(Map)
+
+|     Name      |     Data Type      |              Description              | 
+|:-------------:|:------------------:|:-------------------------------------:|
+|   comments    | `List<CommentDto>` | 댓글 배열. 최근순 정렬. 댓글이 없으면 길이가 0인 배열 `[]` |
+| numOfComments |       `int`        |       댓글 개수 (`comments` 배열 길이)        |
+
+##### CommentDto
+
+|   Name    | Data Type |         Description         | 
+|:---------:|:---------:|:---------------------------:|
+| commentId |   `int`   |           댓글 아이디            |
+|  userId   | `String`  |         댓글 작성자 아이디          |
+|  content  | `String`  |            댓글 내용            |
+| createdAt | `String`  | 댓글 작성일. ISO 8601 형식. UTC 기준 |
+
+##### 예시
+
+```json
+// HTTP/1.1 200 OK
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "댓글 목록 조회 성공",
+  "code": "00",
+  "data": {
+    "comments": [
+      {
+        "commentId": 2,
+        "userId": "cheesecat47",
+        "content": "그치? ㅋㅋㅋ",
+        "createdAt": "2023-12-02T23:02:00Z"
+      },
+      {
+        "commentId": 1,
+        "userId": "rosielsh",
+        "content": "짱 귀여워!",
+        "createdAt": "2023-12-02T23:01:00Z"
+      }
+    ],
+    "numOfComments": 2
+  }
+}
+```
+
+```json
+// HTTP/1.1 400 BAD REQUEST
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "INVALID_REQUEST_PARAMETER",
+  "code": "11",
+  "data": {
+    "userId": "cheesecat$&"
+  }
+}
+```
 
 ### createComment 댓글 작성
 
