@@ -11,5 +11,5 @@ import java.util.List;
 public interface PostMapper {
     List<PostDto> getPosts(GetPostsRequest params) throws SQLException;
 
-    PostDto getPostById(String userId, String postId) throws SQLException;
+    PostDto getPostByTitle(String postTitle) throws SQLException;
 }

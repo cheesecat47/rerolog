@@ -945,20 +945,30 @@ curl -X 'GET' \
 }
 ```
 
-### getPostById 글 상세 조회
+### getPostByTitle 글 상세 조회
 
 - 글 상세 조회. 이 글과 연결된 댓글 포함.
 
 ```http request
-GET /api/post/:userId/:postId
+GET /api/post/:postTitle
 ```
 
 #### 요청
 
-| Param Type |   Name   | Data Type | Required | Description |
-|:----------:|:--------:|:---------:|:--------:|:-----------:|
-|    Path    | `userId` | `String`  |    O     |   유저 아이디    |
-|    Path    | `postId` |   `int`   |    O     |   게시글 아이디   |
+| Param Type |    Name     | Data Type | Required |        Description        |
+|:----------:|:-----------:|:---------:|:--------:|:-------------------------:|
+|    Path    | `postTitle` | `String`  |    O     | 글 제목. 공백 문자는 `-`로 치환하여 입력 |
+
+##### 예시
+
+```bash
+curl -X 'GET' \
+  'http://localhost:8080/api/post/Java-너무-재미있어요.' \
+  -H 'accept: application/json;charset=utf-8'
+
+# 본 예시에서는 `Java-너무-재미있어요.`로 보이나 실제 URL은 인코딩으로 인해 다음과 같음:
+# http://localhost:8080/api/post/Java-%EB%84%88%EB%AC%B4-%EC%9E%AC%EB%AF%B8%EC%9E%88%EC%96%B4%EC%9A%94.
+```
 
 #### 응답
 
@@ -1010,35 +1020,35 @@ GET /api/post/:userId/:postId
 // HTTP/1.1 200 OK
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "인기 글 목록 조회 성공",
-  "errors": null,
+  "message": "글 상세 조회 성공",
+  "code": "00",
   "data": {
-    "postId": 4,
+    "postId": 1,
     "categoryId": 1,
     "categoryName": "Java",
-    "title": "내 아이디가 왜 cheesecat이냐면",
+    "title": "Java 너무 재미있어요.",
     "author": {
       "userId": "cheesecat47",
       "nickName": "신주용",
       "profileImage": null
     },
-    "createdAt": "2023-12-02T23:00:00Z",
-    "hit": 21,
-    "excerpt": "2018년 10월에 동촌 유원지에 사진 찍으러 나갔다가 만난 아기 고양이. 진짜 예뻤다.",
-    "thumbnail": "...",
-    "content": "2018년 10월에 동촌 유원지에 사진 찍으러 나갔다가 만난 아기 고양이. 진짜 예뻤다. 사람을 경계는 하면서도 멀리 도망가지는 않고 웅크리고 앉아서 지켜보는데 얼마나 귀엽던지.",
+    "createdAt": "2024-01-17T10:57:15Z",
+    "hit": 5,
+    "excerpt": "...",
+    "thumbnail": null,
+    "content": null,
     "comments": [
       {
         "commentId": 2,
-        "userId": "cheesecat47",
-        "content": "그치? ㅋㅋㅋ",
-        "createdAt": "2023-12-02T23:02:00Z"
+        "userId": "1",
+        "content": "삭제된 댓글댓글!",
+        "createdAt": "2024-01-17T11:02:15Z"
       },
       {
         "commentId": 1,
         "userId": "rosielsh",
-        "content": "짱 귀여워!",
-        "createdAt": "2023-12-02T23:01:00Z"
+        "content": "댓글댓글!",
+        "createdAt": "2024-01-17T11:01:15Z"
       }
     ],
     "numOfComments": 2
