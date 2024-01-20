@@ -14,27 +14,32 @@ export const usePost = () => {
     const getPostList = ({ userId, categoryId, order }: getPostListRequest) => {
         const key: getPostListRequest = {};
         let url = '/post';
+        const sortList: string[] = [];
+
+        if (userId || categoryId || order) {
+            url += '?';
+        }
 
         if (userId) {
             key.userId = userId;
-            url += `?userId=${userId}`;
+            sortList.push(`userId=${userId}`);
         }
 
         if (categoryId) {
             key.categoryId = categoryId;
-            url += `?categoryId=${categoryId}`;
+            sortList.push(`categoryId=${categoryId}`);
         }
 
         if (order) {
             key.order = order;
-            url += `?order=${order}`;
+            sortList.push(`order=${order}`);
         }
 
         return useQuery({
             queryKey: [QUERY_KEY.POST, key],
             queryFn: async () => {
                 const response: getPostListResponse = await defaultInstance
-                    .get(url)
+                    .get(url + sortList.join('&'))
                     .then((res) => res.data);
 
                 return response.data;
