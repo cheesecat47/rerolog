@@ -3,13 +3,13 @@ import { IPost } from 'interfaces/model';
 import PostCard from './PostCard';
 
 const PostList = ({ selectedOption }: { selectedOption?: string }) => {
-    const { getUserPostList } = usePost();
+    const { getAllPostList } = usePost();
 
     const {
         isLoading,
         error,
         data: posts,
-    } = getUserPostList({ order: selectedOption });
+    } = getAllPostList({ order: selectedOption });
 
     if (isLoading) return <div>로딩중입니다</div>;
 

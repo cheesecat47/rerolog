@@ -13,10 +13,27 @@ export const usePost = () => {
 
     const getUserPostList = ({ userId }: getPostListRequest) => {
         return useQuery({
-            queryKey: [QUERY_KEY.POST, userId],
+            queryKey: [QUERY_KEY.POST, { userId }],
             queryFn: async () => {
                 const response: getPostListResponse = await defaultInstance
-                    .get(`/post/${userId}`)
+                    .get(`/post?userId=${userId}`)
+                    .then((res) => res.data);
+
+                return response.data;
+            },
+            staleTime,
+        });
+    };
+
+    const getUserCategoryPostList = ({
+        userId,
+        categoryId,
+    }: getPostListRequest) => {
+        return useQuery({
+            queryKey: [QUERY_KEY.POST, { userId, categoryId }],
+            queryFn: async () => {
+                const response: getPostDetailResponse = await defaultInstance
+                    .get(`/post?userId=${userId}&categoryId=${categoryId}`)
                     .then((res) => res.data);
 
                 return response.data;
@@ -27,7 +44,7 @@ export const usePost = () => {
 
     const getPostDetail = ({ userId, postId }: getPostDetailRequest) => {
         return useQuery({
-            queryKey: [QUERY_KEY.POST, userId, postId],
+            queryKey: [QUERY_KEY.POST, { userId, postId }],
             queryFn: async () => {
                 const response: getPostDetailResponse = await defaultInstance
                     .get(`/post/${userId}/${postId}`)
@@ -39,7 +56,24 @@ export const usePost = () => {
         });
     };
 
-    // @TODO: 전체 게시물 조회하는 API 생성
+    const getAllPostList = ({ order }: getPostListRequest) => {
+        return useQuery({
+            queryKey: [QUERY_KEY.POST, { order }],
+            queryFn: async () => {
+                const response: getPostListResponse = await defaultInstance
+                    .get(`/post?order=${order}`)
+                    .then((res) => res.data);
 
-    return { getUserPostList, getPostDetail };
+                return response.data;
+            },
+            staleTime,
+        });
+    };
+
+    return {
+        getUserPostList,
+        getUserCategoryPostList,
+        getPostDetail,
+        getAllPostList,
+    };
 };
