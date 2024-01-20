@@ -2,14 +2,11 @@ import { usePost } from 'hooks/usePost';
 import { IPost } from 'interfaces/model';
 import PostCard from './PostCard';
 
-const UserPostList = ({ selectedOption }: { selectedOption?: string }) => {
+const UserPostList = () => {
     const userId = 'rosielsh';
-    const { getUserPostList } = usePost();
-    const {
-        isLoading,
-        error,
-        data: posts,
-    } = getUserPostList({ userId, order: selectedOption });
+
+    const { getPostList } = usePost();
+    const { isLoading, error, data: posts } = getPostList({ userId });
 
     if (isLoading) return <div>로딩중입니다</div>;
 

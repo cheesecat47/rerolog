@@ -11,12 +11,35 @@ import {
 export const usePost = () => {
     const staleTime = Number(process.env.REACT_APP_STALE_TIME);
 
-    const getUserPostList = ({ userId }: getPostListRequest) => {
+    const getPostList = ({ userId, categoryId, order }: getPostListRequest) => {
+        const key: getPostListRequest = {};
+        let url = '/post';
+        const sortList: string[] = [];
+
+        if (userId || categoryId || order) {
+            url += '?';
+        }
+
+        if (userId) {
+            key.userId = userId;
+            sortList.push(`userId=${userId}`);
+        }
+
+        if (categoryId) {
+            key.categoryId = categoryId;
+            sortList.push(`categoryId=${categoryId}`);
+        }
+
+        if (order) {
+            key.order = order;
+            sortList.push(`order=${order}`);
+        }
+
         return useQuery({
-            queryKey: [QUERY_KEY.POST, userId],
+            queryKey: [QUERY_KEY.POST, key],
             queryFn: async () => {
                 const response: getPostListResponse = await defaultInstance
-                    .get(`/post/${userId}`)
+                    .get(url + sortList.join('&'))
                     .then((res) => res.data);
 
                 return response.data;
@@ -27,7 +50,7 @@ export const usePost = () => {
 
     const getPostDetail = ({ userId, postId }: getPostDetailRequest) => {
         return useQuery({
-            queryKey: [QUERY_KEY.POST, userId, postId],
+            queryKey: [QUERY_KEY.POST, { userId, postId }],
             queryFn: async () => {
                 const response: getPostDetailResponse = await defaultInstance
                     .get(`/post/${userId}/${postId}`)
@@ -39,7 +62,8 @@ export const usePost = () => {
         });
     };
 
-    // @TODO: 전체 게시물 조회하는 API 생성
-
-    return { getUserPostList, getPostDetail };
+    return {
+        getPostList,
+        getPostDetail,
+    };
 };
