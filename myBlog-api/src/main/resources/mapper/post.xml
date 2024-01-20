@@ -43,8 +43,8 @@
           <if test="userId != null">
               and myBlog.User.id_str = #{userId}
           </if>
-          <if test="categoryId > 0">
-            and Category.id = #{categoryId}
+          <if test="categoryName != null">
+            and Category.name = #{categoryName}
           </if>
         order by
           <if test="order == 'latest'">

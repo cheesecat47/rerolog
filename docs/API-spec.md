@@ -845,18 +845,29 @@ curl -X 'DELETE' \
 - 조건에 일치하는 글 목록 조회
 
 ```http request
-GET /api/post?userId=&categoryId=&order=recent&offset=0&limit=10
+GET /api/post?userId=&categoryName=&order=recent&offset=0&limit=10
 ```
 
 #### 요청
 
-| Param Type |     Name     | Data Type | Required |                           Description                            |  
-|:----------:|:------------:|:---------:|:--------:|:----------------------------------------------------------------:|
-|   Query    |   `userId`   | `String`  |    -     |                              유저 아이디                              |
-|   Query    | `categoryId` |   `int`   |    -     |          게시판 아이디. 특정 게시판에 속한 글만 필터링 할 때 사용. 없으면 전체 글 목록          |
-|   Query    |   `order`    | `String`  |    -     | `latest(최신순)`,`oldest(오래된순)`,`popular(인기순)` 중 택 1. 기본값은 `latest` |
-|   Query    |   `offset`   |   `int`   |    -     |                  정렬된 결과 중 `offset`부터 반환. 기본값 0                   |
-|   Query    |   `limit`    |   `int`   |    -     |                  `offset`부터 `limit`개 조회. 기본값 10                  |
+| Param Type |      Name      | Data Type | Required |                               Description                                |  
+|:----------:|:--------------:|:---------:|:--------:|:------------------------------------------------------------------------:|
+|   Query    |    `userId`    | `String`  |    -     |                                  유저 아이디                                  |
+|   Query    | `categoryName` | `String`  |    -     |  게시판 이름. 공백 문자는 `-`로 치환하여 입력.<br/>특정 게시판에 속한 글만 필터링 할 때 사용. 없으면 전체 글 목록  |
+|   Query    |    `order`     | `String`  |    -     | 정렬 방법. `latest(최신순)`,`oldest(오래된순)`,`popular(인기순)` 중 택 1. 기본 값은 `latest` |
+|   Query    |    `offset`    |   `int`   |    -     |                      정렬된 결과 중 `offset`부터 반환. 기본값 0                       |
+|   Query    |    `limit`     |   `int`   |    -     |                      `offset`부터 `limit`개 조회. 기본값 10                      |
+
+##### 예시
+
+```bash
+curl -X 'GET' \
+  'http://localhost:8080/api/post?categoryName=알고리즘-문제&order=popular' \
+  -H 'accept: application/json;charset=utf-8'
+
+# 본 예시에서는 `알고리즘-문제`로 보이나 실제 URL은 인코딩으로 인해 다음과 같음:
+# http://localhost:8080/api/post?categoryName=%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EB%AC%B8%EC%A0%9C&order=popular
+```
 
 #### 응답
 
@@ -897,26 +908,27 @@ GET /api/post?userId=&categoryId=&order=recent&offset=0&limit=10
 // HTTP/1.1 200 OK
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "NORMAL_SERVICE",
+  "message": "글 목록 조회 성공",
   "code": "00",
   "data": [
     {
       "postId": 4,
-      "categoryId": 1,
-      "categoryName": "Java",
-      "title": "내 아이디가 왜 cheesecat이냐면",
+      "categoryId": 4,
+      "categoryName": "알고리즘 문제",
+      "title": "알고리즘 쉽지 않네요.",
       "author": {
         "userId": "cheesecat47",
         "nickName": "신주용",
         "profileImage": null
       },
-      "createdAt": "2023-12-02T23:00:00Z",
-      "hit": 21,
-      "excerpt": "2018년 10월에 동촌 유원지에 사진 찍으러 나갔다가 만난 아기 고양이. 진짜 예뻤다.",
-      "thumbnail": "...",
-      "numOfComments": 2
-    },
-    ...
+      "createdAt": "2024-01-17T11:00:15Z",
+      "hit": 5,
+      "excerpt": "...",
+      "thumbnail": null,
+      "content": null,
+      "comments": null,
+      "numOfComments": 0
+    }
   ]
 }
 ```
@@ -925,8 +937,8 @@ GET /api/post?userId=&categoryId=&order=recent&offset=0&limit=10
 // HTTP/1.1 400 BAD REQUEST
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "INVALID_REQUEST_PARAMETER",
-  "code": "11",
+  "message": "입력한 아이디에 해당하는 유저가 없습니다",
+  "code": "13",
   "data": {
     "userId": "cheesecat$&"
   }
