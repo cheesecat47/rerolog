@@ -11,29 +11,30 @@ import {
 export const usePost = () => {
     const staleTime = Number(process.env.REACT_APP_STALE_TIME);
 
-    const getUserPostList = ({ userId }: getPostListRequest) => {
+    const getPostList = ({ userId, categoryId, order }: getPostListRequest) => {
+        const key: getPostListRequest = {};
+        let url = '/post';
+
+        if (userId) {
+            key.userId = userId;
+            url += `?userId=${userId}`;
+        }
+
+        if (categoryId) {
+            key.categoryId = categoryId;
+            url += `?categoryId=${categoryId}`;
+        }
+
+        if (order) {
+            key.order = order;
+            url += `?order=${order}`;
+        }
+
         return useQuery({
-            queryKey: [QUERY_KEY.POST, { userId }],
+            queryKey: [QUERY_KEY.POST, key],
             queryFn: async () => {
                 const response: getPostListResponse = await defaultInstance
-                    .get(`/post?userId=${userId}`)
-                    .then((res) => res.data);
-
-                return response.data;
-            },
-            staleTime,
-        });
-    };
-
-    const getUserCategoryPostList = ({
-        userId,
-        categoryId,
-    }: getPostListRequest) => {
-        return useQuery({
-            queryKey: [QUERY_KEY.POST, { userId, categoryId }],
-            queryFn: async () => {
-                const response: getPostDetailResponse = await defaultInstance
-                    .get(`/post?userId=${userId}&categoryId=${categoryId}`)
+                    .get(url)
                     .then((res) => res.data);
 
                 return response.data;
@@ -56,24 +57,8 @@ export const usePost = () => {
         });
     };
 
-    const getAllPostList = ({ order }: getPostListRequest) => {
-        return useQuery({
-            queryKey: [QUERY_KEY.POST, { order }],
-            queryFn: async () => {
-                const response: getPostListResponse = await defaultInstance
-                    .get(`/post?order=${order}`)
-                    .then((res) => res.data);
-
-                return response.data;
-            },
-            staleTime,
-        });
-    };
-
     return {
-        getUserPostList,
-        getUserCategoryPostList,
+        getPostList,
         getPostDetail,
-        getAllPostList,
     };
 };
