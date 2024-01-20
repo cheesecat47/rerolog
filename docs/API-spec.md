@@ -12,6 +12,7 @@
     * [refresh 액세스 토큰 재발급](#refresh-액세스-토큰-재발급)
   * [Blog](#blog)
     * [getBlogInfo 블로그 정보 조회](#getbloginfo-블로그-정보-조회)
+    * [updateBlogInfo 블로그 정보 변경](#updatebloginfo-블로그-정보-변경)
   * [Category](#category)
     * [getCategories 게시판 목록 조회](#getcategories-게시판-목록-조회)
     * [createCategory 게시판 생성](#createcategory-게시판-생성)
@@ -528,17 +529,17 @@ curl -X 'POST' \
 
 ### getBlogInfo 블로그 정보 조회
 
-- 블로그 주인 유저 아이디를 사용해 해당 유저의 블로그 정보 조회.
+- 블로그 아이디를 사용해 해당 블로그 정보 조회.
 
 ```http request
-GET /api/blog/:userId
+GET /api/blog/:blogId
 ```
 
 #### 요청
 
-| Param Type |   Name   | Data Type | Required |      Description       | 
-|:----------:|:--------:|:---------:|:--------:|:----------------------:|
-|    Path    | `userId` | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 |
+| Param Type |   Name   | Data Type | Required |          Description          | 
+|:----------:|:--------:|:---------:|:--------:|:-----------------------------:|
+|    Path    | `blogId` | `String`  |    O     | 블로그 아이디. 유저 아이디(`userId`)와 동일 |
 
 #### 응답
 
@@ -554,7 +555,7 @@ GET /api/blog/:userId
 
 |   Name    | Data Type |             Description              | 
 |:---------:|:---------:|:------------------------------------:|
-|  userId   | `String`  |    블로그 주인 유저 아이디. DB의 `id_str` 값     |
+|  blogId   | `String`  |    블로그 아이디. 유저 아이디(`userId`)와 동일     |
 | blogName  | `String`  |                블로그 이름                |
 |  content  | `String`  | 블로그 소개. 소개 멘트 부재 시 길이 0인 문자열 `""` 반환 |
 | createdAt | `String`  |     블로그 개설일. ISO 8601 형식. UTC 기준     |
@@ -587,6 +588,68 @@ GET /api/blog/:userId
   }
 }
 ``` 
+
+### updateBlogInfo 블로그 정보 변경
+
+- 블로그 정보 변경.
+
+```http request
+PUT /api/blog/:blogId
+```
+
+#### 요청
+
+| Param Type |   Name    | Data Type | Required |             Description              | 
+|:----------:|:---------:|:---------:|:--------:|:------------------------------------:|
+|    Path    | `blogId`  | `String`  |    O     |    블로그 아이디. 유저 아이디(`userId`)와 동일     |
+|    Body    | `content` | `String`  |    -     | 블로그 소개. 소개 멘트 부재 시 길이 0인 문자열 `""` 반환 |
+
+#### 응답
+
+##### 응답 본문
+
+|   Name    | Data Type | Description | 
+|:---------:|:---------:|:-----------:|
+| `message` | `String`  |   응답 메시지    |
+|  `code`   | `String`  |    응답 코드    |
+|  `data`   |   `Map`   |   오류 정보 맵   |
+
+##### 예시
+
+```json
+// HTTP/1.1 204 NO CONTENT
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "블로그 정보 변경 성공",
+  "code": "00",
+  "data": null
+}
+```
+
+```json
+// HTTP/1.1 400 BAD REQUEST
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "입력한 아이디에 해당하는 블로그가 없습니다.",
+  "code": "13",
+  "data": {
+    "blogId": "cheesecat$&"
+  }
+}
+``` 
+
+```json
+// HTTP/1.1 401 UNAUTHORIZED
+// Content-Type: application/json;charset=UTF-8
+{
+  "message": "블로그 정보 변경은 로그인 상태의 블로그 주인 유저만 가능합니다",
+  "code": "12",
+  "data": {
+    "Authorization": "Bearer eyJ0eXAiOi...",
+    "userId": "rosielsh"
+  }
+}
+```
 
 ## Category
 
