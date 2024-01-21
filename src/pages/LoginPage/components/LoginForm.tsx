@@ -58,7 +58,7 @@ const LoginForm = () => {
                     <span className="text-gray-600">비밀번호</span>
                     <input
                         id="userPw"
-                        type="userPw"
+                        type="password"
                         name="userPw"
                         onChange={handleChange}
                         className="h-12 my-2 p-2 rounded-md border"
