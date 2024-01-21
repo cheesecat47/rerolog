@@ -1,10 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { defaultInstance } from 'apis/defaultInstance';
 import { QUERY_KEY } from 'constants/queryKeys';
-import {
-    getCategoryRequest,
-    getCategoryResponse,
-} from 'interfaces/api/category';
+import { getCategoryRequest, getCategoryResponse } from 'types/api/category';
 
 export const useCategory = () => {
     const staleTime = Number(process.env.REACT_APP_STALE_TIME);

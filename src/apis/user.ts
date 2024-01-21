@@ -1,4 +1,4 @@
-import { loginRequest, logoutRequest } from 'interfaces/api/user';
+import { loginRequest, logoutRequest } from 'types/api/user';
 import { authInstance } from './authInstance';
 import { defaultInstance } from './defaultInstance';
 
