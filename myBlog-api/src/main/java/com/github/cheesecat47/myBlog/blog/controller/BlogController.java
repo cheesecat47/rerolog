@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -151,7 +152,7 @@ public class BlogController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 
-    @Operation(summary = "deleteCategory 게시판 삭제")
+    @Operation(summary = "deleteCategory 게시판 삭제", security = {@SecurityRequirement(name = "Access Token")})
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "게시판 삭제 성공", content = {@Content(schema = @Schema(implementation = DeleteCategoryResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "게시판 삭제 실패"),
