@@ -126,7 +126,7 @@ public class BlogController {
             @ApiResponse(responseCode = "401", description = "게시판 변경 실패"),
             @ApiResponse(responseCode = "500", description = "게시판 변경 실패")
     })
-    @PutMapping(value = "/{blogId}/category/{categoryName}")
+    @PatchMapping(value = "/{blogId}/category/{categoryName}")
     public ResponseEntity<UpdateCategoryResponseDto> updateCategory(
             @Parameter(description = "블로그 아이디. 유저 아이디(`userId`)와 동일") @PathVariable String blogId,
             @Parameter(description = "정보를 변경하려는 게시판 이름") @PathVariable String categoryName,
