@@ -8,5 +8,5 @@ import java.util.List;
 public interface PostService {
     List<PostDto> getPosts(GetPostsRequest params) throws Exception;
 
-    PostDto getPostById(String userId, String postId) throws Exception;
+    PostDto getPostByTitle(String postTitle) throws Exception;
 }

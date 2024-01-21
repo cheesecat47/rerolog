@@ -3,7 +3,7 @@ package com.github.cheesecat47.myBlog.post.controller;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
-import com.github.cheesecat47.myBlog.post.model.response.GetPostByIdResponse;
+import com.github.cheesecat47.myBlog.post.model.response.GetPostByTitleResponse;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostsResponse;
 import com.github.cheesecat47.myBlog.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,14 +45,14 @@ public class PostController {
     @GetMapping(value = "")
     public ResponseEntity<GetPostsResponse> getPosts(
             @Parameter(description = "유저 아이디") @RequestParam(required = false) String userId,
-            @Parameter(description = "게시판 아이디") @RequestParam(required = false) String categoryId,
+            @Parameter(description = "게시판 이름") @RequestParam(required = false) String categoryName,
             @Parameter(description = "정렬 방법") @RequestParam(required = false, defaultValue = "latest") String order,
             @Parameter(description = "offset: 몇 번째 글부터") @RequestParam(required = false, defaultValue = "0") String offset,
             @Parameter(description = "limit: 몇 개의 글 조회 할지") @RequestParam(required = false, defaultValue = "10") String limit
     ) throws Exception {
         GetPostsRequest params = new GetPostsRequest();
         params.setUserId(userId);
-        params.setCategoryId(categoryId == null ? 0 : Integer.parseInt(categoryId));
+        params.setCategoryName(categoryName);
         params.setOrder(order);
         params.setOffset(Integer.parseInt(offset));
         params.setLimit(Integer.parseInt(limit));
@@ -71,27 +71,25 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @Operation(summary = "getPostById 글 상세 조회", description = "글 상세 조회. 이 글과 연결된 댓글 포함.")
+    @Operation(summary = "getPostByTitle 글 상세 조회", description = "글 상세 조회. 이 글과 연결된 댓글 포함.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "글 조회 성공", content = {@Content(schema = @Schema(implementation = GetPostsResponse.class))}),
+            @ApiResponse(responseCode = "200", description = "글 조회 성공", content = {@Content(schema = @Schema(implementation = GetPostByTitleResponse.class))}),
             @ApiResponse(responseCode = "400", description = "글 조회 실패"),
             @ApiResponse(responseCode = "404", description = "글 조회 실패"),
             @ApiResponse(responseCode = "500", description = "글 조회 실패")
     })
-    @GetMapping(value = "/{userId}/{postId}")
-    public ResponseEntity<GetPostByIdResponse> getPostById(
-            @Parameter(description = "유저 아이디") @PathVariable String userId,
-            @Parameter(description = "글 아이디") @PathVariable String postId
+    @GetMapping(value = "/{postTitle}")
+    public ResponseEntity<GetPostByTitleResponse> getPostByTitle(
+            @Parameter(description = "글 제목") @PathVariable String postTitle
     ) throws Exception {
-        log.debug("getPostById: userId: {}", userId);
-        log.debug("getPostById: postId: {}", postId);
+        log.debug("getPostByTitle: postTitle: {}", postTitle);
 
-        GetPostByIdResponse response = new GetPostByIdResponse();
+        GetPostByTitleResponse response = new GetPostByTitleResponse();
 
-        PostDto postDto = postService.getPostById(userId, postId);
+        PostDto postDto = postService.getPostByTitle(postTitle);
 
         String msg = "글 상세 조회 성공";
-        log.info("getPostById: {}", msg);
+        log.info("getPostByTitle: {}", msg);
         response.setCode(ResponseCode.NORMAL_SERVICE);
         response.setMessage(msg);
         response.setData(postDto);

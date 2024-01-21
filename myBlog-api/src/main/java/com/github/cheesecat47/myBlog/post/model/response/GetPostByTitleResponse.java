@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class GetPostByIdResponse {
+public class GetPostByTitleResponse {
     @Schema(description = "응답 코드. API 명세서 참고")
     String code;
 
