@@ -52,8 +52,7 @@ public class PostController {
     ) throws Exception {
         GetPostsRequest params = new GetPostsRequest();
         params.setUserId(userId);
-        // 게시판 이름이 `알고리즘 문제`라면 파라미터에 `알고리즘-문제`와 같이 들어오므로 치환 필요
-        params.setCategoryName(categoryName.replace('-', ' '));
+        params.setCategoryName(categoryName);
         params.setOrder(order);
         params.setOffset(Integer.parseInt(offset));
         params.setLimit(Integer.parseInt(limit));
@@ -81,9 +80,8 @@ public class PostController {
     })
     @GetMapping(value = "/{postTitle}")
     public ResponseEntity<GetPostByTitleResponse> getPostByTitle(
-            @Parameter(description = "글 제목. 공백 문자는 `-`로 치환하여 입력") @PathVariable String postTitle
+            @Parameter(description = "글 제목") @PathVariable String postTitle
     ) throws Exception {
-        postTitle = postTitle.replace('-', ' ');
         log.debug("getPostByTitle: postTitle: {}", postTitle);
 
         GetPostByTitleResponse response = new GetPostByTitleResponse();

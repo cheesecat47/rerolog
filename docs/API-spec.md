@@ -792,12 +792,12 @@ PUT /api/blog/:userId/category/:categoryName
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |              Description              |
-|:----------:|:---------------:|:---------:|:--------:|:-------------------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |        유저 아이디. DB의 `id_str` 값         |
-|    Path    | `categoryName`  | `String`  |    O     | 정보를 변경하려는 게시판 이름. 공백 문자는 `-`로 치환하여 입력 |
-|   Header   | `Authorization` | `String`  |    O     |      액세스 토큰. 본인 블로그 게시판 정보 변경 가능      |
-|    Body    | `categoryName`  | `String`  |    O     |               새 게시판 이름                |
+| Param Type |      Name       | Data Type | Required |         Description         |
+|:----------:|:---------------:|:---------:|:--------:|:---------------------------:|
+|    Path    |    `userId`     | `String`  |    O     |   유저 아이디. DB의 `id_str` 값    |
+|    Path    | `categoryName`  | `String`  |    O     |      정보를 변경하려는 게시판 이름       |
+|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 게시판 정보 변경 가능 |
+|    Body    | `categoryName`  | `String`  |    O     |          새 게시판 이름           |
 
 ##### 예시
 
@@ -861,11 +861,11 @@ DELETE /api/blog/:userId/category/:categoryName
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |            Description            |
-|:----------:|:---------------:|:---------:|:--------:|:---------------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |      유저 아이디. DB의 `id_str` 값       |
-|    Path    | `categoryName`  | `String`  |    O     | 삭제하려는 게시판 이름. 공백 문자는 `-`로 치환하여 입력 |
-|   Header   | `Authorization` | `String`  |    O     |     액세스 토큰. 본인 블로그 게시판 삭제 가능      |
+| Param Type |      Name       | Data Type | Required |       Description        |
+|:----------:|:---------------:|:---------:|:--------:|:------------------------:|
+|    Path    |    `userId`     | `String`  |    O     |  유저 아이디. DB의 `id_str` 값  |
+|    Path    | `categoryName`  | `String`  |    O     |       삭제하려는 게시판 이름       |
+|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 게시판 삭제 가능 |
 
 ##### 예시
 
@@ -921,7 +921,7 @@ GET /api/post?userId=&categoryName=&order=recent&offset=0&limit=10
 | Param Type |      Name      | Data Type | Required |                               Description                                |  
 |:----------:|:--------------:|:---------:|:--------:|:------------------------------------------------------------------------:|
 |   Query    |    `userId`    | `String`  |    -     |                                  유저 아이디                                  |
-|   Query    | `categoryName` | `String`  |    -     |  게시판 이름. 공백 문자는 `-`로 치환하여 입력.<br/>특정 게시판에 속한 글만 필터링 할 때 사용. 없으면 전체 글 목록  |
+|   Query    | `categoryName` | `String`  |    -     |             게시판 이름<br/>특정 게시판에 속한 글만 필터링 할 때 사용. 없으면 전체 글 목록             |
 |   Query    |    `order`     | `String`  |    -     | 정렬 방법. `latest(최신순)`,`oldest(오래된순)`,`popular(인기순)` 중 택 1. 기본 값은 `latest` |
 |   Query    |    `offset`    |   `int`   |    -     |                      정렬된 결과 중 `offset`부터 반환. 기본값 0                       |
 |   Query    |    `limit`     |   `int`   |    -     |                      `offset`부터 `limit`개 조회. 기본값 10                      |
@@ -1023,9 +1023,9 @@ GET /api/post/:postTitle
 
 #### 요청
 
-| Param Type |    Name     | Data Type | Required |        Description        |
-|:----------:|:-----------:|:---------:|:--------:|:-------------------------:|
-|    Path    | `postTitle` | `String`  |    O     | 글 제목. 공백 문자는 `-`로 치환하여 입력 |
+| Param Type |    Name     | Data Type | Required | Description |
+|:----------:|:-----------:|:---------:|:--------:|:-----------:|
+|    Path    | `postTitle` | `String`  |    O     |    글 제목     |
 
 ##### 예시
 
@@ -1194,15 +1194,15 @@ PUT /api/post/:postTitle
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |          Description          |
-|:----------:|:---------------:|:---------:|:--------:|:-----------------------------:|
-|   Header   | `Authorization` | `String`  |    O     |    액세스 토큰. 본인 블로그 글 수정 가능     |
-|    Path    |   `postTitle`   | `String`  |    O     | 수정할 글 제목. 공백 문자는 `-`로 치환하여 입력 |
-|    Body    |    `userId`     | `String`  |    O     |    유저 아이디. DB의 `id_str` 값     |
-|    Body    | `categoryName`  | `String`  |    -     |            게시판 이름             |
-|    Body    |     `title`     | `String`  |    -     |             글 제목              |
-|    Body    |    `excerpt`    | `String`  |    -     |    글 요약. 최대 200자. 기본값 `""`    |
-|    Body    |    `content`    | `String`  |    -     |        글 본문. 최대 2000자         |
+| Param Type |      Name       | Data Type | Required |       Description       |
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------:|
+|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 글 수정 가능  |
+|    Path    |   `postTitle`   | `String`  |    O     |        수정할 글 제목         |
+|    Body    |    `userId`     | `String`  |    O     | 유저 아이디. DB의 `id_str` 값  |
+|    Body    | `categoryName`  | `String`  |    -     |         게시판 이름          |
+|    Body    |     `title`     | `String`  |    -     |          글 제목           |
+|    Body    |    `excerpt`    | `String`  |    -     | 글 요약. 최대 200자. 기본값 `""` |
+|    Body    |    `content`    | `String`  |    -     |     글 본문. 최대 2000자      |
 
 ##### 예시
 
@@ -1267,11 +1267,11 @@ DELETE /api/post/:postTitle
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |          Description          |
-|:----------:|:---------------:|:---------:|:--------:|:-----------------------------:|
-|   Header   | `Authorization` | `String`  |    O     |    액세스 토큰. 본인 블로그 글 수정 가능     |
-|    Path    |   `postTitle`   | `String`  |    O     | 삭제할 글 제목. 공백 문자는 `-`로 치환하여 입력 |
-|    Body    |    `userId`     | `String`  |    O     |    유저 아이디. DB의 `id_str` 값     |
+| Param Type |      Name       | Data Type | Required |      Description       |
+|:----------:|:---------------:|:---------:|:--------:|:----------------------:|
+|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 글 수정 가능 |
+|    Path    |   `postTitle`   | `String`  |    O     |        삭제할 글 제목        |
+|    Body    |    `userId`     | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 |
 
 ##### 예시
 
