@@ -719,23 +719,23 @@ curl -X 'POST' \
 - 게시판 정보 변경.
 
 ```http request
-PUT /api/blog/:userId/category/:categoryId
+PUT /api/blog/:userId/category/:categoryName
 ```
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |                          Description                          |
-|:----------:|:---------------:|:---------:|:--------:|:-------------------------------------------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |                    유저 아이디. DB의 `id_str` 값                     |
-|    Path    |  `categoryId`   |   `int`   |    O     |                       정보를 변경하려는 게시판 아이디                       |
-|   Header   | `Authorization` | `String`  |    O     |                  액세스 토큰. 본인 블로그 게시판 정보 변경 가능                  |
-|    Body    | `categoryName`  | `String`  |    O     |                           새 게시판 이름                            |
+| Param Type |      Name       | Data Type | Required |              Description              |
+|:----------:|:---------------:|:---------:|:--------:|:-------------------------------------:|
+|    Path    |    `userId`     | `String`  |    O     |        유저 아이디. DB의 `id_str` 값         |
+|    Path    | `categoryName`  | `String`  |    O     | 정보를 변경하려는 게시판 이름. 공백 문자는 `-`로 치환하여 입력 |
+|   Header   | `Authorization` | `String`  |    O     |      액세스 토큰. 본인 블로그 게시판 정보 변경 가능      |
+|    Body    | `categoryName`  | `String`  |    O     |               새 게시판 이름                |
 
 ##### 예시
 
 ```bash
 curl -X 'PUT' \
-  'http://localhost:8080/api/blog/cheesecat47/category/1' \
+  'http://localhost:8080/api/blog/cheesecat47/category/Spring-스터디' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Authorization: Bearer eyJ0eXAiOi...' \
   -H 'Content-Type: application/json' \
@@ -788,22 +788,22 @@ curl -X 'PUT' \
 - 게시판 삭제
 
 ```http request
-DELETE /api/blog/:userId/category/:categoryId
+DELETE /api/blog/:userId/category/:categoryName
 ```
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |                        Description                         |
-|:----------:|:---------------:|:---------:|:--------:|:----------------------------------------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |                   유저 아이디. DB의 `id_str` 값                   |
-|    Path    |  `categoryId`   |   `int`   |    O     |                       삭제하려는 게시판 아이디                        |
-|   Header   | `Authorization` | `String`  |    O     |                  액세스 토큰. 본인 블로그 게시판 삭제 가능                  |
+| Param Type |      Name       | Data Type | Required |            Description            |
+|:----------:|:---------------:|:---------:|:--------:|:---------------------------------:|
+|    Path    |    `userId`     | `String`  |    O     |      유저 아이디. DB의 `id_str` 값       |
+|    Path    | `categoryName`  | `String`  |    O     | 삭제하려는 게시판 이름. 공백 문자는 `-`로 치환하여 입력 |
+|   Header   | `Authorization` | `String`  |    O     |     액세스 토큰. 본인 블로그 게시판 삭제 가능      |
 
 ##### 예시
 
 ```bash
 curl -X 'DELETE' \
-  'http://localhost:8080/api/blog/cheesecat47/category/1' \
+  'http://localhost:8080/api/blog/cheesecat47/category/Spring-스터디' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Authorization: Bearer eyJ0eXAiOi...' \
   -H 'Content-Type: application/json'
@@ -1082,7 +1082,7 @@ POST /api/post
 |:----------:|:---------------:|:---------:|:--------:|:-----------------------:|
 |   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 글 작성 가능  |
 |    Body    |    `userId`     | `String`  |    O     | 유저 아이디. DB의 `id_str` 값  |
-|    Body    |  `categoryId`   |   `int`   |    O     |         게시판 아이디         |
+|    Body    | `categoryName`  | `String`  |    O     |         게시판 이름          |
 |    Body    |     `title`     | `String`  |    O     |          글 제목           |
 |    Body    |    `excerpt`    | `String`  |    -     | 글 요약. 최대 200자. 기본값 `""` |
 |    Body    |    `content`    | `String`  |    -     |     글 본문. 최대 2000자      |
@@ -1097,7 +1097,7 @@ curl -X 'POST' \
   -H 'Content-Type: application/json' \
   -d '{
   "userId": "cheesecat47",
-  "categoryId": 1,
+  "categoryName": "Spring 스터디",
   "title": "Spring 공부 중",
   "content": "스프링 공부 중인데 재밌다. 이케이케 하면 서버가 실행된다."
 }'
@@ -1147,26 +1147,26 @@ curl -X 'POST' \
 - 글 수정.
 
 ```http request
-PUT /api/post/:postId
+PUT /api/post/:postTitle
 ```
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |       Description       |
-|:----------:|:---------------:|:---------:|:--------:|:-----------------------:|
-|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 글 수정 가능  |
-|    Path    |    `postId`     |   `int`   |    O     |        수정할 글 아이디        |
-|    Body    |    `userId`     | `String`  |    O     | 유저 아이디. DB의 `id_str` 값  |
-|    Body    |  `categoryId`   |   `int`   |    -     |         게시판 아이디         |
-|    Body    |     `title`     | `String`  |    -     |          글 제목           |
-|    Body    |    `excerpt`    | `String`  |    -     | 글 요약. 최대 200자. 기본값 `""` |
-|    Body    |    `content`    | `String`  |    -     |     글 본문. 최대 2000자      |
+| Param Type |      Name       | Data Type | Required |          Description          |
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------------:|
+|   Header   | `Authorization` | `String`  |    O     |    액세스 토큰. 본인 블로그 글 수정 가능     |
+|    Path    |   `postTitle`   | `String`  |    O     | 수정할 글 제목. 공백 문자는 `-`로 치환하여 입력 |
+|    Body    |    `userId`     | `String`  |    O     |    유저 아이디. DB의 `id_str` 값     |
+|    Body    | `categoryName`  | `String`  |    -     |            게시판 이름             |
+|    Body    |     `title`     | `String`  |    -     |             글 제목              |
+|    Body    |    `excerpt`    | `String`  |    -     |    글 요약. 최대 200자. 기본값 `""`    |
+|    Body    |    `content`    | `String`  |    -     |        글 본문. 최대 2000자         |
 
 ##### 예시
 
 ```bash
 curl -X 'PUT' \
-  'http://localhost:8080/api/post/1' \
+  'http://localhost:8080/api/post/Spring-공부-중' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Authorization: Bearer eyJ0eXAiOi...' \
   -H 'Content-Type: application/json' \
@@ -1220,22 +1220,22 @@ curl -X 'PUT' \
 - 글 삭제.
 
 ```http request
-DELETE /api/post/:postId
+DELETE /api/post/:postTitle
 ```
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |       Description       |
-|:----------:|:---------------:|:---------:|:--------:|:-----------------------:|
-|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 글 수정 가능  |
-|    Path    |    `postId`     |   `int`   |    O     |        수정할 글 아이디        |
-|    Body    |    `userId`     | `String`  |    O     | 유저 아이디. DB의 `id_str` 값  |
+| Param Type |      Name       | Data Type | Required |          Description          |
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------------:|
+|   Header   | `Authorization` | `String`  |    O     |    액세스 토큰. 본인 블로그 글 수정 가능     |
+|    Path    |   `postTitle`   | `String`  |    O     | 삭제할 글 제목. 공백 문자는 `-`로 치환하여 입력 |
+|    Body    |    `userId`     | `String`  |    O     |    유저 아이디. DB의 `id_str` 값     |
 
 ##### 예시
 
 ```bash
 curl -X 'DELETE' \
-  'http://localhost:8080/api/post/1' \
+  'http://localhost:8080/api/post/Spring-공부-중' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Authorization: Bearer eyJ0eXAiOi...' \
   -H 'Content-Type: application/json' \
