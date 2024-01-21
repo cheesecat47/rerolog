@@ -3,20 +3,20 @@ const userIdKey = 'ML_userId';
 const accessTokenKey = 'ML_accessToken';
 const refreshTokenKey = 'ML_refreshToken';
 
-export const getIsLogin = (): boolean | null => {
-    return Boolean(localStorage.getItem(isLoginKey)) || null;
+export const getIsLogin = (): boolean => {
+    return Boolean(localStorage.getItem(isLoginKey));
 };
 
-export const getUserId = (): string | null => {
-    return localStorage.getItem(userIdKey) || null;
+export const getUserId = (): string => {
+    return localStorage.getItem(userIdKey) || '';
 };
 
-export const getAccessToken = (): string | null => {
-    return localStorage.getItem(accessTokenKey) || null;
+export const getAccessToken = (): string => {
+    return localStorage.getItem(accessTokenKey) || '';
 };
 
-export const getRefreshToken = (): string | null => {
-    return localStorage.getItem(refreshTokenKey) || null;
+export const getRefreshToken = (): string => {
+    return localStorage.getItem(refreshTokenKey) || '';
 };
 
 export const setIsLogin = (value: boolean) => {

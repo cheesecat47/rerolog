@@ -2,8 +2,8 @@ import { getIsLogin, getUserId } from 'utils/localStorage';
 import { create } from 'zustand';
 
 interface UserState {
-    isLogin: boolean | null;
-    userId: string | null;
+    isLogin: boolean;
+    userId: string;
     loginUser: ({ userId }: { userId: string }) => void;
     logoutUser: () => void;
 }
@@ -19,7 +19,7 @@ const useUserStore = create<UserState>((set) => ({
     },
     logoutUser: () =>
         set({
-            userId: null,
+            userId: '',
             isLogin: false,
         }),
 }));
