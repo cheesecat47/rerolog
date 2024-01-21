@@ -41,16 +41,34 @@
           and Category.deleted_at is null; -- 삭제한 게시판 정보 제외
     </select>
 
+    <sql id="getUserId">
+        select User.id
+        from User
+        where User.id_str = #{blogId}
+          and User.deleted_at is null
+    </sql>
+
     <!-- createCategory 쿼리 -->
     <insert id="createCategory" parameterType="CreateCategoryRequestDto">
         <selectKey keyProperty="blogId" resultType="String" order="BEFORE">
-            select User.id
-            from User
-            where User.id_str = #{blogId}
-            and User.deleted_at is null
+            <include refid="getUserId"/>
         </selectKey>
         insert into Category (blog_id, name)
         values (#{blogId}, #{categoryName})
     </insert>
+
+    <!-- updateCategory 쿼리 -->
+    <update id="updateCategory" parameterType="UpdateCategoryRequestDto">
+        <selectKey keyProperty="categoryId" resultType="String" order="BEFORE">
+            select Category.id
+            from Category
+            where Category.blog_id = (<include refid="getUserId"/>)
+            and Category.name = #{categoryName}
+            and Category.deleted_at is null
+        </selectKey>
+        update Category
+        set Category.name = #{newCategoryName}
+        where Category.id = #{categoryId}
+    </update>
 
 </mapper>
