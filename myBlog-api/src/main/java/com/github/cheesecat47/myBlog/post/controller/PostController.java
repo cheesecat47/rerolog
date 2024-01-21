@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,18 +45,8 @@ public class PostController {
     })
     @GetMapping(value = "")
     public ResponseEntity<GetPostsResponse> getPosts(
-            @Parameter(description = "유저 아이디") @RequestParam(required = false) String userId,
-            @Parameter(description = "게시판 이름") @RequestParam(required = false) String categoryName,
-            @Parameter(description = "정렬 방법") @RequestParam(required = false, defaultValue = "latest") String order,
-            @Parameter(description = "offset: 몇 번째 글부터") @RequestParam(required = false, defaultValue = "0") String offset,
-            @Parameter(description = "limit: 몇 개의 글 조회 할지") @RequestParam(required = false, defaultValue = "10") String limit
+            @ParameterObject GetPostsRequest params
     ) throws Exception {
-        GetPostsRequest params = new GetPostsRequest();
-        params.setUserId(userId);
-        params.setCategoryName(categoryName);
-        params.setOrder(order);
-        params.setOffset(Integer.parseInt(offset));
-        params.setLimit(Integer.parseInt(limit));
         log.debug("getPosts: params: {}", params);
 
         GetPostsResponse response = new GetPostsResponse();

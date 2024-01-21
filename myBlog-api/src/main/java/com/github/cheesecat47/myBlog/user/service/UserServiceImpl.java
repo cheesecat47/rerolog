@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
      * @throws MyBlogCommonException 입력 받은 유저 아이디에 문제가 있는 경우 발생.
      */
     @Override
-    public UserInfoDto getUserInfo(Optional<String> userId) throws Exception {
+    public UserInfoDto getUserInfo(String userId) throws Exception {
         log.debug("getUserInfo: userId: {}", userId);
 
         // 입력한 아이디가 없는 경우
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         // DB에서 유저 조회
         UserInfoDto userInfoDto;
         try {
-            userInfoDto = userMapper.getUserInfo(userId.get());
+            userInfoDto = userMapper.getUserInfo(userId);
             log.debug("getUserInfo: userInfo: {}", userInfoDto);
 
             // 조회된 유저가 없는 경우
