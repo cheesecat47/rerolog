@@ -65,32 +65,18 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto getPostById(String userId, String postId) throws Exception {
-        log.debug("getPostById: userId: {}", userId);
-        log.debug("getPostById: postId: {}", postId);
+    public PostDto getPostByTitle(String postTitle) throws Exception {
+        log.debug("getPostByTitle: postTitle: {}", postTitle);
 
         // 공백인 경우
-        if (userId.isEmpty() || userId.isBlank()) {
-            String msg = "유저 아이디는 필수입니다";
-            log.error("getPostById: {}", msg);
+        if (postTitle.isEmpty() || postTitle.isBlank()) {
+            String msg = "글 제목은 필수입니다";
+            log.error("getPostByTitle: {}", msg);
             throw new MyBlogCommonException(
                     ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
                     msg,
                     new HashMap<>() {{
-                        put("userId", userId);
-                    }}
-            );
-        }
-
-        // 공백인 경우
-        if (postId.isEmpty() || postId.isBlank()) {
-            String msg = "글 아이디는 필수입니다";
-            log.error("getPostById: {}", msg);
-            throw new MyBlogCommonException(
-                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
-                    msg,
-                    new HashMap<>() {{
-                        put("postId", postId);
+                        put("postTitle", postTitle);
                     }}
             );
         }
@@ -98,30 +84,16 @@ public class PostServiceImpl implements PostService {
         // DB에서 조회
         PostDto postDto;
         try {
-            // 존재하는 유저인지 확인
-            UserInfoDto userInfoDto = userMapper.getUserInfo(userId);
-            if (userInfoDto == null) {
-                String msg = "입력한 아이디에 해당하는 유저가 없습니다";
-                log.error("getPostById: {}", msg);
-                throw new MyBlogCommonException(
-                        ResponseCode.NO_RESULT,
-                        msg,
-                        new HashMap<>() {{
-                            put("userId", userId);
-                        }}
-                );
-            }
-
             // 존재하는 글인지 확인
-            postDto = postMapper.getPostById(userId, postId);
+            postDto = postMapper.getPostByTitle(postTitle);
             if (postDto == null) {
                 String msg = "해당하는 글이 없습니다";
-                log.error("getPostById: {}", msg);
+                log.error("getPostByTitle: {}", msg);
                 throw new MyBlogCommonException(
                         ResponseCode.NO_RESULT,
                         msg,
                         new HashMap<>() {{
-                            put("postId", postId);
+                            put("postTitle", postTitle);
                         }}
                 );
             }
@@ -129,16 +101,15 @@ public class PostServiceImpl implements PostService {
             // 댓글 개수 업데이트
             postDto.setNumOfComments(postDto.getComments().size());
 
-            log.debug("getPostById: postDto: {}", postDto);
+            log.debug("getPostByTitle: postDto: {}", postDto);
         } catch (SQLException e) {
             String msg = "DB 조회 중 오류가 발생했습니다";
-            log.error("getPostById: {}", msg);
+            log.error("getPostByTitle: {}", msg);
             throw new MyBlogCommonException(
                     ResponseCode.SQL_ERROR,
                     msg,
                     new HashMap<>() {{
-                        put("userId", userId);
-                        put("postId", postId);
+                        put("postTitle", postTitle);
                         put("error", e.getMessage());
                     }}
             );

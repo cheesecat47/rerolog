@@ -43,8 +43,8 @@
           <if test="userId != null">
               and myBlog.User.id_str = #{userId}
           </if>
-          <if test="categoryId > 0">
-            and Category.id = #{categoryId}
+          <if test="categoryName != null">
+            and Category.name = #{categoryName}
           </if>
         order by
           <if test="order == 'latest'">
@@ -59,8 +59,8 @@
         limit #{offset}, #{limit};
     </select>
 
-    <!--  getPostById 결과 매핑 -->
-    <resultMap id="getPostByIdResultMap" type="PostDto">
+    <!--  getPostByTitle 결과 매핑 -->
+    <resultMap id="getPostByTitleResultMap" type="PostDto">
         <result property="postId" column="post_id"/>
         <result property="categoryId" column="category_id"/>
         <result property="categoryName" column="category_name"/>
@@ -81,8 +81,8 @@
         </collection>
     </resultMap>
 
-    <!--  getPostById 쿼리 -->
-    <select id="getPostById" parameterType="String" resultMap="getPostByIdResultMap">
+    <!--  getPostByTitle 쿼리 -->
+    <select id="getPostByTitle" parameterType="String" resultMap="getPostByTitleResultMap">
         select Post.id                                                        as post_id,
                Post.category_id,
                Category.name                                                  as category_name,
@@ -101,9 +101,7 @@
                  left outer join myBlog.User on Post.user_id = User.id
                  left outer join myBlog.Category on Post.category_id = Category.id
                  left outer join myBlog.Comment on Comment.post_id = Post.id
-        where myBlog.User.id_str = #{userId}
-          and Post.id = #{postId}
-          and User.deleted_at is null
+        where Post.title = #{postTitle}
           and Post.deleted_at is null
         order by comment_created_at desc;
     </select>
