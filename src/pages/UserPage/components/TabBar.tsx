@@ -1,4 +1,4 @@
-import { ITabBarProps, TabBarPropsList } from 'interfaces/common/TabBarProps';
+import { ITabBarProps, TabBarPropsList } from 'types/common/TabBarProps';
 
 const TabBar = ({
     selectedTab,

@@ -1,20 +1,40 @@
 import useInput from 'hooks/useInput';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
+import { login } from 'apis/user';
 import kakao from 'assets/icons/ML_kakao-icon.png';
 import naver from 'assets/icons/ML_naver-icon.png';
+import useUserStore from 'stores/useUserStore';
+import {
+    setAccessToken,
+    setIsLogin,
+    setRefreshToken,
+    setUserId,
+} from 'utils/localStorage';
 
 const LoginForm = () => {
+    const navigate = useNavigate();
+    const loginUser = useUserStore((state) => state.loginUser);
     const { values, handleChange } = useInput({
         userId: '',
-        password: '',
+        userPw: '',
     });
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // 폼 제출 처리 로직
-        console.log('userId: ', values.userId, ' password: ', values.password);
+
+        const result = await login({
+            userId: values.userId,
+            userPw: values.userPw,
+        });
+
+        loginUser({ userId: result.userId });
+        setIsLogin(true);
+        setUserId(result.userId);
+        setAccessToken(result.accessToken);
+        setRefreshToken(result.refreshToken);
+        navigate('/');
     };
 
     return (
@@ -37,9 +57,9 @@ const LoginForm = () => {
                 <label htmlFor="userId" className="flex flex-col mb-2">
                     <span className="text-gray-600">비밀번호</span>
                     <input
-                        id="password"
+                        id="userPw"
                         type="password"
-                        name="password"
+                        name="userPw"
                         onChange={handleChange}
                         className="h-12 my-2 p-2 rounded-md border"
                     />

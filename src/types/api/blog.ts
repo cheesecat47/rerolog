@@ -1,4 +1,4 @@
-import { IBlog } from 'interfaces/model';
+import { IBlog } from 'types/model';
 import { ApiResponse } from './api';
 
 export type getBlogInfoReqest = {

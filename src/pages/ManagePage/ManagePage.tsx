@@ -1,8 +1,8 @@
 import profile from 'assets/images/ML_test-profile.png';
-import { IBlog } from 'interfaces/model/Blog';
-import { CategoryListType } from 'interfaces/model/Category';
-import { IUser } from 'interfaces/model/User';
 import React, { useState } from 'react';
+import { IBlog } from 'types/model/Blog';
+import { CategoryListType } from 'types/model/Category';
+import { IUser } from 'types/model/User';
 
 const ManagePage = () => {
     const [userInfo, setUserInfo] = useState<IUser>({

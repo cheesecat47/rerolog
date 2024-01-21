@@ -6,7 +6,7 @@ import {
     getPostDetailResponse,
     getPostListRequest,
     getPostListResponse,
-} from 'interfaces/api/post';
+} from 'types/api/post';
 
 export const usePost = () => {
     const staleTime = Number(process.env.REACT_APP_STALE_TIME);

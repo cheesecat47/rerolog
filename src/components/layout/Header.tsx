@@ -1,22 +1,29 @@
 // import React, { useEffect, useState } from 'react';
 
 import { HeaderIconText, PopOver } from 'components/common';
-import { IPopOverProps } from 'interfaces/common/PopOverProps';
 import { Link, useNavigate } from 'react-router-dom';
+import { IPopOverProps } from 'types/common/PopOverProps';
 
+import { logout } from 'apis/user';
 import flower from 'assets/icons/ML_flower-icon.png';
 import login from 'assets/icons/ML_login_icon.png';
-import logout from 'assets/icons/ML_logout-icon.png';
+import logoutIcon from 'assets/icons/ML_logout-icon.png';
 import moon from 'assets/icons/ML_moon-icon.png';
 import my from 'assets/icons/ML_my-icon.png';
 import pencil from 'assets/icons/ML_pencil-icon.png';
 import sun from 'assets/icons/ML_sun-icon.png';
+import useUserStore from 'stores/useUserStore';
+import {
+    deleteAccessToken,
+    deleteIsLogin,
+    deleteRefreshToken,
+    deleteUserId,
+    getAccessToken,
+    getUserId,
+} from 'utils/localStorage';
 
 const Header = ({ blogName }: { blogName: string }) => {
-    // 추후 로그인 여부 확인
-    // const [isLogin, setIsLogin] = useState(false);
-
-    const checkIsLogin = () => true;
+    const { isLogin, userId: myId, logoutUser } = useUserStore();
 
     const navigate = useNavigate();
 
@@ -24,12 +31,10 @@ const Header = ({ blogName }: { blogName: string }) => {
         navigate('/write');
     };
 
-    const userId = 'shlee';
-
     const popOverList: IPopOverProps[] = [
         {
             text: '내 블로그',
-            link: `/${userId}/posts`,
+            link: `/${myId}/posts`,
         },
         {
             text: '설정하기',
@@ -41,8 +46,30 @@ const Header = ({ blogName }: { blogName: string }) => {
         navigate(pop.link);
     };
 
-    const handleLogout = () => {
-        // 로그아웃 로직
+    const handleLogout = async () => {
+        const userId = getUserId();
+        const accessToken = getAccessToken();
+
+        if (!userId || !accessToken) {
+            alert('로그아웃에 실패했습니다.');
+            return;
+        }
+
+        await logout({
+            userId,
+            accessToken,
+        });
+
+        logoutUser();
+        deleteIsLogin();
+        deleteUserId();
+        deleteAccessToken();
+        deleteRefreshToken();
+        navigate('/');
+    };
+
+    const handleLogin = () => {
+        navigate('/login');
     };
 
     return (
@@ -57,7 +84,7 @@ const Header = ({ blogName }: { blogName: string }) => {
                 </span>
             </Link>
             <div className="basis-[40%] flex justify-end">
-                {checkIsLogin() ? (
+                {isLogin ? (
                     <div className="hidden sm:flex w-full justify-end">
                         <HeaderIconText
                             icon={pencil}
@@ -73,7 +100,7 @@ const Header = ({ blogName }: { blogName: string }) => {
                         </PopOver>
 
                         <HeaderIconText
-                            icon={logout}
+                            icon={logoutIcon}
                             alt="logout"
                             text="Logout"
                             onClick={handleLogout}
@@ -84,7 +111,7 @@ const Header = ({ blogName }: { blogName: string }) => {
                         icon={login}
                         alt="login"
                         text="Login"
-                        onClick={handleLogout}
+                        onClick={handleLogin}
                     />
                 )}
                 <div className="hidden md:flex justify-center items-center mr-4">

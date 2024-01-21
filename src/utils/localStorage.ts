@@ -1,12 +1,30 @@
+const isLoginKey = 'ML_isLogin';
+const userIdKey = 'ML_userId';
 const accessTokenKey = 'ML_accessToken';
 const refreshTokenKey = 'ML_refreshToken';
 
-export const getAccessToken = (): string | null => {
-    return localStorage.getItem(accessTokenKey) || null;
+export const getIsLogin = (): boolean => {
+    return Boolean(localStorage.getItem(isLoginKey));
 };
 
-export const getRefreshToken = (): string | null => {
-    return localStorage.getItem(refreshTokenKey) || null;
+export const getUserId = (): string => {
+    return localStorage.getItem(userIdKey) || '';
+};
+
+export const getAccessToken = (): string => {
+    return localStorage.getItem(accessTokenKey) || '';
+};
+
+export const getRefreshToken = (): string => {
+    return localStorage.getItem(refreshTokenKey) || '';
+};
+
+export const setIsLogin = (value: boolean) => {
+    localStorage.setItem(isLoginKey, String(value));
+};
+
+export const setUserId = (value: string) => {
+    localStorage.setItem(userIdKey, value);
 };
 
 export const setAccessToken = (value: string) => {
@@ -17,10 +35,18 @@ export const setRefreshToken = (value: string) => {
     localStorage.setItem(refreshTokenKey, value);
 };
 
+export const deleteIsLogin = () => {
+    localStorage.removeItem(isLoginKey);
+};
+
+export const deleteUserId = () => {
+    localStorage.removeItem(userIdKey);
+};
+
 export const deleteAccessToken = () => {
-    localStorage.setItem(accessTokenKey, '');
+    localStorage.removeItem(accessTokenKey);
 };
 
 export const deleteRefreshToken = () => {
-    localStorage.setItem(refreshTokenKey, '');
+    localStorage.removeItem(refreshTokenKey);
 };
