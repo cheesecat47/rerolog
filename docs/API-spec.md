@@ -214,7 +214,7 @@ curl -X 'POST' \
 - 유저 아이디를 사용해 해당 유저 정보 변경.
 
 ```http request
-PUT /api/user/:userId
+PATCH /api/user/:userId
 ```
 
 #### 요청
@@ -239,7 +239,7 @@ PUT /api/user/:userId
 ##### 예시
 
 ```bash
-curl -X 'PUT' \
+curl -X 'PATCH' \
   'http://localhost:8080/api/user/cheesecat47' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Content-Type: application/json' \
@@ -594,7 +594,7 @@ GET /api/blog/:blogId
 - 블로그 정보 변경.
 
 ```http request
-PUT /api/blog/:blogId
+PATCH /api/blog/:blogId
 ```
 
 #### 요청
@@ -787,28 +787,28 @@ curl -X 'POST' \
 - 게시판 정보 변경.
 
 ```http request
-PUT /api/blog/:userId/category/:categoryName
+PATCH /api/blog/:blogId/category/:categoryName
 ```
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |         Description         |
-|:----------:|:---------------:|:---------:|:--------:|:---------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |   유저 아이디. DB의 `id_str` 값    |
-|    Path    | `categoryName`  | `String`  |    O     |      정보를 변경하려는 게시판 이름       |
-|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 게시판 정보 변경 가능 |
-|    Body    | `categoryName`  | `String`  |    O     |          새 게시판 이름           |
+| Param Type |       Name        | Data Type | Required |          Description          |
+|:----------:|:-----------------:|:---------:|:--------:|:-----------------------------:|
+|    Path    |     `blogId`      | `String`  |    O     | 블로그 아이디. 유저 아이디(`userId`)와 동일 |
+|    Path    |  `categoryName`   | `String`  |    O     |       정보를 변경하려는 게시판 이름        |
+|   Header   |  `Authorization`  | `String`  |    O     |  액세스 토큰. 본인 블로그 게시판 정보 변경 가능  |
+|    Body    | `newCategoryName` | `String`  |    O     |           새 게시판 이름            |
 
 ##### 예시
 
 ```bash
-curl -X 'PUT' \
+curl -X 'PATCH' \
   'http://localhost:8080/api/blog/cheesecat47/category/Spring-스터디' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Authorization: Bearer eyJ0eXAiOi...' \
   -H 'Content-Type: application/json' \
   -d '{
-  "categoryName": "Spring Boot 스터디",
+  "newCategoryName": "Spring Boot 스터디",
 }'
 ```
 
@@ -1189,7 +1189,7 @@ curl -X 'POST' \
 - 글 수정.
 
 ```http request
-PUT /api/post/:postTitle
+PATCH /api/post/:postTitle
 ```
 
 #### 요청
@@ -1207,7 +1207,7 @@ PUT /api/post/:postTitle
 ##### 예시
 
 ```bash
-curl -X 'PUT' \
+curl -X 'PATCH' \
   'http://localhost:8080/api/post/Spring-공부-중' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Authorization: Bearer eyJ0eXAiOi...' \
@@ -1459,7 +1459,7 @@ curl -X 'POST' \
 - 댓글 수정.
 
 ```http request
-PUT /api/post/:postId/comment/:commentId
+PATCH /api/post/:postId/comment/:commentId
 ```
 
 #### 요청
@@ -1477,7 +1477,7 @@ PUT /api/post/:postId/comment/:commentId
 ##### 예시
 
 ```bash
-curl -X 'PUT' \
+curl -X 'PATCH' \
   'http://localhost:8080/api/post/1/comment/1' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Authorization: Bearer eyJ0eXAiOi...' \

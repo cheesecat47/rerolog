@@ -2,10 +2,8 @@ package com.github.cheesecat47.myBlog.blog.controller;
 
 import com.github.cheesecat47.myBlog.blog.model.BlogInfoDto;
 import com.github.cheesecat47.myBlog.blog.model.request.CreateCategoryRequestDto;
-import com.github.cheesecat47.myBlog.blog.model.response.CategoryDto;
-import com.github.cheesecat47.myBlog.blog.model.response.CreateCategoriesResponseDto;
-import com.github.cheesecat47.myBlog.blog.model.response.GetBlogInfoResponse;
-import com.github.cheesecat47.myBlog.blog.model.response.GetCategoriesResponse;
+import com.github.cheesecat47.myBlog.blog.model.request.UpdateCategoryRequestDto;
+import com.github.cheesecat47.myBlog.blog.model.response.*;
 import com.github.cheesecat47.myBlog.blog.service.BlogService;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -119,5 +117,36 @@ public class BlogController {
         response.setMessage(msg);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @Operation(summary = "updateCategory 게시판 정보 변경")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "게시판 변경 성공", content = {@Content(schema = @Schema(implementation = UpdateCategoryResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "게시판 변경 실패"),
+            @ApiResponse(responseCode = "401", description = "게시판 변경 실패"),
+            @ApiResponse(responseCode = "500", description = "게시판 변경 실패")
+    })
+    @PatchMapping(value = "/{blogId}/category/{categoryName}")
+    public ResponseEntity<UpdateCategoryResponseDto> updateCategory(
+            @Parameter(description = "블로그 아이디. 유저 아이디(`userId`)와 동일") @PathVariable String blogId,
+            @Parameter(description = "정보를 변경하려는 게시판 이름") @PathVariable String categoryName,
+            HttpServletRequest request,
+            @RequestBody UpdateCategoryRequestDto params
+    ) throws Exception {
+        params.setBlogId(blogId);
+        params.setCategoryName(categoryName);
+        params.setAccessToken(request.getHeader("Authorization"));
+        log.debug("updateCategory: params: {}", params);
+
+        UpdateCategoryResponseDto response = new UpdateCategoryResponseDto();
+
+        blogService.updateCategory(params);
+
+        String msg = "게시판 정보 변경 성공";
+        log.info("updateCategory: {}", msg);
+        response.setMessage(msg);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 }
