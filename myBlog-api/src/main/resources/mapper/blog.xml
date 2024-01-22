@@ -71,4 +71,18 @@
         where Category.id = #{categoryId}
     </update>
 
+    <!-- deleteCategory 쿼리 -->
+    <update id="deleteCategory" parameterType="DeleteCategoryRequestDto">
+        <selectKey keyProperty="categoryId" resultType="String" order="BEFORE">
+            select Category.id
+            from Category
+            where Category.blog_id = (<include refid="getUserId"/>)
+            and Category.name = #{categoryName}
+            and Category.deleted_at is null
+        </selectKey>
+        update Category
+        set Category.deleted_at = now()
+        where Category.id = #{categoryId}
+    </update>
+
 </mapper>

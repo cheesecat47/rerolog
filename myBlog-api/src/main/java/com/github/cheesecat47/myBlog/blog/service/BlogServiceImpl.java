@@ -3,6 +3,7 @@ package com.github.cheesecat47.myBlog.blog.service;
 import com.github.cheesecat47.myBlog.blog.model.BlogInfoDto;
 import com.github.cheesecat47.myBlog.blog.model.mapper.BlogMapper;
 import com.github.cheesecat47.myBlog.blog.model.request.CreateCategoryRequestDto;
+import com.github.cheesecat47.myBlog.blog.model.request.DeleteCategoryRequestDto;
 import com.github.cheesecat47.myBlog.blog.model.request.UpdateCategoryRequestDto;
 import com.github.cheesecat47.myBlog.blog.model.response.CategoryDto;
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
@@ -288,7 +289,71 @@ public class BlogServiceImpl implements BlogService {
             log.debug("updateCategory: 게시판 생성 성공");
         } catch (SQLException e) {
             String msg = "DB 업데이트 중 오류가 발생했습니다";
-            log.error("createCategory: {}", msg);
+            log.error("updateCategory: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.SQL_ERROR,
+                    msg,
+                    new HashMap<>() {{
+                        put("blogId", params.getBlogId());
+                        put("error", e.getMessage());
+                    }}
+            );
+        }
+    }
+
+    @Override
+    public void deleteCategory(DeleteCategoryRequestDto params) throws Exception {
+        log.debug("deleteCategory: params: {}", params);
+
+        if (params.getAccessToken() == null || !jwtUtil.checkToken(params.getAccessToken(), params.getBlogId())) {
+            String msg = "로그인 후 이용 바랍니다";
+            log.error("deleteCategory: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.UNAUTHORIZED,
+                    msg,
+                    new HashMap<>() {{
+                        put("blogId", params.getBlogId());
+                        put("Authorization", params.getAccessToken());
+                    }}
+            );
+        }
+
+        try {
+            // 존재하지 않는 블로그인 경우
+            BlogInfoDto blogInfoDto = blogMapper.getBlogInfo(params.getBlogId());
+            log.debug("deleteCategory: blogInfo: {}", blogInfoDto);
+
+            if (blogInfoDto == null) {
+                String msg = "입력한 아이디에 해당하는 블로그가 없습니다";
+                log.error("deleteCategory: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.NO_RESULT,
+                        msg,
+                        new HashMap<>() {{
+                            put("blogId", params.getBlogId());
+                        }}
+                );
+            }
+
+            // TODO: 게시판 이름 체크
+
+            int count = blogMapper.deleteCategory(params);
+            if (count != 1) {
+                String msg = "게시판 삭제에 실패했습니다";
+                log.error("deleteCategory: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.INTERNAL_SERVER_ERROR,
+                        msg,
+                        new HashMap<>() {{
+                            put("blogId", params.getBlogId());
+                            put("categoryName", params.getCategoryName());
+                        }}
+                );
+            }
+            log.debug("deleteCategory: 게시판 삭제 성공");
+        } catch (SQLException e) {
+            String msg = "DB 업데이트 중 오류가 발생했습니다";
+            log.error("deleteCategory: {}", msg);
             throw new MyBlogCommonException(
                     ResponseCode.SQL_ERROR,
                     msg,

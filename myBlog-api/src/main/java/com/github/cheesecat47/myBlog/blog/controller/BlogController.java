@@ -2,6 +2,7 @@ package com.github.cheesecat47.myBlog.blog.controller;
 
 import com.github.cheesecat47.myBlog.blog.model.BlogInfoDto;
 import com.github.cheesecat47.myBlog.blog.model.request.CreateCategoryRequestDto;
+import com.github.cheesecat47.myBlog.blog.model.request.DeleteCategoryRequestDto;
 import com.github.cheesecat47.myBlog.blog.model.request.UpdateCategoryRequestDto;
 import com.github.cheesecat47.myBlog.blog.model.response.*;
 import com.github.cheesecat47.myBlog.blog.service.BlogService;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -144,6 +146,37 @@ public class BlogController {
 
         String msg = "게시판 정보 변경 성공";
         log.info("updateCategory: {}", msg);
+        response.setMessage(msg);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+    }
+
+    @Operation(summary = "deleteCategory 게시판 삭제", security = {@SecurityRequirement(name = "Access Token")})
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "게시판 삭제 성공", content = {@Content(schema = @Schema(implementation = DeleteCategoryResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "게시판 삭제 실패"),
+            @ApiResponse(responseCode = "401", description = "게시판 삭제 실패"),
+            @ApiResponse(responseCode = "500", description = "게시판 삭제 실패")
+    })
+    @DeleteMapping(value = "/{blogId}/category/{categoryName}")
+    public ResponseEntity<DeleteCategoryResponseDto> deleteCategory(
+            @Parameter(description = "블로그 아이디. 유저 아이디(`userId`)와 동일") @PathVariable String blogId,
+            @Parameter(description = "삭제하려는 게시판 이름") @PathVariable String categoryName,
+            HttpServletRequest request
+    ) throws Exception {
+        DeleteCategoryRequestDto params = new DeleteCategoryRequestDto();
+        params.setBlogId(blogId);
+        params.setCategoryName(categoryName);
+        params.setAccessToken(request.getHeader("Authorization"));
+        log.debug("deleteCategory: params: {}", params);
+
+        DeleteCategoryResponseDto response = new DeleteCategoryResponseDto();
+
+        blogService.deleteCategory(params);
+
+        String msg = "게시판 삭제 성공";
+        log.info("deleteCategory: {}", msg);
         response.setMessage(msg);
         response.setCode(ResponseCode.NORMAL_SERVICE);
 

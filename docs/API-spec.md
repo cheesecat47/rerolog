@@ -856,7 +856,7 @@ curl -X 'PATCH' \
 - 게시판 삭제
 
 ```http request
-DELETE /api/blog/:userId/category/:categoryName
+DELETE /api/blog/:blogId/category/:categoryName
 ```
 
 #### 요청
