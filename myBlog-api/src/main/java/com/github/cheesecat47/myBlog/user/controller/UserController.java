@@ -27,8 +27,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 /**
  * 유저 컨트롤러
  *
@@ -58,7 +56,7 @@ public class UserController {
     })
     @GetMapping(value = "/{userId}")
     public ResponseEntity<GetUserInfoResponse> getUserInfo(
-            @Parameter(description = "유저 아이디") @PathVariable Optional<String> userId
+            @Parameter(description = "유저 아이디") @PathVariable String userId
     ) throws Exception {
         log.debug("getUserInfo: userId: {}", userId);
 

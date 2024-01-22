@@ -6,10 +6,8 @@ import com.github.cheesecat47.myBlog.user.model.request.LoginRequestDto;
 import com.github.cheesecat47.myBlog.user.model.request.LogoutRequestDto;
 import com.github.cheesecat47.myBlog.user.model.request.RefreshRequestDto;
 
-import java.util.Optional;
-
 public interface UserService {
-    UserInfoDto getUserInfo(Optional<String> userId) throws Exception;
+    UserInfoDto getUserInfo(String userId) throws Exception;
 
     AuthTokenDto login(LoginRequestDto params) throws Exception;
 
