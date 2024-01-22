@@ -90,7 +90,7 @@ public class BlogController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @Operation(summary = "createCategory 게시판 생성", description = "게시판 생성.<br/>로그인 상태의 블로그 주인 유저만 생성 가능.")
+    @Operation(summary = "createCategory 게시판 생성", description = "게시판 생성.<br/>로그인 상태의 블로그 주인 유저만 생성 가능.", security = {@SecurityRequirement(name = "Access Token")})
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "게시판 생성 성공", content = {@Content(schema = @Schema(implementation = CreateCategoriesResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "게시판 생성 실패"),
@@ -119,7 +119,7 @@ public class BlogController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @Operation(summary = "updateCategory 게시판 정보 변경")
+    @Operation(summary = "updateCategory 게시판 정보 변경", security = {@SecurityRequirement(name = "Access Token")})
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "게시판 변경 성공", content = {@Content(schema = @Schema(implementation = UpdateCategoryResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "게시판 변경 실패"),
