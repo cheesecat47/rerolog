@@ -12,9 +12,9 @@ import java.util.List;
 
 @Mapper
 public interface BlogMapper {
-    BlogInfoDto getBlogInfo(String userId) throws SQLException;
+    BlogInfoDto getBlogInfo(String blogId) throws SQLException;
 
-    List<CategoryDto> getCategories(String userId) throws SQLException;
+    List<CategoryDto> getCategories(String blogId) throws SQLException;
 
     int createCategory(CreateCategoryRequestDto params) throws SQLException;
 

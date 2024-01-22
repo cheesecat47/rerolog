@@ -569,7 +569,7 @@ GET /api/blog/:blogId
   "message": "블로그 정보 조회 성공",
   "code": "00",
   "data": {
-    "userId": "cheesecat47",
+    "blogId": "cheesecat47",
     "blogName": "La foret rouge",
     "content": "",
     "createdAt": "2023-12-20T09:00:00Z"
@@ -584,7 +584,7 @@ GET /api/blog/:blogId
   "message": "입력한 아이디에 해당하는 블로그가 없습니다.",
   "code": "13",
   "data": {
-    "userId": "cheesecat$&"
+    "blogId": "cheesecat$&"
   }
 }
 ``` 
@@ -658,14 +658,14 @@ PATCH /api/blog/:blogId
 - 블로그에 있는 게시판 목록 조회.
 
 ```http request
-GET /api/blog/:userId/category
+GET /api/blog/:blogId/category
 ```
 
 #### 요청
 
-| Param Type |   Name   | Data Type | Required |      Description       | 
-|:----------:|:--------:|:---------:|:--------:|:----------------------:|
-|    Path    | `userId` | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 | 
+| Param Type |   Name   | Data Type | Required |          Description          | 
+|:----------:|:--------:|:---------:|:--------:|:-----------------------------:|
+|    Path    | `blogId` | `String`  |    O     | 블로그 아이디. 유저 아이디(`userId`)와 동일 |
 
 #### 응답
 
@@ -709,7 +709,7 @@ GET /api/blog/:userId/category
   "message": "입력한 아이디에 해당하는 블로그가 없습니다.",
   "code": "13",
   "data": {
-    "userId": "cheesecat$&"
+    "blogId": "cheesecat$&"
   }
 }
 ```
@@ -719,16 +719,16 @@ GET /api/blog/:userId/category
 - 게시판 생성.
 
 ```http request
-POST /api/blog/:userId/category
+POST /api/blog/:blogId/category
 ```
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |                        Description                         | 
-|:----------:|:---------------:|:---------:|:--------:|:----------------------------------------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |                   유저 아이디. DB의 `id_str` 값                   |
-|   Header   | `Authorization` | `String`  |    O     |                  액세스 토큰. 본인 블로그 게시판 생성 가능                  |
-|    Body    | `categoryName`  | `String`  |    O     |                           게시판 이름                           |
+| Param Type |      Name       | Data Type | Required |          Description          | 
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------------:|
+|    Path    |    `blogId`     | `String`  |    O     | 블로그 아이디. 유저 아이디(`userId`)와 동일 |
+|   Header   | `Authorization` | `String`  |    O     |   액세스 토큰. 본인 블로그 게시판 생성 가능    |
+|    Body    | `categoryName`  | `String`  |    O     |            게시판 이름             |
 
 ##### 예시
 
@@ -861,11 +861,11 @@ DELETE /api/blog/:blogId/category/:categoryName
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |       Description        |
-|:----------:|:---------------:|:---------:|:--------:|:------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |  유저 아이디. DB의 `id_str` 값  |
-|    Path    | `categoryName`  | `String`  |    O     |       삭제하려는 게시판 이름       |
-|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 게시판 삭제 가능 |
+| Param Type |      Name       | Data Type | Required |          Description          |
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------------:|
+|    Path    |    `blogId`     | `String`  |    O     | 블로그 아이디. 유저 아이디(`userId`)와 동일 |
+|    Path    | `categoryName`  | `String`  |    O     |         삭제하려는 게시판 이름          |
+|   Header   | `Authorization` | `String`  |    O     |   액세스 토큰. 본인 블로그 게시판 삭제 가능    |
 
 ##### 예시
 

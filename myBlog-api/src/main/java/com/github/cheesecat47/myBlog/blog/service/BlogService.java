@@ -9,9 +9,9 @@ import com.github.cheesecat47.myBlog.blog.model.response.CategoryDto;
 import java.util.List;
 
 public interface BlogService {
-    BlogInfoDto getBlogInfo(String userId) throws Exception;
+    BlogInfoDto getBlogInfo(String blogId) throws Exception;
 
-    List<CategoryDto> getCategories(String userId) throws Exception;
+    List<CategoryDto> getCategories(String blogId) throws Exception;
 
     void createCategory(CreateCategoryRequestDto params) throws Exception;
 

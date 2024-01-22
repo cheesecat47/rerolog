@@ -45,15 +45,15 @@ public class BlogController {
             @ApiResponse(responseCode = "404", description = "블로그 정보 조회 실패"),
             @ApiResponse(responseCode = "500", description = "블로그 정보 조회 실패")
     })
-    @GetMapping(value = "/{userId}")
+    @GetMapping(value = "/{blogId}")
     public ResponseEntity<GetBlogInfoResponse> getBlogInfo(
-            @Parameter(description = "유저 아이디") @PathVariable String userId
+            @Parameter(description = "블로그 아이디. 유저 아이디(`userId`)와 동일") @PathVariable String blogId
     ) throws Exception {
-        log.debug("getBlogInfo: userId: {}", userId);
+        log.debug("getBlogInfo: blogId: {}", blogId);
 
         GetBlogInfoResponse response = new GetBlogInfoResponse();
 
-        BlogInfoDto blogInfoDto = blogService.getBlogInfo(userId);
+        BlogInfoDto blogInfoDto = blogService.getBlogInfo(blogId);
 
         String msg = "블로그 정보 조회 성공";
         log.info("getBlogInfo: {}", msg);
@@ -71,16 +71,15 @@ public class BlogController {
             @ApiResponse(responseCode = "404", description = "게시판 목록 조회 실패"),
             @ApiResponse(responseCode = "500", description = "게시판 목록 조회 실패")
     })
-    @GetMapping(value = "/{userId}/category")
+    @GetMapping(value = "/{blogId}/category")
     public ResponseEntity<GetCategoriesResponse> getCategories(
-            @Parameter(description = "유저 아이디") @PathVariable String userId
+            @Parameter(description = "블로그 아이디. 유저 아이디(`userId`)와 동일") @PathVariable String blogId
     ) throws Exception {
-        // TODO: userId를 blogId로 수정 (1:1 매핑, 식별 관계여서 값은 같음)
-        log.debug("getCategories: userId: {}", userId);
+        log.debug("getCategories: blogId: {}", blogId);
 
         GetCategoriesResponse response = new GetCategoriesResponse();
 
-        List<CategoryDto> categoryNames = blogService.getCategories(userId);
+        List<CategoryDto> categoryNames = blogService.getCategories(blogId);
 
         String msg = "게시판 목록 조회 성공";
         log.info("getCategories: {}, size: {}", msg, categoryNames.size());
@@ -100,16 +99,15 @@ public class BlogController {
     })
     @PostMapping(value = "/{blogId}/category")
     public ResponseEntity<CreateCategoriesResponseDto> createCategory(
-            @Parameter(description = "게시판을 생성할 블로그 아이디") @PathVariable String blogId,
+            @Parameter(description = "블로그 아이디. 유저 아이디(`userId`)와 동일") @PathVariable String blogId,
             @RequestBody CreateCategoryRequestDto params,
             HttpServletRequest request
     ) throws Exception {
-        log.debug("createCategory: blogId: {}", blogId);
-
-        CreateCategoriesResponseDto response = new CreateCategoriesResponseDto();
-
         params.setBlogId(blogId);
         params.setAccessToken(request.getHeader("Authorization"));
+        log.debug("createCategory: params: {}", params);
+
+        CreateCategoriesResponseDto response = new CreateCategoriesResponseDto();
 
         blogService.createCategory(params);
 
