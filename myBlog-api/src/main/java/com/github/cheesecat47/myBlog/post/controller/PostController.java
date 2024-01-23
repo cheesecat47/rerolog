@@ -2,7 +2,9 @@ package com.github.cheesecat47.myBlog.post.controller;
 
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
+import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
+import com.github.cheesecat47.myBlog.post.model.response.CreatePostResponseDto;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostByTitleResponse;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostsResponse;
 import com.github.cheesecat47.myBlog.post.service.PostService;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
@@ -86,5 +89,31 @@ public class PostController {
         response.setData(postDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Operation(summary = "createPost 글 작성", description = "본인 블로그에 글 작성")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "글 작성 성공", content = {@Content(schema = @Schema(implementation = CreatePostResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "글 작성 실패"),
+            @ApiResponse(responseCode = "404", description = "글 작성 실패"),
+            @ApiResponse(responseCode = "500", description = "글 작성 실패")
+    })
+    @PostMapping(value = "")
+    public ResponseEntity<CreatePostResponseDto> createPost(
+            HttpServletRequest request,
+            @RequestBody CreatePostRequestDto params
+    ) throws Exception {
+        params.setAccessToken(request.getHeader("Authorization"));
+        log.debug("createPost: params: {}", params);
+
+        postService.createPost(params);
+
+        CreatePostResponseDto response = new CreatePostResponseDto();
+        String msg = "글 작성 성공";
+        log.info("createPost: {}", msg);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+        response.setMessage(msg);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

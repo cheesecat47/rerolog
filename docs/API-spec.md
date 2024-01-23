@@ -1112,7 +1112,7 @@ curl -X 'GET' \
 
 ### createPost 글 작성
 
-- 글 작성.
+- 본인 블로그에 글 작성.
 
 ```http request
 POST /api/post
@@ -1153,7 +1153,7 @@ curl -X 'POST' \
 // HTTP/1.1 201 CREATED
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "글 생성 성공",
+  "message": "글 작성 성공",
   "code": "00",
   "data": null
 }
@@ -1163,10 +1163,12 @@ curl -X 'POST' \
 // HTTP/1.1 400 BAD REQUEST
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "글 제목 형식에 맞지 않습니다",
-  "code": "11",
+  "message": "필수 파라미터를 확인하세요",
+  "code": "10",
   "data": {
-    "categoryName": "!Spring!"
+    "postTitle": null,
+    "userId": "cheesecat47",
+    "categoryName": "알고리즘 문제"
   }
 }
 ```
