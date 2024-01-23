@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import RequireAuth from 'components/common/RequireAuth';
 import UserPostList from 'components/post/UserPostList';
 import { GuestBook, Introduce } from 'pages/UserPage/components';
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
@@ -22,7 +23,14 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
             { index: true, element: <MainPage /> },
-            { path: 'manage', element: <ManagePage /> },
+            {
+                path: 'manage',
+                element: (
+                    <RequireAuth>
+                        <ManagePage />
+                    </RequireAuth>
+                ),
+            },
             { path: 'post/:sort?', element: <MainPage /> },
             {
                 path: ':userId',
@@ -50,7 +58,14 @@ const router = createBrowserRouter([
         children: [
             { path: 'login', element: <LoginPage /> },
             { path: 'signup', element: <SignupPage /> },
-            { path: 'write', element: <PostWritePage /> },
+            {
+                path: 'write',
+                element: (
+                    <RequireAuth>
+                        <PostWritePage />
+                    </RequireAuth>
+                ),
+            },
         ],
     },
 ]);

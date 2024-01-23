@@ -55,17 +55,21 @@ const Header = ({ blogName }: { blogName: string }) => {
             return;
         }
 
-        await logout({
+        const result = await logout({
             userId,
             accessToken,
         });
 
-        logoutUser();
-        deleteIsLogin();
-        deleteUserId();
-        deleteAccessToken();
-        deleteRefreshToken();
-        navigate('/');
+        if (result) {
+            logoutUser();
+            deleteIsLogin();
+            deleteUserId();
+            deleteAccessToken();
+            deleteRefreshToken();
+            navigate('/');
+        } else {
+            alert('로그아웃에 실패했습니다');
+        }
     };
 
     const handleLogin = () => {
