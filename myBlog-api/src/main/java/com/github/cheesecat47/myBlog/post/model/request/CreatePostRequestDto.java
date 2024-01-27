@@ -25,4 +25,8 @@ public class CreatePostRequestDto {
 
     @Schema(description = "글 본문. 최대 2000자")
     String content;
+
+    // TODO: 썸네일 이미지. 추후 업데이트 예정
+
+    // TODO: 게시글 이미지 리스트. 추후 업데이트 예정
 }
