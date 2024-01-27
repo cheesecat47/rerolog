@@ -1,6 +1,7 @@
 package com.github.cheesecat47.myBlog.post.model.mapper;
 
 import com.github.cheesecat47.myBlog.post.model.PostDto;
+import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,4 +13,6 @@ public interface PostMapper {
     List<PostDto> getPosts(GetPostsRequest params) throws SQLException;
 
     PostDto getPostByTitle(String postTitle) throws SQLException;
+
+    int createPost(CreatePostRequestDto params) throws SQLException;
 }

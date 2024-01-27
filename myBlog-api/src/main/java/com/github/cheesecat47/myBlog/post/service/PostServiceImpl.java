@@ -4,9 +4,11 @@ import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.mapper.PostMapper;
+import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.mapper.UserMapper;
+import com.github.cheesecat47.myBlog.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostMapper postMapper;
     private final UserMapper userMapper;
+    private final JWTUtil jwtUtil;
 
     @Override
     public List<PostDto> getPosts(GetPostsRequest params) throws Exception {
@@ -116,5 +119,86 @@ public class PostServiceImpl implements PostService {
         }
 
         return postDto;
+    }
+
+    @Override
+    public void createPost(CreatePostRequestDto params) throws Exception {
+        log.debug("createPost: params: {}", params);
+
+        // 필수 파라미터 체크
+        if (params.getUserId() == null || params.getCategoryName() == null || params.getTitle() == null) {
+            String msg = "필수 파라미터를 확인하세요";
+            log.error("createPost: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    msg,
+                    new HashMap<>() {{
+                        put("userId", params.getUserId());
+                        put("categoryName", params.getCategoryName());
+                        put("postTitle", params.getTitle());
+                    }}
+            );
+        }
+
+        // 입력한 액세스 토큰이 없는 경우
+        if (params.getAccessToken() == null || !jwtUtil.checkToken(params.getAccessToken(), params.getUserId())) {
+            String msg = "로그인 후 이용 바랍니다";
+            log.error("createPost: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.UNAUTHORIZED,
+                    msg,
+                    new HashMap<>() {{
+                        put("userId", params.getUserId());
+                        put("Authorization", params.getAccessToken());
+                    }}
+            );
+        }
+
+        // DB에 글 정보 삽입
+        try {
+            // 존재하는 글인지 확인
+            PostDto postDto = postMapper.getPostByTitle(params.getTitle());
+            if (postDto != null) {
+                String msg = "동일한 제목의 글이 이미 존재합니다";
+                log.error("createPost: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.INVALID_REQUEST_PARAMETER,
+                        msg,
+                        new HashMap<>() {{
+                            put("postTitle", params.getTitle());
+                        }}
+                );
+            }
+
+            int count = postMapper.createPost(params);
+            if (count != 1) {
+                String msg = "글 작성에 실패했습니다";
+                log.error("createPost: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.UNAUTHORIZED,
+                        msg,
+                        new HashMap<>() {{
+                            put("userId", params.getUserId());
+                            put("categoryName", params.getCategoryName());
+                            put("title", params.getTitle());
+                            put("excerpt", params.getExcerpt());
+                            put("content", params.getContent());
+                        }}
+                );
+            }
+
+            log.debug("createPost: postDto: {}", postDto);
+        } catch (SQLException e) {
+            String msg = "DB 조회 중 오류가 발생했습니다";
+            log.error("createPost: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.SQL_ERROR,
+                    msg,
+                    new HashMap<>() {{
+                        put("postTitle", params.getTitle());
+                        put("error", e.getMessage());
+                    }}
+            );
+        }
     }
 }

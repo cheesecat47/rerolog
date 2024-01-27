@@ -106,4 +106,25 @@
         order by comment_created_at desc;
     </select>
 
+    <sql id="getUserId">
+        select User.id
+        from User
+        where User.id_str = #{userId}
+          and User.deleted_at is null
+    </sql>
+
+    <sql id="getCategoryId">
+        select Category.id
+        from Category
+        where Category.name = #{categoryName}
+        and Category.blog_id = (<include refid="getUserId"/>)
+        and Category.deleted_at is null
+    </sql>
+
+    <!-- createPost 쿼리 -->
+    <insert id="createPost" parameterType="CreatePostRequestDto">
+        insert into Post (category_id, user_id, title, excerpt, content)
+        values ((<include refid="getCategoryId"/>),(<include refid="getUserId"/>), #{title}, #{excerpt}, #{content});
+    </insert>
+
 </mapper>
