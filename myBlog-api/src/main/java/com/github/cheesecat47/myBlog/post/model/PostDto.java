@@ -3,8 +3,6 @@ package com.github.cheesecat47.myBlog.post.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Schema(description = "글 정보 객체.")
 public class PostDto {
@@ -37,9 +35,6 @@ public class PostDto {
 
     @Schema(description = "글 본문.")
     String content;
-
-    @Schema(description = "댓글 목록.")
-    List<CommentDto> comments;
 
     @Schema(description = "댓글 개수.")
     int numOfComments;

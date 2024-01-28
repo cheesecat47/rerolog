@@ -2,7 +2,11 @@ package com.github.cheesecat47.myBlog.post.controller;
 
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
+import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
+import com.github.cheesecat47.myBlog.post.model.request.DeletePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
+import com.github.cheesecat47.myBlog.post.model.request.UpdatePostRequestDto;
+import com.github.cheesecat47.myBlog.post.model.response.CreatePostResponseDto;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostByTitleResponse;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostsResponse;
 import com.github.cheesecat47.myBlog.post.service.PostService;
@@ -12,7 +16,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
@@ -86,5 +92,78 @@ public class PostController {
         response.setData(postDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Operation(summary = "createPost 글 작성", description = "본인 블로그에 글 작성", security = {@SecurityRequirement(name = "Access Token")})
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "글 작성 성공", content = {@Content(schema = @Schema(implementation = CreatePostResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "글 작성 실패"),
+            @ApiResponse(responseCode = "404", description = "글 작성 실패"),
+            @ApiResponse(responseCode = "500", description = "글 작성 실패")
+    })
+    @PostMapping(value = "")
+    public ResponseEntity<CreatePostResponseDto> createPost(
+            HttpServletRequest request,
+            @RequestBody CreatePostRequestDto params
+    ) throws Exception {
+        params.setAccessToken(request.getHeader("Authorization"));
+        log.debug("createPost: params: {}", params);
+
+        postService.createPost(params);
+
+        CreatePostResponseDto response = new CreatePostResponseDto();
+        String msg = "글 작성 성공";
+        log.info("createPost: {}", msg);
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+        response.setMessage(msg);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @Operation(summary = "updatePost 글 수정", description = "본인 블로그의 글 수정", security = {@SecurityRequirement(name = "Access Token")})
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "글 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "글 수정 실패"),
+            @ApiResponse(responseCode = "404", description = "글 수정 실패"),
+            @ApiResponse(responseCode = "500", description = "글 수정 실패")
+    })
+    @PatchMapping(value = "/{postTitle}")
+    public ResponseEntity updatePost(
+            HttpServletRequest request,
+            @PathVariable String postTitle,
+            @RequestBody UpdatePostRequestDto params
+    ) throws Exception {
+        params.setAccessToken(request.getHeader("Authorization"));
+        params.setPostTitle(postTitle);
+        log.debug("updatePost: params: {}", params);
+
+        postService.updatePost(params);
+        log.info("updatePost: 글 수정 성공");
+
+        // HTTP 응답 코드가 204 NO CONTENT일 때는 body를 넣더리도 전송되지 않음!
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "deletePost 글 삭제", description = "본인 블로그의 글 삭제", security = {@SecurityRequirement(name = "Access Token")})
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "글 삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "글 삭제 실패"),
+            @ApiResponse(responseCode = "404", description = "글 삭제 실패"),
+            @ApiResponse(responseCode = "500", description = "글 삭제 실패")
+    })
+    @DeleteMapping(value = "/{postTitle}")
+    public ResponseEntity deletePost(
+            HttpServletRequest request,
+            @Parameter(description = "삭제할 글 제목") @PathVariable String postTitle,
+            @RequestBody DeletePostRequestDto params
+    ) throws Exception {
+        params.setAccessToken(request.getHeader("Authorization"));
+        params.setPostTitle(postTitle);
+        log.debug("deletePost: params: {}", params);
+
+        postService.deletePost(params);
+        log.info("deletePost: 글 삭제 성공");
+
+        return ResponseEntity.noContent().build();
     }
 }

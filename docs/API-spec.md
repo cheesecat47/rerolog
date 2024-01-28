@@ -569,7 +569,7 @@ GET /api/blog/:blogId
   "message": "블로그 정보 조회 성공",
   "code": "00",
   "data": {
-    "userId": "cheesecat47",
+    "blogId": "cheesecat47",
     "blogName": "La foret rouge",
     "content": "",
     "createdAt": "2023-12-20T09:00:00Z"
@@ -584,7 +584,7 @@ GET /api/blog/:blogId
   "message": "입력한 아이디에 해당하는 블로그가 없습니다.",
   "code": "13",
   "data": {
-    "userId": "cheesecat$&"
+    "blogId": "cheesecat$&"
   }
 }
 ``` 
@@ -658,14 +658,14 @@ PATCH /api/blog/:blogId
 - 블로그에 있는 게시판 목록 조회.
 
 ```http request
-GET /api/blog/:userId/category
+GET /api/blog/:blogId/category
 ```
 
 #### 요청
 
-| Param Type |   Name   | Data Type | Required |      Description       | 
-|:----------:|:--------:|:---------:|:--------:|:----------------------:|
-|    Path    | `userId` | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 | 
+| Param Type |   Name   | Data Type | Required |          Description          | 
+|:----------:|:--------:|:---------:|:--------:|:-----------------------------:|
+|    Path    | `blogId` | `String`  |    O     | 블로그 아이디. 유저 아이디(`userId`)와 동일 |
 
 #### 응답
 
@@ -709,7 +709,7 @@ GET /api/blog/:userId/category
   "message": "입력한 아이디에 해당하는 블로그가 없습니다.",
   "code": "13",
   "data": {
-    "userId": "cheesecat$&"
+    "blogId": "cheesecat$&"
   }
 }
 ```
@@ -719,16 +719,16 @@ GET /api/blog/:userId/category
 - 게시판 생성.
 
 ```http request
-POST /api/blog/:userId/category
+POST /api/blog/:blogId/category
 ```
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |                        Description                         | 
-|:----------:|:---------------:|:---------:|:--------:|:----------------------------------------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |                   유저 아이디. DB의 `id_str` 값                   |
-|   Header   | `Authorization` | `String`  |    O     |                  액세스 토큰. 본인 블로그 게시판 생성 가능                  |
-|    Body    | `categoryName`  | `String`  |    O     |                           게시판 이름                           |
+| Param Type |      Name       | Data Type | Required |          Description          | 
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------------:|
+|    Path    |    `blogId`     | `String`  |    O     | 블로그 아이디. 유저 아이디(`userId`)와 동일 |
+|   Header   | `Authorization` | `String`  |    O     |   액세스 토큰. 본인 블로그 게시판 생성 가능    |
+|    Body    | `categoryName`  | `String`  |    O     |            게시판 이름             |
 
 ##### 예시
 
@@ -861,11 +861,11 @@ DELETE /api/blog/:blogId/category/:categoryName
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |       Description        |
-|:----------:|:---------------:|:---------:|:--------:|:------------------------:|
-|    Path    |    `userId`     | `String`  |    O     |  유저 아이디. DB의 `id_str` 값  |
-|    Path    | `categoryName`  | `String`  |    O     |       삭제하려는 게시판 이름       |
-|   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 게시판 삭제 가능 |
+| Param Type |      Name       | Data Type | Required |          Description          |
+|:----------:|:---------------:|:---------:|:--------:|:-----------------------------:|
+|    Path    |    `blogId`     | `String`  |    O     | 블로그 아이디. 유저 아이디(`userId`)와 동일 |
+|    Path    | `categoryName`  | `String`  |    O     |         삭제하려는 게시판 이름          |
+|   Header   | `Authorization` | `String`  |    O     |   액세스 토큰. 본인 블로그 게시판 삭제 가능    |
 
 ##### 예시
 
@@ -1112,7 +1112,7 @@ curl -X 'GET' \
 
 ### createPost 글 작성
 
-- 글 작성.
+- 본인 블로그에 글 작성.
 
 ```http request
 POST /api/post
@@ -1153,7 +1153,7 @@ curl -X 'POST' \
 // HTTP/1.1 201 CREATED
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "글 생성 성공",
+  "message": "글 작성 성공",
   "code": "00",
   "data": null
 }
@@ -1163,10 +1163,12 @@ curl -X 'POST' \
 // HTTP/1.1 400 BAD REQUEST
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "글 제목 형식에 맞지 않습니다",
-  "code": "11",
+  "message": "필수 파라미터를 확인하세요",
+  "code": "10",
   "data": {
-    "categoryName": "!Spring!"
+    "postTitle": null,
+    "userId": "cheesecat47",
+    "categoryName": "알고리즘 문제"
   }
 }
 ```
@@ -1186,7 +1188,7 @@ curl -X 'POST' \
 
 ### updatePost 글 수정
 
-- 글 수정.
+- 본인 블로그의 글 수정.
 
 ```http request
 PATCH /api/post/:postTitle
@@ -1197,10 +1199,10 @@ PATCH /api/post/:postTitle
 | Param Type |      Name       | Data Type | Required |       Description       |
 |:----------:|:---------------:|:---------:|:--------:|:-----------------------:|
 |   Header   | `Authorization` | `String`  |    O     | 액세스 토큰. 본인 블로그 글 수정 가능  |
-|    Path    |   `postTitle`   | `String`  |    O     |        수정할 글 제목         |
+|    Path    |   `postTitle`   | `String`  |    O     |      정보를 수정할 글 제목       |
 |    Body    |    `userId`     | `String`  |    O     | 유저 아이디. DB의 `id_str` 값  |
 |    Body    | `categoryName`  | `String`  |    -     |         게시판 이름          |
-|    Body    |     `title`     | `String`  |    -     |          글 제목           |
+|    Body    |   `newTitle`    | `String`  |    -     |         새 글 제목          |
 |    Body    |    `excerpt`    | `String`  |    -     | 글 요약. 최대 200자. 기본값 `""` |
 |    Body    |    `content`    | `String`  |    -     |     글 본문. 최대 2000자      |
 
@@ -1214,8 +1216,9 @@ curl -X 'PATCH' \
   -H 'Content-Type: application/json' \
   -d '{
   "userId": "cheesecat47",
-  "title": "Spring Boot 공부 중",
+  "newTitle": "Spring Boot 공부 중",
 }'
+# 실제 URL은 'http://localhost:8080/api/post/Spring%20%ED%85%8C%EC%8A%A4%ED%8A%B8'와 같음
 ```
 
 #### 응답
@@ -1225,11 +1228,6 @@ curl -X 'PATCH' \
 ```json
 // HTTP/1.1 204 NO CONTENT
 // Content-Type: application/json;charset=UTF-8
-{
-  "message": "글 수정 성공",
-  "code": "00",
-  "data": null
-}
 ```
 
 ```json
@@ -1293,11 +1291,6 @@ curl -X 'DELETE' \
 ```json
 // HTTP/1.1 204 NO CONTENT
 // Content-Type: application/json;charset=UTF-8
-{
-  "message": "글 삭제 성공",
-  "code": "00",
-  "data": null
-}
 ```
 
 ```json
