@@ -4,6 +4,7 @@ import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
+import com.github.cheesecat47.myBlog.post.model.request.UpdatePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.response.CreatePostResponseDto;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostByTitleResponse;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostsResponse;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -91,7 +93,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @Operation(summary = "createPost 글 작성", description = "본인 블로그에 글 작성")
+    @Operation(summary = "createPost 글 작성", description = "본인 블로그에 글 작성", security = {@SecurityRequirement(name = "Access Token")})
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "글 작성 성공", content = {@Content(schema = @Schema(implementation = CreatePostResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "글 작성 실패"),
@@ -115,5 +117,29 @@ public class PostController {
         response.setMessage(msg);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @Operation(summary = "updatePost 글 수정", description = "본인 블로그의 글 수정", security = {@SecurityRequirement(name = "Access Token")})
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "글 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "글 수정 실패"),
+            @ApiResponse(responseCode = "404", description = "글 수정 실패"),
+            @ApiResponse(responseCode = "500", description = "글 수정 실패")
+    })
+    @PatchMapping(value = "/{postTitle}")
+    public ResponseEntity updatePost(
+            HttpServletRequest request,
+            @PathVariable String postTitle,
+            @RequestBody UpdatePostRequestDto params
+    ) throws Exception {
+        params.setAccessToken(request.getHeader("Authorization"));
+        params.setPostTitle(postTitle);
+        log.debug("updatePost: params: {}", params);
+
+        postService.updatePost(params);
+        log.info("updatePost: 글 수정 성공");
+
+        // HTTP 응답 코드가 204 NO CONTENT일 때는 body를 넣더리도 전송되지 않음!
+        return ResponseEntity.noContent().build();
     }
 }

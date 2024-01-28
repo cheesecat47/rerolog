@@ -127,4 +127,23 @@
         values ((<include refid="getCategoryId"/>),(<include refid="getUserId"/>), #{title}, #{excerpt}, #{content});
     </insert>
 
+    <!-- updatePost 쿼리 -->
+    <update id="updatePost" parameterType="UpdatePostRequestDto">
+        <selectKey keyProperty="postId" resultType="String" order="BEFORE">
+            select Post.id
+            from Post
+            where Post.user_id = (<include refid="getUserId"/>)
+            and Post.title = #{postTitle}
+            and Post.deleted_at is null
+        </selectKey>
+        update Post
+        <trim prefix="set" suffixOverrides=",">
+            <if test="newTitle != null">Post.title = #{newTitle},</if>
+            <if test="categoryName != null">Post.category_id = (<include refid="getCategoryId"/>),</if>
+            <if test="excerpt != null">Post.excerpt = #{excerpt},</if>
+            <if test="content != null">Post.content = #{content},</if>
+            Post.updated_at = now(),
+        </trim>
+        where Post.id = #{postId}
+    </update>
 </mapper>
