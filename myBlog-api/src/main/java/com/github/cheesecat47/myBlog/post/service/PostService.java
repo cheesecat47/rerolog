@@ -2,6 +2,7 @@ package com.github.cheesecat47.myBlog.post.service;
 
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
+import com.github.cheesecat47.myBlog.post.model.request.DeletePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
 import com.github.cheesecat47.myBlog.post.model.request.UpdatePostRequestDto;
 
@@ -15,4 +16,6 @@ public interface PostService {
     void createPost(CreatePostRequestDto params) throws Exception;
 
     void updatePost(UpdatePostRequestDto params) throws Exception;
+
+    void deletePost(DeletePostRequestDto params) throws Exception;
 }

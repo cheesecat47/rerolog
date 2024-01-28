@@ -3,6 +3,7 @@ package com.github.cheesecat47.myBlog.post.controller;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
+import com.github.cheesecat47.myBlog.post.model.request.DeletePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
 import com.github.cheesecat47.myBlog.post.model.request.UpdatePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.response.CreatePostResponseDto;
@@ -140,6 +141,29 @@ public class PostController {
         log.info("updatePost: 글 수정 성공");
 
         // HTTP 응답 코드가 204 NO CONTENT일 때는 body를 넣더리도 전송되지 않음!
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "deletePost 글 삭제", description = "본인 블로그의 글 삭제", security = {@SecurityRequirement(name = "Access Token")})
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "글 삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "글 삭제 실패"),
+            @ApiResponse(responseCode = "404", description = "글 삭제 실패"),
+            @ApiResponse(responseCode = "500", description = "글 삭제 실패")
+    })
+    @DeleteMapping(value = "/{postTitle}")
+    public ResponseEntity deletePost(
+            HttpServletRequest request,
+            @Parameter(description = "삭제할 글 제목") @PathVariable String postTitle,
+            @RequestBody DeletePostRequestDto params
+    ) throws Exception {
+        params.setAccessToken(request.getHeader("Authorization"));
+        params.setPostTitle(postTitle);
+        log.debug("deletePost: params: {}", params);
+
+        postService.deletePost(params);
+        log.info("deletePost: 글 삭제 성공");
+
         return ResponseEntity.noContent().build();
     }
 }

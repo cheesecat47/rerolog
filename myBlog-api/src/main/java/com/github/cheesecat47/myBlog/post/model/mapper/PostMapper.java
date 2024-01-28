@@ -2,6 +2,7 @@ package com.github.cheesecat47.myBlog.post.model.mapper;
 
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
+import com.github.cheesecat47.myBlog.post.model.request.DeletePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
 import com.github.cheesecat47.myBlog.post.model.request.UpdatePostRequestDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -18,4 +19,6 @@ public interface PostMapper {
     int createPost(CreatePostRequestDto params) throws SQLException;
 
     int updatePost(UpdatePostRequestDto params) throws SQLException;
+
+    int deletePost(DeletePostRequestDto params) throws SQLException;
 }

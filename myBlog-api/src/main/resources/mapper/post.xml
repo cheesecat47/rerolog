@@ -146,4 +146,18 @@
         </trim>
         where Post.id = #{postId}
     </update>
+
+    <!-- deletePost 쿼리 -->
+    <update id="deletePost" parameterType="DeletePostRequestDto">
+        <selectKey keyProperty="postId" resultType="String" order="BEFORE">
+            select Post.id
+            from Post
+            where Post.user_id = (<include refid="getUserId"/>)
+            and Post.title = #{postTitle}
+            and Post.deleted_at is null
+        </selectKey>
+        update Post
+        set Post.deleted_at = now()
+        where Post.id = #{postId}
+    </update>
 </mapper>
