@@ -102,9 +102,6 @@ public class PostServiceImpl implements PostService {
                 );
             }
 
-            // 댓글 개수 업데이트
-            postDto.setNumOfComments(postDto.getComments().size());
-
             log.debug("getPostByTitle: postDto: {}", postDto);
         } catch (SQLException e) {
             String msg = "DB 조회 중 오류가 발생했습니다";

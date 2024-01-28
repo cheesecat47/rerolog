@@ -4,8 +4,17 @@
 
 <mapper namespace="com.github.cheesecat47.myBlog.post.model.mapper.PostMapper">
 
-    <!--  getPosts 결과 매핑 -->
-    <resultMap id="getPostsResultMap" type="PostDto">
+    <!-- 댓글 개수 세는 쿼리문 공통으로 사용되므로 분리 -->
+    <sql id="getNumOfComments">
+        select count(*)
+        from Comment c,
+             User u
+        where c.post_id = Post.id
+          and u.id = User.id
+    </sql>
+
+    <!--  PostDto도 공통으로 사용되므로 분리 -->
+    <resultMap id="PostDtoMap" type="PostDto">
         <result property="postId" column="id"/>
         <result property="categoryId" column="category_id"/>
         <result property="categoryName" column="category_name"/>
@@ -13,6 +22,7 @@
         <result property="createdAt" column="created_at"/>
         <result property="hit" column="hit"/>
         <result property="excerpt" column="excerpt"/>
+        <result property="content" column="content"/>
         <result property="numOfComments" column="num_of_comments"/>
         <association property="author" column="author" javaType="AuthorDto">
             <result property="userId" column="id_str"/>
@@ -21,21 +31,17 @@
     </resultMap>
 
     <!--  getPosts 쿼리 -->
-    <select id="getPosts" parameterType="GetPostsRequest" resultMap="getPostsResultMap">
+    <select id="getPosts" parameterType="GetPostsRequest" resultMap="PostDtoMap">
         select Post.id,
                Post.category_id,
                Category.name                                                  as category_name,
                Post.title,
                User.id_str,
                User.name,
-               DATE_FORMAT(Post.created_at, '%Y-%m-%dT%TZ') as created_at,
+               DATE_FORMAT(Post.created_at, '%Y-%m-%dT%TZ')                   as created_at,
                Post.hit,
                ifnull(Post.excerpt, concat(substr(Post.content, 197), '...')) as excerpt, -- 본문이 200자보다 길다면 197자까지 자르고 '...' 붙이기
-               (select count(*)
-                from Comment c,
-                     User u
-                where c.post_id = Post.id
-                  and u.id = User.id)                                         as num_of_comments
+               (<include refid="getNumOfComments"/>)                           as num_of_comments
         from myBlog.Post
                  left outer join myBlog.User on Post.user_id = User.id
                  left outer join myBlog.Category on Post.category_id = Category.id
@@ -59,51 +65,24 @@
         limit #{offset}, #{limit};
     </select>
 
-    <!--  getPostByTitle 결과 매핑 -->
-    <resultMap id="getPostByTitleResultMap" type="PostDto">
-        <result property="postId" column="post_id"/>
-        <result property="categoryId" column="category_id"/>
-        <result property="categoryName" column="category_name"/>
-        <result property="title" column="title"/>
-        <result property="createdAt" column="post_created_at"/>
-        <result property="hit" column="hit"/>
-        <result property="excerpt" column="excerpt"/>
-        <result property="content" column="content"/>
-        <association property="author" column="author" javaType="AuthorDto">
-            <result property="userId" column="id_str"/>
-            <result property="nickName" column="name"/>
-        </association>
-        <collection property="comments" column="comments" javaType="List" ofType="CommentDto">
-            <result property="commentId" column="comment_id"/>
-            <result property="userId" column="comment_user_id"/>
-            <result property="content" column="comment_content"/>
-            <result property="createdAt" column="comment_created_at"/>
-        </collection>
-    </resultMap>
-
     <!--  getPostByTitle 쿼리 -->
-    <select id="getPostByTitle" parameterType="String" resultMap="getPostByTitleResultMap">
-        select Post.id                                                        as post_id,
+    <select id="getPostByTitle" parameterType="String" resultMap="PostDtoMap">
+        select Post.id,
                Post.category_id,
                Category.name                                                  as category_name,
                Post.title,
                User.id_str,
                User.name,
-               DATE_FORMAT(Post.created_at, '%Y-%m-%dT%TZ')                   as post_created_at,
+               DATE_FORMAT(Post.created_at, '%Y-%m-%dT%TZ')                   as created_at,
                Post.hit,
                ifnull(Post.excerpt, concat(substr(Post.content, 197), '...')) as excerpt,
-               Post.content                                                   as post_content,
-               Comment.id                                                     as comment_id,
-               Comment.user_id                                                as comment_user_id,
-               Comment.content                                                as comment_content,
-               DATE_FORMAT(Comment.created_at, '%Y-%m-%dT%TZ')                as comment_created_at
+               Post.content,
+               (<include refid="getNumOfComments"/>)                           as num_of_comments
         from myBlog.Post
                  left outer join myBlog.User on Post.user_id = User.id
                  left outer join myBlog.Category on Post.category_id = Category.id
-                 left outer join myBlog.Comment on Comment.post_id = Post.id
         where Post.title = #{postTitle}
-          and Post.deleted_at is null
-        order by comment_created_at desc;
+          and Post.deleted_at is null;
     </select>
 
     <sql id="getUserId">
