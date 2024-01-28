@@ -1291,11 +1291,6 @@ curl -X 'DELETE' \
 ```json
 // HTTP/1.1 204 NO CONTENT
 // Content-Type: application/json;charset=UTF-8
-{
-  "message": "글 삭제 성공",
-  "code": "00",
-  "data": null
-}
 ```
 
 ```json
