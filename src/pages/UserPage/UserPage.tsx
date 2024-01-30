@@ -4,14 +4,13 @@ import { tabBarProps } from 'constants/tabBarProps';
 import { useCategory } from 'hooks/useCategory';
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import useUserStore from 'stores/useUserStore';
 import { ITabBarProps } from 'types/common/TabBarProps';
-import { getUserId } from 'utils/localStorage';
 import { Category, TabBar, UserProfileBox } from './components';
 
 const UserPage = () => {
     // @TODO: 본인 아이디 받아오기
-    const userId = getUserId() || '';
-
+    const { userId } = useUserStore();
     const location = useLocation();
 
     const getCurrentTabUrl = (): string => {
