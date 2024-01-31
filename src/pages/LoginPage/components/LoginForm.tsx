@@ -6,16 +6,11 @@ import { login } from 'apis/user';
 import kakao from 'assets/icons/ML_kakao-icon.png';
 import naver from 'assets/icons/ML_naver-icon.png';
 import useUserStore from 'stores/useUserStore';
-import {
-    setAccessToken,
-    setIsLogin,
-    setRefreshToken,
-    setUserId,
-} from 'utils/localStorage';
 
 const LoginForm = () => {
     const navigate = useNavigate();
-    const loginUser = useUserStore((state) => state.loginUser);
+    const { loginUser } = useUserStore();
+
     const { values, handleChange } = useInput({
         userId: '',
         userPw: '',
@@ -24,16 +19,17 @@ const LoginForm = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const result = await login({
+        const userData = await login({
             userId: values.userId,
             userPw: values.userPw,
         });
 
-        loginUser({ userId: result.userId });
-        setIsLogin(true);
-        setUserId(result.userId);
-        setAccessToken(result.accessToken);
-        setRefreshToken(result.refreshToken);
+        loginUser({
+            userId: userData.userId,
+            accessToken: userData.accessToken,
+            refreshToken: userData.refreshToken,
+        });
+
         navigate('/');
     };
 

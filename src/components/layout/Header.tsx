@@ -13,18 +13,9 @@ import my from 'assets/icons/ML_my-icon.png';
 import pencil from 'assets/icons/ML_pencil-icon.png';
 import sun from 'assets/icons/ML_sun-icon.png';
 import useUserStore from 'stores/useUserStore';
-import {
-    deleteAccessToken,
-    deleteIsLogin,
-    deleteRefreshToken,
-    deleteUserId,
-    getAccessToken,
-    getUserId,
-} from 'utils/localStorage';
 
 const Header = ({ blogName }: { blogName: string }) => {
-    const { isLogin, userId: myId, logoutUser } = useUserStore();
-
+    const { isLogin, accessToken, userId: myId, logoutUser } = useUserStore();
     const navigate = useNavigate();
 
     const goWrite = () => {
@@ -47,25 +38,20 @@ const Header = ({ blogName }: { blogName: string }) => {
     };
 
     const handleLogout = async () => {
-        const userId = getUserId();
-        const accessToken = getAccessToken();
-
-        if (!userId || !accessToken) {
+        if (!myId || !accessToken) {
             alert('로그아웃에 실패했습니다.');
             return;
         }
 
         const result = await logout({
-            userId,
+            userId: myId,
             accessToken,
         });
 
+        console.log('로그아웃 처리', result);
+
         if (result) {
             logoutUser();
-            deleteIsLogin();
-            deleteUserId();
-            deleteAccessToken();
-            deleteRefreshToken();
             navigate('/');
         } else {
             alert('로그아웃에 실패했습니다');
