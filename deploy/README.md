@@ -15,7 +15,7 @@ docker compose up -d --build api
 ## FE
 
 ```bash
-docker compose up -d --build frontend
+docker compose up -d --build frontend && docker compose stop frontend && docker compose rm -f frontend
 ```
 
 ## NGINX
