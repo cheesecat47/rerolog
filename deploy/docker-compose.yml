@@ -13,7 +13,7 @@ services:
       - "mysql_data:/var/lib/mysql"
 
   api:
-    build: ./myBlog-api
+    build: ../api/myBlog-api
     env_file:
       - .env
     ports:
