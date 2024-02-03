@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM eclipse-temurin:17-jdk-jammy AS builder
+LABEL authors="cheesecat47"
 
 WORKDIR /app
 

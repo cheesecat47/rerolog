@@ -2,6 +2,7 @@ name: rerolog-deploy
 
 volumes:
   mysql-data:
+  fe-build:
 
 networks:
   rerolog-network:
@@ -9,6 +10,7 @@ networks:
 services:
   db:
     image: mysql:8.0.34
+    restart: unless-stopped
     networks:
       - rerolog-network
     volumes:
@@ -34,6 +36,7 @@ services:
     build:
       context: ../api
       dockerfile: Dockerfile
+    restart: unless-stopped
     depends_on:
       - db
     networks:
@@ -46,14 +49,27 @@ services:
       - ${API_PORT}:8080
     command: bash -c "/wait-for-it.sh -h ${MYSQL_HOST} -p ${MYSQL_PORT} -t 30 -- java -jar /app.jar"
 
-#  nginx:
-#    build: ./myBlog-frontend
-#    env_file:
-#      - api.env
-#    ports:
-#      - "${HTTP_PORT}:80"
-#    volumes:
-#      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
-#    depends_on:
-#      - db
-#      - api
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - rerolog-network
+    volumes:
+      - fe-build:/build
+    env_file:
+      - .env
+
+  nginx:
+    image: nginx:1.25
+    restart: unless-stopped
+    networks:
+      - rerolog-network
+    ports:
+      - ${NGINX_PORT}:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - fe-build:/usr/share/nginx/html
+    depends_on:
+      - api

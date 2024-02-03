@@ -11,3 +11,15 @@ docker compose up -d db
 ```bash
 docker compose up -d --build api
 ```
+
+## FE
+
+```bash
+docker compose up -d --build frontend
+```
+
+## NGINX
+
+```bash
+docker compose up -d nginx
+```
