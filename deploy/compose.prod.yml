@@ -1,0 +1,7 @@
+services:
+  nginx:
+    ports:
+      - ${NGINX_PORT}:443
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/.cert:/.cert:ro

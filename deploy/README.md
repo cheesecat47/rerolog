@@ -21,5 +21,5 @@ docker compose up -d --build frontend && docker compose stop frontend && docker 
 ## NGINX
 
 ```bash
-docker compose up -d nginx
+docker compose -f compose.yml -f compose.dev.yml up -d nginx
 ```
