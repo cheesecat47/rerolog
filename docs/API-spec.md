@@ -25,7 +25,7 @@
     * [updatePost 글 수정](#updatepost-글-수정)
     * [deletePost 글 삭제](#deletepost-글-삭제)
   * [Comment](#comment)
-    * [getCommentsByPostId 특정 글에 달린 댓글 목록 조회](#getcommentsbypostid-특정-글에-달린-댓글-목록-조회)
+    * [getCommentsByPostTitle 특정 글에 달린 댓글 목록 조회](#getcommentsbyposttitle-특정-글에-달린-댓글-목록-조회)
     * [createComment 댓글 작성](#createcomment-댓글-작성)
     * [updateComment 댓글 수정](#updatecomment-댓글-수정)
     * [deleteComment 댓글 삭제](#deletecomment-댓글-삭제)
@@ -1015,7 +1015,7 @@ curl -X 'GET' \
 
 ### getPostByTitle 글 상세 조회
 
-- 글 상세 조회. 이 글과 연결된 댓글은 [getCommentsByPostId 특정 글에 달린 댓글 목록 조회](#getcommentsbypostid-특정-글에-달린-댓글-목록-조회) API 사용.
+- 글 상세 조회. 이 글과 연결된 댓글은 [getCommentsByPostTitle 특정 글에 달린 댓글 목록 조회](#getcommentsbyposttitle-특정-글에-달린-댓글-목록-조회) API 사용.
 
 ```http request
 GET /api/post/:postTitle
@@ -1308,19 +1308,19 @@ curl -X 'DELETE' \
 
 ## Comment
 
-### getCommentsByPostId 특정 글에 달린 댓글 목록 조회
+### getCommentsByPostTitle 특정 글에 달린 댓글 목록 조회
 
 - 특정 글에 달린 댓글 목록 조회.
 
 ```http request
-GET /api/post/:postId/comment
+GET /api/post/:postTitle/comment
 ```
 
 #### 요청
 
-| Param Type |   Name   | Data Type | Required | Description |
-|:----------:|:--------:|:---------:|:--------:|:-----------:|
-|    Path    | `postId` |   `int`   |    O     |   게시글 아이디   |
+| Param Type |    Name     | Data Type | Required | Description |
+|:----------:|:-----------:|:---------:|:--------:|:-----------:|
+|    Path    | `postTitle` | `String`  |    O     |    글 제목     |
 
 #### 응답
 
@@ -1393,14 +1393,14 @@ GET /api/post/:postId/comment
 - 특정 글에 댓글 작성.
 
 ```http request
-POST /api/post/:postId/comment
+POST /api/post/:postTitle/comment
 ```
 
 #### 요청
 
 | Param Type |      Name       | Data Type | Required |                    Description                    |
 |:----------:|:---------------:|:---------:|:--------:|:-------------------------------------------------:|
-|    Path    |    `postId`     |   `int`   |    O     |                       글 아이디                       |
+|    Path    |   `postTitle`   | `String`  |    O     |                       글 제목                        |
 |    Body    |    `userId`     | `String`  |    -     |              유저 아이디. DB의 `id_str` 값               |
 |   Header   | `Authorization` | `String`  |    -     |         액세스 토큰. `userId`를 사용해 댓글 작성 시 필요          |
 |    Body    |    `content`    | `String`  |    -     |                  댓글 본문. 최대 300자                   |
@@ -1411,7 +1411,7 @@ POST /api/post/:postId/comment
 
 ```bash
 curl -X 'POST' \
-  'http://localhost:8080/api/post/1/comment' \
+  'http://localhost:8080/api/post/Java%20너무%20재미있어요./comment' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Authorization: Bearer eyJ0eXAiOi...' \
   -H 'Content-Type: application/json' \
@@ -1452,14 +1452,14 @@ curl -X 'POST' \
 - 댓글 수정.
 
 ```http request
-PATCH /api/post/:postId/comment/:commentId
+PATCH /api/post/:postTitle/comment/:commentId
 ```
 
 #### 요청
 
 | Param Type |      Name       | Data Type | Required |                          Description                           |
 |:----------:|:---------------:|:---------:|:--------:|:--------------------------------------------------------------:|
-|    Path    |    `postId`     |   `int`   |    O     |                             글 아이디                              |
+|    Path    |   `postTitle`   | `String`  |    O     |                              글 제목                              |
 |    Path    |   `commentId`   |   `int`   |    O     |                             댓글 아이디                             |
 |    Body    |    `userId`     | `String`  |    -     |                     유저 아이디. DB의 `id_str` 값                     |
 |   Header   | `Authorization` | `String`  |    -     |              액세스 토큰. `userId`를 사용해 작성한 댓글 수정 시 필요              |
@@ -1471,7 +1471,7 @@ PATCH /api/post/:postId/comment/:commentId
 
 ```bash
 curl -X 'PATCH' \
-  'http://localhost:8080/api/post/1/comment/1' \
+  'http://localhost:8080/api/post/Java%20너무%20재미있어요./comment/1' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Authorization: Bearer eyJ0eXAiOi...' \
   -H 'Content-Type: application/json' \
@@ -1525,14 +1525,14 @@ curl -X 'PATCH' \
 - 댓글 삭제.
 
 ```http request
-DELETE /api/post/:postId/comment/:commentId
+DELETE /api/post/:postTitle/comment/:commentId
 ```
 
 #### 요청
 
 | Param Type |      Name       | Data Type | Required |                          Description                           |
 |:----------:|:---------------:|:---------:|:--------:|:--------------------------------------------------------------:|
-|    Path    |    `postId`     |   `int`   |    O     |                             글 아이디                              |
+|    Path    |   `postTitle`   | `String`  |    O     |                              글 제목                              |
 |    Path    |   `commentId`   |   `int`   |    O     |                             댓글 아이디                             |
 |    Body    |    `userId`     | `String`  |    -     |                     유저 아이디. DB의 `id_str` 값                     |
 |   Header   | `Authorization` | `String`  |    -     |              액세스 토큰. `userId`를 사용해 작성한 댓글 삭제 시 필요              |
@@ -1543,7 +1543,7 @@ DELETE /api/post/:postId/comment/:commentId
 
 ```bash
 curl -X 'DELETE' \
-  'http://localhost:8080/api/post/1/comment/1' \
+  'http://localhost:8080/api/post/Java%20너무%20재미있어요./comment/1' \
   -H 'accept: application/json;charset=utf-8' \
   -H 'Authorization: Bearer eyJ0eXAiOi...' \
   -H 'Content-Type: application/json' \
