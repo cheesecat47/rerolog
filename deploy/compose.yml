@@ -1,0 +1,59 @@
+name: rerolog-deploy
+
+volumes:
+  mysql-data:
+
+networks:
+  rerolog-network:
+
+services:
+  db:
+    image: mysql:8.0.34
+    networks:
+      - rerolog-network
+    volumes:
+      - ../api/resources/sql/:/docker-entrypoint-initdb.d/:ro
+      - mysql-data:/var/lib/mysql
+    env_file:
+      - .env
+    ports:
+      - ${MYSQL_EXTERNAL_PORT}:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent" ]
+      interval: 3s
+      retries: 5
+      start_period: 30s
+
+  api:
+    build:
+      context: ../api
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    networks:
+      - rerolog-network
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh
+    env_file:
+      - .env
+    ports:
+      - ${API_PORT}:8080
+    command: bash -c "/wait-for-it.sh -h ${MYSQL_HOST} -p ${MYSQL_PORT} -t 30 -- java -jar /app.jar"
+
+#  nginx:
+#    build: ./myBlog-frontend
+#    env_file:
+#      - api.env
+#    ports:
+#      - "${HTTP_PORT}:80"
+#    volumes:
+#      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+#    depends_on:
+#      - db
+#      - api

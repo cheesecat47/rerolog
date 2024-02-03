@@ -1,4 +1,4 @@
-use myBlog;
+use rerolog;
 
 alter table Session
     change session_id refresh_token varchar(512) null;

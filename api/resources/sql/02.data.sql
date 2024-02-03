@@ -9,19 +9,19 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-USE `myBlog`;
+USE rerolog;
 
-INSERT INTO myBlog.User (id_str, pw, name, content)
+INSERT INTO User (id_str, pw, name, content)
 VALUES ('cheesecat47', '1234', '신주용', '안녕하세요, 신주용입니다.'),
        ('rosielsh', '1234', '이수화', '안녕하세요, 이수화입니다.');
 SET @user_cheesecat47 = (SELECT id
-                         FROM myBlog.User
+                         FROM User
                          WHERE `id_str` = 'cheesecat47');
 SET @user_rosielsh = (SELECT id
-                         FROM myBlog.User
+                         FROM User
                          WHERE `id_str` = 'rosielsh');
 
-INSERT INTO myBlog.ContactType (type)
+INSERT INTO ContactType (type)
 VALUES ('Email'),
        ('GitHub'),
        ('LinkedIn'),
@@ -39,24 +39,24 @@ SET @contacttype_website = (SELECT id
                             FROM ContactType
                             WHERE type = 'WebSite');
 
-INSERT INTO myBlog.Contact (user_id, type_id, value)
+INSERT INTO Contact (user_id, type_id, value)
 VALUES (@user_cheesecat47, @contacttype_email, 'cheesecat47@gmail.com'),
        (@user_cheesecat47, @contacttype_github, 'https://github.com/cheesecat47'),
        (@user_cheesecat47, @contacttype_linkedin, 'https://www.linkedin.com/in/shinjuyong/'),
        (@user_cheesecat47, @contacttype_website, 'https://cheesecat47.github.io'),
        (@user_rosielsh, @contacttype_github, 'https://github.com/cheesecat47');
 
-INSERT INTO myBlog.Blog (id, name)
+INSERT INTO Blog (id, name)
 VALUES (@user_cheesecat47, 'La foret rouge'),
        (@user_rosielsh, 'rosie.log');
 SET @blogid_cheesecat47 = (SELECT id
-                           FROM myBlog.Blog
+                           FROM Blog
                            WHERE id = @user_cheesecat47);
 SET @blogid_rosielsh = (SELECT id
-                           FROM myBlog.Blog
+                           FROM Blog
                            WHERE id = @user_rosielsh);
 
-INSERT INTO myBlog.Category (blog_id, name, deleted_at)
+INSERT INTO Category (blog_id, name, deleted_at)
 VALUES (@blogid_cheesecat47, 'Java', null),
        (@blogid_cheesecat47, 'Spring Boot', null),
        (@blogid_cheesecat47, 'Vue.js', now()), -- 조회 결과에 안 나와야 함
@@ -65,22 +65,22 @@ VALUES (@blogid_cheesecat47, 'Java', null),
        (@blogid_rosielsh, '회고록', null),
        (@blogid_rosielsh, 'CS', now()); -- 조회 결과에 안 나와야 함
 SET @categoryid_java = (SELECT id
-                        FROM myBlog.Category
+                        FROM Category
                         WHERE name = 'Java');
 SET @categoryid_vue = (SELECT id
-                        FROM myBlog.Category
+                        FROM Category
                         WHERE name = 'Vue.js');
 SET @categoryid_algo = (SELECT id
-                        FROM myBlog.Category
+                        FROM Category
                         WHERE name = '알고리즘 문제');
 SET @categoryid_fe = (SELECT id
-                        FROM myBlog.Category
+                        FROM Category
                         WHERE name = 'Front-end');
 SET @categoryid_cs = (SELECT id
-                      FROM myBlog.Category
+                      FROM Category
                       WHERE name = 'CS');
 
-INSERT INTO myBlog.Post (category_id, user_id, title, content, hit, created_at, deleted_at)
+INSERT INTO Post (category_id, user_id, title, content, hit, created_at, deleted_at)
 VALUES (@categoryid_java, @user_cheesecat47, 'Java 너무 재미있어요.',
         'Java 너무 재미있어요. Objective Oriented Programming 익숙해지니 너무 좋아요.', 5,
         date_sub(now(), interval 5 minute), null),
@@ -102,13 +102,13 @@ SET @postid_java_1 = (SELECT id
                       FROM Post
                       WHERE title = 'Java 너무 재미있어요.');
 
-INSERT INTO myBlog.Comment (user_id, post_id, content, created_at, deleted_at)
+INSERT INTO Comment (user_id, post_id, content, created_at, deleted_at)
 VALUES (@user_cheesecat47, @postid_java_1, '댓글댓글!',
         date_sub(now(), interval 1 minute), null),
        (@user_cheesecat47, @postid_java_1, '삭제된 댓글댓글!',
         now(), now());
 
-INSERT INTO myBlog.UserProfileImage (id, path)
+INSERT INTO UserProfileImage (id, path)
 VALUES (@user_cheesecat47,
         'https://raw.githubusercontent.com/cheesecat47/myBlog/main/myBlog-frontend/src/assets/6B152AA5-CC62-49B6-913A-7C702AF22F1E_1_102_o.jpeg'),
        (@user_rosielsh,

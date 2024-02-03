@@ -1,4 +1,4 @@
-use myBlog;
+use rerolog;
 
 alter table Category
     add unique (name);
