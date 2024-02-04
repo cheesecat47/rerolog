@@ -45,9 +45,7 @@ services:
       - ./wait-for-it.sh:/wait-for-it.sh
     env_file:
       - .env
-    ports:
-      - ${API_PORT}:8080
-    command: bash -c "/wait-for-it.sh -h ${MYSQL_HOST} -p ${MYSQL_PORT} -t 30 -- java -jar /app.jar"
+    command: bash -c "/wait-for-it.sh ${MYSQL_HOST}:${MYSQL_PORT} -t 30 -- java -jar /app.jar"
 
   frontend:
     build:
@@ -64,9 +62,10 @@ services:
   nginx:
     image: nginx:1.25
     restart: unless-stopped
+    depends_on:
+      - api
     networks:
       - rerolog-network
     volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh
       - fe-build:/usr/share/nginx/html
-    depends_on:
-      - api
