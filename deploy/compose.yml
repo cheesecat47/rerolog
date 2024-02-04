@@ -68,4 +68,5 @@ services:
       - rerolog-network
     volumes:
       - ./wait-for-it.sh:/wait-for-it.sh
+      - ./nginx/nginx.conf:/etc/nginx/nginx/conf:ro
       - fe-build:/usr/share/nginx/html

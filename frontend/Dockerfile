@@ -3,8 +3,6 @@ LABEL authors="cheesecat47"
 
 WORKDIR /app
 
-USER root
-
 COPY package*.json .
 
 RUN npm install
