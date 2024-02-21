@@ -131,7 +131,7 @@ GET /api/user/:userId
   "data": {
     "userId": "cheesecat$&"
   },
-  "message": "입력한 아이디에 해당하는 유저가 없습니다."
+  "message": "입력한 아이디에 해당하는 유저가 없습니다"
 }
 ``` 
 
@@ -182,6 +182,55 @@ curl -X 'POST' \
   ]
 }'
 ```
+
+#### 요청
+
+| Param Type |        Name        |     Data Type      | Required |         Description         |
+|:----------:|:------------------:|:------------------:|:--------:|:---------------------------:|
+|    Body    |      `userId`      |      `String`      |    O     |   유저 아이디. DB의 `id_str` 값    |
+|    Body    |      `userPw`      |      `String`      |    O     |           유저 비밀번호           |
+|    Body    |     `nickName`     |      `String`      |    O     |     유저 별명. DB의 `name` 값     |
+|    Body    |     `content`      |      `String`      |    -     | 유저 소개 글. 최대 200자. 기본 값 `""` |
+|    Body    |     `contacts`     | `List<ContactDto>` |    -     |          연락처 객체 배열          |
+|  ~~Body~~  | ~~`profileImage`~~ |     ~~`File`~~     |    -     |       ~~프로필 이미지~~ 준비중       |
+
+##### ContactDto
+
+| Name  | Data Type |                  Description                  | 
+|:-----:|:---------:|:---------------------------------------------:|
+| type  | `String`  | "Email", "GitHub", "LinkedIn", "WebSite" 중 하나 |
+| value | `String`  |                     연락처 값                     |
+
+##### 예시
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/user' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "cheesecat47",
+  "userPw": "1234",
+  "nickName": "refo",
+  "content": "안녕하세요!",
+  "contacts": [
+    {
+      "type": "Email",
+      "value": "cheesecat47@gmail.com"
+    },
+    ...
+  ]
+}'
+```
+
+#### 요청
+
+| Param Type |   Name   | Data Type | Required |      Description       |
+|:----------:|:--------:|:---------:|:--------:|:----------------------:|
+|    Body    | `userId` | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 |
+|    Body    | `pw` | `String`  |    O     | 유저 비밀번호 |
+|    Body    | `name` | `String`  |    O     | 유저명 |
+|    Body    | `content` | `String`  |    -     | 소개. 200자 제한 |
 
 #### 응답
 
@@ -248,6 +297,47 @@ curl -X 'PATCH' \
   "content": "안녕하세요!!",
 }'
 ```
+
+#### 요청
+
+| Param Type |        Name        |     Data Type      | Required |                   Description                    |
+|:----------:|:------------------:|:------------------:|:--------:|:------------------------------------------------:|
+|   Header   |  `Authorization`   |      `String`      |    O     | `Bearer` + (공백 하나 포함) + `로그인할 때 받은 Access Token` |
+|    Path    |      `userId`      |      `String`      |    O     |              유저 아이디. DB의 `id_str` 값              |
+|    Body    |      `userPw`      |      `String`      |    -     |                     유저 비밀번호                      |
+|    Body    |     `nickName`     |      `String`      |    -     |               유저 별명. DB의 `name` 값                |
+|    Body    |     `content`      |      `String`      |    -     |           유저 소개 글. 최대 200자. 기본 값 `""`            |
+|    Body    |     `contacts`     | `List<ContactDto>` |    -     |                    연락처 객체 배열                     |
+|  ~~Body~~  | ~~`profileImage`~~ |     ~~`File`~~     |    -     |                 ~~프로필 이미지~~ 준비중                  |
+
+##### ContactDto
+
+| Name  | Data Type |                  Description                  | 
+|:-----:|:---------:|:---------------------------------------------:|
+| type  | `String`  | "Email", "GitHub", "LinkedIn", "WebSite" 중 하나 |
+| value | `String`  |                     연락처 값                     |
+
+##### 예시
+
+```bash
+curl -X 'PATCH' \
+  'http://localhost:8080/api/user/cheesecat47' \
+  -H 'accept: application/json;charset=utf-8' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userPw": "1235",
+  "content": "안녕하세요!!",
+}'
+```
+
+#### 요청
+
+| Param Type |   Name   | Data Type | Required |      Description       |
+|:----------:|:--------:|:---------:|:--------:|:----------------------:|
+|    Path    | `userId` | `String`  |    O     | 유저 아이디. DB의 `id_str` 값 |
+|    Body    | `pw` | `String`  |    O     | 유저 비밀번호 |
+|    Body    | `name` | `String`  |    O     | 유저명 |
+|    Body    | `content` | `String`  |    -     | 소개. 200자 제한 |
 
 #### 응답
 
