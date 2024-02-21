@@ -9,7 +9,7 @@ networks:
 
 services:
   db:
-    image: mysql:8.0.34
+    image: mysql:8.0.35
     restart: unless-stopped
     networks:
       - rerolog-network
@@ -70,3 +70,5 @@ services:
       - ./wait-for-it.sh:/wait-for-it.sh
       - ./nginx/nginx.conf:/etc/nginx/nginx/conf:ro
       - fe-build:/usr/share/nginx/html
+    env_file:
+      - .env
