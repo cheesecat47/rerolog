@@ -1,10 +1,8 @@
 package com.github.cheesecat47.myBlog.post.service;
 
+import com.github.cheesecat47.myBlog.post.model.CommentDto;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
-import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
-import com.github.cheesecat47.myBlog.post.model.request.DeletePostRequestDto;
-import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
-import com.github.cheesecat47.myBlog.post.model.request.UpdatePostRequestDto;
+import com.github.cheesecat47.myBlog.post.model.request.*;
 
 import java.util.List;
 
@@ -18,4 +16,8 @@ public interface PostService {
     void updatePost(UpdatePostRequestDto params) throws Exception;
 
     void deletePost(DeletePostRequestDto params) throws Exception;
+
+    List<CommentDto> getCommentsByPostTitle(String postTitle) throws Exception;
+
+    void createComment(CreateCommentRequestDto params) throws Exception;
 }

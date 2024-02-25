@@ -139,4 +139,26 @@
         set Post.deleted_at = now()
         where Post.id = #{postId}
     </update>
+
+    <!--  getCommentsByPostTitle 쿼리  -->
+    <select id="getCommentsByPostTitle" parameterType="String" resultType="CommentDto">
+        select Comment.id                                      as commentId,
+               User.id_str                                     as userId,
+               Comment.content,
+               DATE_FORMAT(Comment.created_at, '%Y-%m-%dT%TZ') as createdAt
+        from Comment
+                 left outer join User on Comment.user_id = User.id
+        where Comment.post_id = (select Post.id
+                                 from Post
+                                 where Post.title = #{postTitle}
+                                   and Post.deleted_at is null)
+          and Comment.deleted_at is null
+        order by Comment.created_at desc;
+    </select>
+
+    <!-- createComment 쿼리 -->
+    <insert id="createComment" parameterType="CreateCommentRequestDto">
+        insert into Comment(user_id, post_id, content)
+        value ((<include refid="getUserId"/>), #{postId}, #{content});
+    </insert>
 </mapper>

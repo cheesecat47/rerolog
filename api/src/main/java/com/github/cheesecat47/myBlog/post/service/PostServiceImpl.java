@@ -2,12 +2,10 @@ package com.github.cheesecat47.myBlog.post.service;
 
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
+import com.github.cheesecat47.myBlog.post.model.CommentDto;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.mapper.PostMapper;
-import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
-import com.github.cheesecat47.myBlog.post.model.request.DeletePostRequestDto;
-import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
-import com.github.cheesecat47.myBlog.post.model.request.UpdatePostRequestDto;
+import com.github.cheesecat47.myBlog.post.model.request.*;
 import com.github.cheesecat47.myBlog.user.model.UserInfoDto;
 import com.github.cheesecat47.myBlog.user.model.mapper.UserMapper;
 import com.github.cheesecat47.myBlog.util.JWTUtil;
@@ -348,6 +346,132 @@ public class PostServiceImpl implements PostService {
                     msg,
                     new HashMap<>() {{
                         put("postTitle", params.getPostTitle());
+                        put("error", e.getMessage());
+                    }}
+            );
+        }
+    }
+
+    @Override
+    public List<CommentDto> getCommentsByPostTitle(String postTitle) throws Exception {
+        log.debug("getCommentsByPostTitle: postTitle: {}", postTitle);
+
+        // 공백인 경우
+        if (postTitle.isEmpty() || postTitle.isBlank()) {
+            String msg = "글 제목은 필수입니다";
+            log.error("getCommentsByPostTitle: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    msg,
+                    new HashMap<>() {{
+                        put("postTitle", postTitle);
+                    }}
+            );
+        }
+
+        // DB에서 조회
+        List<CommentDto> comments;
+        try {
+            comments = postMapper.getCommentsByPostTitle(postTitle);
+            log.debug("getCommentsByPostTitle: posts size: {}", comments.size());
+        } catch (SQLException e) {
+            String msg = "DB 조회 중 오류가 발생했습니다";
+            log.error("getCommentsByPostTitle: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.SQL_ERROR,
+                    msg,
+                    new HashMap<>() {{
+                        put("postTitle", postTitle);
+                        put("error", e.getMessage());
+                    }}
+            );
+        }
+
+        return comments;
+    }
+
+    @Override
+    public void createComment(CreateCommentRequestDto params) throws Exception {
+        log.debug("createComment: params: {}", params);
+
+        // 로그인 한 유저가 작성하는 경우
+        if (params.getAccessToken() != null) {
+            try {
+                params.setUserId(jwtUtil.getUserIdFromToken(params.getAccessToken()));
+            } catch (Exception e) {
+                String msg = "유효하지 않은 토큰입니다";
+                log.error("createComment: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.UNAUTHORIZED,
+                        msg,
+                        new HashMap<>() {{
+                            put("Access Token", params.getAccessToken());
+                        }}
+                );
+            }
+        }
+
+        // 유저 정보 있는지 확인
+        if (params.getUserId() == null) {
+            String msg = "로그인이 필요한 서비스입니다";
+            log.error("createComment: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.UNAUTHORIZED,
+                    msg,
+                    new HashMap<>() {{
+                        put("userId", params.getUserId());
+                    }}
+            );
+        }
+
+        // 공백인 경우
+        if (params.getContent() == null || params.getContent().equals("")) {
+            String msg = "댓글 본문은 필수입니다";
+            log.error("createComment: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    msg,
+                    new HashMap<>() {{
+                        put("content", params.getContent());
+                    }}
+            );
+        }
+
+        try {
+            PostDto post = postMapper.getPostByTitle(params.getPostTitle());
+            if (post == null) {
+                String msg = "존재하지 않는 게시글입니다";
+                log.error("createComment: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.UNAUTHORIZED,
+                        msg,
+                        new HashMap<>() {{
+                            put("userId", params.getUserId());
+                        }}
+                );
+            }
+            params.setPostId(post.getPostId());
+
+            if (postMapper.createComment(params) != 1) {
+                String msg = "댓글 작성에 실패했습니다";
+                log.error("createComment: {}", msg);
+                throw new MyBlogCommonException(
+                        ResponseCode.INTERNAL_SERVER_ERROR,
+                        msg,
+                        new HashMap<>() {{
+                            put("userId", params.getUserId());
+                            put("postTitle", params.getPostTitle());
+                            put("content", params.getContent());
+                        }}
+                );
+            }
+        } catch (SQLException e) {
+            String msg = "DB 조회 중 오류가 발생했습니다";
+            log.error("createComment: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.SQL_ERROR,
+                    msg,
+                    new HashMap<>() {{
                         put("error", e.getMessage());
                     }}
             );

@@ -1398,19 +1398,27 @@ curl -X 'DELETE' \
 
 ## Comment
 
-### getCommentsByPostId 특정 글에 달린 댓글 목록 조회
+### getCommentsByPostTitle 특정 글에 달린 댓글 목록 조회
 
 - 특정 글에 달린 댓글 목록 조회.
 
 ```http request
-GET /api/post/:postId/comment
+GET /api/post/:postTitle/comment
 ```
 
 #### 요청
 
-| Param Type |   Name   | Data Type | Required | Description |
-|:----------:|:--------:|:---------:|:--------:|:-----------:|
-|    Path    | `postId` |   `int`   |    O     |   게시글 아이디   |
+| Param Type |    Name     | Data Type | Required | Description  |
+|:----------:|:-----------:|:---------:|:--------:|:------------:|
+|    Path    | `postTitle` | `String`  |    O     | 댓글을 조회할 글 제목 |
+
+##### 예시
+
+```bash
+curl -X 'GET' \
+  'http://localhost:8080/api/post/Java%20%EB%84%88%EB%AC%B4%20%EC%9E%AC%EB%AF%B8%EC%9E%88%EC%96%B4%EC%9A%94./comment' \
+  -H 'accept: application/json;charset=utf-8'
+```
 
 #### 응답
 
@@ -1483,31 +1491,30 @@ GET /api/post/:postId/comment
 - 특정 글에 댓글 작성.
 
 ```http request
-POST /api/post/:postId/comment
+POST /api/post/:postTitle/comment
 ```
 
 #### 요청
 
-| Param Type |      Name       | Data Type | Required |                    Description                    |
-|:----------:|:---------------:|:---------:|:--------:|:-------------------------------------------------:|
-|    Path    |    `postId`     |   `int`   |    O     |                       글 아이디                       |
-|    Body    |    `userId`     | `String`  |    -     |              유저 아이디. DB의 `id_str` 값               |
-|   Header   | `Authorization` | `String`  |    -     |         액세스 토큰. `userId`를 사용해 댓글 작성 시 필요          |
-|    Body    |    `content`    | `String`  |    -     |                  댓글 본문. 최대 300자                   |
-|    Body    |   `tmpUserId`   | `String`  |    -     | 비회원 댓글 시 유저 아이디. `userId` 또는 이 값 중 하나 필수. 둘 다는 불가 |
-|    Body    |   `tmpUserPw`   | `String`  |    -     |       비회원 댓글 시 유저 비밀번호. `tmpUserId` 사용 시 필요       |
+| Param Type |      Name       | Data Type | Required |                                    Description                                     |
+|:----------:|:---------------:|:---------:|:--------:|:----------------------------------------------------------------------------------:|
+|    Path    |   `postTitle`   | `String`  |    O     |                                        글 제목                                        |
+|   Header   | `Authorization` | `String`  |    O     |                          액세스 토큰. `userId`를 사용해 댓글 작성 시 필요                          |
+|    Body    |    `content`    | `String`  |    O     |                                   댓글 본문. 최대 300자                                   |
+
+[//]: # (|    Body    |   `tmpUserId`   | `String`  |    -     | 비회원 댓글 시 유저 아이디. `userId` 또는 이 값 중 하나 필수. 둘 다는 불가. 토큰이 유효하다면 토큰에 포함된 `userId`를 우선함 |)
+[//]: # (|    Body    |   `tmpUserPw`   | `String`  |    -     |                       비회원 댓글 시 유저 비밀번호. `tmpUserId` 사용 시 필요                        |)
 
 ##### 예시
 
 ```bash
 curl -X 'POST' \
-  'http://localhost:8080/api/post/1/comment' \
+  'http://localhost:8080/api/post/Java%20%EB%84%88%EB%AC%B4%20%EC%9E%AC%EB%AF%B8%EC%9E%88%EC%96%B4%EC%9A%94./comment' \
   -H 'accept: application/json;charset=utf-8' \
-  -H 'Authorization: Bearer eyJ0eXAiOi...' \
+  -H 'Authorization: Bearer eyJ0eXA...' \
   -H 'Content-Type: application/json' \
   -d '{
-  "userId": "cheesecat47",
-  "content": "글 잘 보고 갑니다^^",
+  "content": "스프링 짱짱"
 }'
 ```
 
@@ -1519,7 +1526,7 @@ curl -X 'POST' \
 // HTTP/1.1 201 CREATED
 // Content-Type: application/json;charset=UTF-8
 {
-  "message": "댓글 생성 성공",
+  "message": "댓글 작성 성공",
   "code": "00",
   "data": null
 }

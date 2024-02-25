@@ -77,6 +77,18 @@ public class JWTUtil {
         return Keys.hmacShaKeyFor(salt.getBytes(StandardCharsets.UTF_8));
     }
 
+    public String getUserIdFromToken(String token) throws Exception {
+        token = token.replaceAll("^Bearer ", "");
+        log.debug("getUserIdFromToken: token: {}", token);
+
+        return Jwts.parser()
+                .verifyWith(generateKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("userId", String.class);
+    }
+
     /**
      * 토큰이 제대로 생성된 것인지 검증
      *
