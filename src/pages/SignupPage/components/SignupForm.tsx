@@ -1,6 +1,6 @@
-import kakao from 'assets/icons/ML_kakao-icon.png';
-import naver from 'assets/icons/ML_naver-icon.png';
-import useInput from 'hooks/useInput';
+import kakao from '@/assets/icons/ML_kakao-icon.png';
+import naver from '@/assets/icons/ML_naver-icon.png';
+import useInput from '@/hooks/useInput';
 import React from 'react';
 import { Link } from 'react-router-dom';
 

@@ -1,10 +1,6 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import RequireAuth from 'components/common/RequireAuth';
-import UserPostList from 'components/post/UserPostList';
-import { GuestBook, Introduce } from 'pages/UserPage/components';
-import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { Layout } from './components/layout';
+import RequireAuth from "@/components/common/RequireAuth";
+import { Layout } from '@/components/layout';
+import UserPostList from '@/components/post/UserPostList';
 import {
     LoginPage,
     MainPage,
@@ -13,7 +9,11 @@ import {
     PostWritePage,
     SignupPage,
     UserPage,
-} from './pages';
+} from '@/pages';
+import { GuestBook, Introduce } from '@/pages/UserPage/components';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 const queryClient = new QueryClient();
 

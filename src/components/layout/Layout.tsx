@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Footer from './Footer';
 import Header from './Header';
 
-import { DEFAULT_BLOG_NAME } from '../../constants/post';
+import { DEFAULT_BLOG_NAME } from '@/constants/post';
 
 const Layout = () => (
     <div className="flex flex-col min-h-screen">

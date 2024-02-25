@@ -4,7 +4,7 @@ import { defaultInstance } from './defaultInstance';
 
 const login = async ({ userId, userPw }: loginRequest) => {
     const result = await defaultInstance
-        .post('/user/login', {
+        .post('user/login', {
             userId,
             userPw,
         })
@@ -23,7 +23,7 @@ const login = async ({ userId, userPw }: loginRequest) => {
 
 const logout = async ({ userId, accessToken }: logoutRequest) => {
     const result = await authInstance
-        .post('/user/logout', {
+        .post('user/logout', {
             userId,
             accessToken,
         })
