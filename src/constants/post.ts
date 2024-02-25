@@ -1,1 +1,1 @@
-export const DEFAULT_BLOG_NAME = 'my.log';
+export const DEFAULT_BLOG_NAME = 'Rerolog';
