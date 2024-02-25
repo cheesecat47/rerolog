@@ -155,4 +155,10 @@
           and Comment.deleted_at is null
         order by Comment.created_at desc;
     </select>
+
+    <!-- createComment 쿼리 -->
+    <insert id="createComment" parameterType="CreateCommentRequestDto">
+        insert into Comment(user_id, post_id, content)
+        value ((<include refid="getUserId"/>), #{postId}, #{content});
+    </insert>
 </mapper>

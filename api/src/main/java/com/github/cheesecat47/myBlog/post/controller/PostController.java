@@ -3,14 +3,8 @@ package com.github.cheesecat47.myBlog.post.controller;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
 import com.github.cheesecat47.myBlog.post.model.CommentDto;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
-import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
-import com.github.cheesecat47.myBlog.post.model.request.DeletePostRequestDto;
-import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
-import com.github.cheesecat47.myBlog.post.model.request.UpdatePostRequestDto;
-import com.github.cheesecat47.myBlog.post.model.response.CreatePostResponseDto;
-import com.github.cheesecat47.myBlog.post.model.response.GetCommentsByPostTitleResponse;
-import com.github.cheesecat47.myBlog.post.model.response.GetPostByTitleResponse;
-import com.github.cheesecat47.myBlog.post.model.response.GetPostsResponse;
+import com.github.cheesecat47.myBlog.post.model.request.*;
+import com.github.cheesecat47.myBlog.post.model.response.*;
 import com.github.cheesecat47.myBlog.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -197,5 +191,33 @@ public class PostController {
         }});
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Operation(summary = "createComment 특정 글에 댓글 작성", security = {@SecurityRequirement(name = "Access Token")})
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "댓글 작성 성공", content = {@Content(schema = @Schema(implementation = CreateCommentResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "댓글 작성 실패"),
+            @ApiResponse(responseCode = "401", description = "댓글 작성 실패"),
+            @ApiResponse(responseCode = "500", description = "댓글 작성 실패")
+    })
+    @PostMapping(value = "/{postTitle}/comment")
+    public ResponseEntity<CreateCommentResponseDto> createComment(
+            HttpServletRequest request,
+            @Parameter(description = "글 제목") @PathVariable String postTitle,
+            @RequestBody CreateCommentRequestDto params
+    ) throws Exception {
+        params.setAccessToken(request.getHeader("Authorization"));
+        params.setPostTitle(postTitle);
+        log.debug("createComment: params: {}", params);
+
+        CreateCommentResponseDto response = new CreateCommentResponseDto();
+
+        postService.createComment(params);
+
+        String msg = "댓글 작성 성공";
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+        response.setMessage(msg);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

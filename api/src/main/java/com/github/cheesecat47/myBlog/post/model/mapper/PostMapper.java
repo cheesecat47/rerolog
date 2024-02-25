@@ -2,10 +2,7 @@ package com.github.cheesecat47.myBlog.post.model.mapper;
 
 import com.github.cheesecat47.myBlog.post.model.CommentDto;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
-import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
-import com.github.cheesecat47.myBlog.post.model.request.DeletePostRequestDto;
-import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
-import com.github.cheesecat47.myBlog.post.model.request.UpdatePostRequestDto;
+import com.github.cheesecat47.myBlog.post.model.request.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.SQLException;
@@ -24,4 +21,6 @@ public interface PostMapper {
     int deletePost(DeletePostRequestDto params) throws SQLException;
 
     List<CommentDto> getCommentsByPostTitle(String postTitle) throws SQLException;
+
+    int createComment(CreateCommentRequestDto params) throws SQLException;
 }
