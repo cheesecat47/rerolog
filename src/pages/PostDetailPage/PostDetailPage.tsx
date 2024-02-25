@@ -6,12 +6,12 @@ import { useParams } from 'react-router-dom';
 import CommentBoxList from './components/CommentBoxList';
 
 const PostDetailPage = () => {
-    const { userId, postId } = useParams();
+    const { userId, postTitle } = useParams();
 
-    if (!userId || !postId) return <div>잘못된 경로입니다.</div>;
+    if (!userId || !postTitle) return <div>잘못된 경로입니다.</div>;
 
     const { getPostDetail } = usePost();
-    const { isLoading, error, data: post } = getPostDetail({ userId, postId });
+    const { isLoading, error, data: post } = getPostDetail({ userId, postTitle });
 
     if (!post) return <div>잘못된 경로입니다.</div>;
 

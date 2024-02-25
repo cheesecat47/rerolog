@@ -48,12 +48,12 @@ export const usePost = () => {
         });
     };
 
-    const getPostDetail = ({ userId, postId }: getPostDetailRequest) => {
+    const getPostDetail = ({ userId, postTitle }: getPostDetailRequest) => {
         return useQuery({
-            queryKey: [QUERY_KEY.POST, { userId, postId }],
+            queryKey: [QUERY_KEY.POST, { userId, postTitle }],
             queryFn: async () => {
                 const response: getPostDetailResponse = await defaultInstance
-                    .get(`post/${userId}/${postId}`)
+                    .get(`post/${userId}/${postTitle}`)
                     .then((res) => res.data);
 
                 return response.data;
