@@ -15,7 +15,7 @@ export type getPostListResponse = ApiResponse<PostListType>;
 
 export type getPostDetailRequest = {
     userId: string;
-    postId: string;
+    postTitle: string;
 };
 
 export type getPostDetailResponse = ApiResponse<IPostDetail>;

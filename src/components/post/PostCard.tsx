@@ -10,7 +10,8 @@ const PostCard = ({ post }: { post: IPost }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/${post.author.userId}/${post.postId}`);
+        console.log(post.title, encodeURI(post.title));
+        navigate(`/${post.author.userId}/${encodeURI(post.title)}`);
     };
 
     return (
