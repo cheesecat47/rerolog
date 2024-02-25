@@ -1398,19 +1398,27 @@ curl -X 'DELETE' \
 
 ## Comment
 
-### getCommentsByPostId 특정 글에 달린 댓글 목록 조회
+### getCommentsByPostTitle 특정 글에 달린 댓글 목록 조회
 
 - 특정 글에 달린 댓글 목록 조회.
 
 ```http request
-GET /api/post/:postId/comment
+GET /api/post/:postTitle/comment
 ```
 
 #### 요청
 
-| Param Type |   Name   | Data Type | Required | Description |
-|:----------:|:--------:|:---------:|:--------:|:-----------:|
-|    Path    | `postId` |   `int`   |    O     |   게시글 아이디   |
+| Param Type |    Name     | Data Type | Required | Description  |
+|:----------:|:-----------:|:---------:|:--------:|:------------:|
+|    Path    | `postTitle` | `String`  |    O     | 댓글을 조회할 글 제목 |
+
+##### 예시
+
+```bash
+curl -X 'GET' \
+  'http://localhost:8080/api/post/Java%20%EB%84%88%EB%AC%B4%20%EC%9E%AC%EB%AF%B8%EC%9E%88%EC%96%B4%EC%9A%94./comment' \
+  -H 'accept: application/json;charset=utf-8'
+```
 
 #### 응답
 

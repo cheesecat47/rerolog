@@ -2,6 +2,7 @@ package com.github.cheesecat47.myBlog.post.service;
 
 import com.github.cheesecat47.myBlog.common.exception.MyBlogCommonException;
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
+import com.github.cheesecat47.myBlog.post.model.CommentDto;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.mapper.PostMapper;
 import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
@@ -352,5 +353,43 @@ public class PostServiceImpl implements PostService {
                     }}
             );
         }
+    }
+
+    @Override
+    public List<CommentDto> getCommentsByPostTitle(String postTitle) throws Exception {
+        log.debug("getCommentsByPostTitle: postTitle: {}", postTitle);
+
+        // 공백인 경우
+        if (postTitle.isEmpty() || postTitle.isBlank()) {
+            String msg = "글 제목은 필수입니다";
+            log.error("getCommentsByPostTitle: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.NO_REQUIRED_REQUEST_PARAMETER,
+                    msg,
+                    new HashMap<>() {{
+                        put("postTitle", postTitle);
+                    }}
+            );
+        }
+
+        // DB에서 조회
+        List<CommentDto> comments;
+        try {
+            comments = postMapper.getCommentsByPostTitle(postTitle);
+            log.debug("getCommentsByPostTitle: posts size: {}", comments.size());
+        } catch (SQLException e) {
+            String msg = "DB 조회 중 오류가 발생했습니다";
+            log.error("getCommentsByPostTitle: {}", msg);
+            throw new MyBlogCommonException(
+                    ResponseCode.SQL_ERROR,
+                    msg,
+                    new HashMap<>() {{
+                        put("postTitle", postTitle);
+                        put("error", e.getMessage());
+                    }}
+            );
+        }
+
+        return comments;
     }
 }

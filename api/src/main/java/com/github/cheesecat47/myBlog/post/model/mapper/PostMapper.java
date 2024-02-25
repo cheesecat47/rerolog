@@ -1,5 +1,6 @@
 package com.github.cheesecat47.myBlog.post.model.mapper;
 
+import com.github.cheesecat47.myBlog.post.model.CommentDto;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.DeletePostRequestDto;
@@ -21,4 +22,6 @@ public interface PostMapper {
     int updatePost(UpdatePostRequestDto params) throws SQLException;
 
     int deletePost(DeletePostRequestDto params) throws SQLException;
+
+    List<CommentDto> getCommentsByPostTitle(String postTitle) throws SQLException;
 }

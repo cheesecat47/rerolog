@@ -1,12 +1,14 @@
 package com.github.cheesecat47.myBlog.post.controller;
 
 import com.github.cheesecat47.myBlog.common.exception.ResponseCode;
+import com.github.cheesecat47.myBlog.post.model.CommentDto;
 import com.github.cheesecat47.myBlog.post.model.PostDto;
 import com.github.cheesecat47.myBlog.post.model.request.CreatePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.DeletePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.request.GetPostsRequest;
 import com.github.cheesecat47.myBlog.post.model.request.UpdatePostRequestDto;
 import com.github.cheesecat47.myBlog.post.model.response.CreatePostResponseDto;
+import com.github.cheesecat47.myBlog.post.model.response.GetCommentsByPostTitleResponse;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostByTitleResponse;
 import com.github.cheesecat47.myBlog.post.model.response.GetPostsResponse;
 import com.github.cheesecat47.myBlog.post.service.PostService;
@@ -26,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -165,5 +168,34 @@ public class PostController {
         log.info("deletePost: 글 삭제 성공");
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "getCommentsByPostTitle 특정 글에 달린 댓글 목록 조회", description = "해당 글에 달린 댓글 목록 조회.<br/>만약 해당 글에 달린 댓글이 없다면 data는 길이가 0인 배열 반환.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "댓글 목록 조회 성공", content = {@Content(schema = @Schema(implementation = GetCommentsByPostTitleResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "댓글 목록 조회 실패"),
+            @ApiResponse(responseCode = "404", description = "댓글 목록 조회 실패"),
+            @ApiResponse(responseCode = "500", description = "댓글 목록 조회 실패")
+    })
+    @GetMapping(value = "/{postTitle}/comment")
+    public ResponseEntity<GetCommentsByPostTitleResponse> getCommentsByPostTitle(
+            @Parameter(description = "글 제목") @PathVariable String postTitle
+    ) throws Exception {
+        log.debug("getCommentsByPostId: postTitle: {}", postTitle);
+
+        GetCommentsByPostTitleResponse response = new GetCommentsByPostTitleResponse();
+
+        List<CommentDto> comments = postService.getCommentsByPostTitle(postTitle);
+
+        String msg = "댓글 목록 조회 성공";
+        log.info("getCommentsByPostId: {}, size: {}", msg, comments.size());
+        response.setCode(ResponseCode.NORMAL_SERVICE);
+        response.setMessage(msg);
+        response.setData(new HashMap<String, Object>(2){{
+            put("comments",comments);
+            put("numOfComments", comments.size());
+        }});
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
