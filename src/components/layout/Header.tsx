@@ -7,10 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '@/apis/user';
 import flower from '@/assets/icons/ML_flower-icon.png';
 import login from '@/assets/icons/ML_login_icon.png';
-import logoutIcon from '@/assets/icons/ML_logout-icon.png';
 import moon from '@/assets/icons/ML_moon-icon.png';
-import my from '@/assets/icons/ML_my-icon.png';
-import pencil from '@/assets/icons/ML_pencil-icon.png';
 import sun from '@/assets/icons/ML_sun-icon.png';
 import useUserStore from '@/stores/useUserStore';
 
@@ -48,8 +45,6 @@ const Header = ({ blogName }: { blogName: string }) => {
             accessToken,
         });
 
-        console.log('로그아웃 처리', result);
-
         if (result) {
             logoutUser();
             navigate('/');
@@ -77,7 +72,6 @@ const Header = ({ blogName }: { blogName: string }) => {
                 {isLogin ? (
                     <div className="hidden sm:flex w-full justify-end">
                         <HeaderIconText
-                            icon={pencil}
                             alt="pencil"
                             text="Write"
                             onClick={goWrite}
@@ -86,11 +80,10 @@ const Header = ({ blogName }: { blogName: string }) => {
                             popOverList={popOverList}
                             handlePopOver={handlePopOver}
                         >
-                            <HeaderIconText icon={my} alt="my" text="My" />
+                            <HeaderIconText alt="my" text="My" />
                         </PopOver>
 
                         <HeaderIconText
-                            icon={logoutIcon}
                             alt="logout"
                             text="Logout"
                             onClick={handleLogout}

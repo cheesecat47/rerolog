@@ -32,7 +32,7 @@ const PostCard = ({ post }: { post: IPost }) => {
                             alt="calendar"
                             className="w-4 h-4 mr-2 "
                         />
-                        <span className="text-xs">{post.createdAt}</span>
+                        <span className="text-xs">{post?.createdAt.slice(0, 10)}</span>
                     </div>
                     <div className="mb-2">
                         <CategoryBadge categoryName={post.categoryName} />

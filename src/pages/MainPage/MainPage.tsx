@@ -24,13 +24,12 @@ const MainPage = () => {
         <>
             <div className=" mt-20 flex items-center">
                 <div className="flex-1">&nbsp;</div>
-                <div className="w-[250px] text-center text-4xl font-semibold">
+                <div className="w-[250px] text-center text-4xl">
                     {selectedOption === sortList[0]
                         ? 'Recent Posts'
                         : 'Trend Posts'}
                 </div>
                 <div className="flex-1">&nbsp;</div>
-                {/* <div className="flex-1 cursor-pointer">&nbsp;&nbsp;See all posts</div> */}
             </div>
             <p className="text-center mt-2">
                 {selectedOption === sortList[0]
