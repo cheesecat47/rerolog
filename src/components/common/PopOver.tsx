@@ -1,6 +1,6 @@
+import { IPopOverProps } from '@/types/common/PopOverProps';
 import { Popover, Transition } from '@headlessui/react';
 import { Fragment, ReactElement } from 'react';
-import { IPopOverProps } from 'types/common/PopOverProps';
 
 const PopOver = ({
     popOverList,

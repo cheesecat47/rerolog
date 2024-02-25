@@ -1,4 +1,4 @@
-import { IUser } from 'types/model';
+import { IUser } from '@/types/model';
 import { ApiResponse } from './api';
 
 export type getUserInfoReqest = {

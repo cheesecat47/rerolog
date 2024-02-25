@@ -1,4 +1,4 @@
-import { CommentListType } from 'types/model/Comment';
+import { CommentListType } from '@/types/model/Comment';
 import CommentBox from './CommentBox';
 
 const CommentBoxList = ({ comments }: { comments: CommentListType }) => (

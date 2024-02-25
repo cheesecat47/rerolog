@@ -1,5 +1,5 @@
 import calendar from '@/assets/icons/ML_calendar-icon.png';
-import { IComment } from 'types/model/Comment';
+import { IComment } from '@/types/model/Comment';
 
 const CommentBox = ({ comment }: { comment: IComment }) => (
     <div className="p-3 py-5">

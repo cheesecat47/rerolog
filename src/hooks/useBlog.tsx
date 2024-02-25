@@ -1,7 +1,7 @@
 import { defaultInstance } from '@/apis/defaultInstance';
 import { QUERY_KEY } from '@/constants/queryKeys';
+import { getBlogInfoReqest, getBlogInfoResponse } from '@/types/api/blog';
 import { useQuery } from '@tanstack/react-query';
-import { getBlogInfoReqest, getBlogInfoResponse } from 'types/api/blog';
 
 export const useBlog = () => {
     const staleTime = Number(import.meta.env.VITE_STALE_TIME);

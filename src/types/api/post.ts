@@ -1,4 +1,4 @@
-import { IPostDetail, PostListType } from 'types/model';
+import { IPostDetail, PostListType } from '@/types/model';
 import { ApiResponse } from './api';
 
 export type orderType = 'latest' | 'oldest' | 'popular';

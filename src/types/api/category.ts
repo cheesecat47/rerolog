@@ -1,4 +1,4 @@
-import { CategoryListType } from 'types/model';
+import { CategoryListType } from '@/types/model';
 import { ApiResponse } from './api';
 
 export type getCategoryRequest = {

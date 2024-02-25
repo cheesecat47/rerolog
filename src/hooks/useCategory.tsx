@@ -1,7 +1,7 @@
 import { defaultInstance } from '@/apis/defaultInstance';
 import { QUERY_KEY } from '@/constants/queryKeys';
+import { getCategoryRequest, getCategoryResponse } from '@/types/api/category';
 import { useQuery } from '@tanstack/react-query';
-import { getCategoryRequest, getCategoryResponse } from 'types/api/category';
 
 export const useCategory = () => {
     const staleTime = Number(import.meta.env.VITE_STALE_TIME);

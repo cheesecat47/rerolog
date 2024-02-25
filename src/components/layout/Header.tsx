@@ -1,8 +1,8 @@
 // import React, { useEffect, useState } from 'react';
 
 import { HeaderIconText, PopOver } from '@/components/common';
+import { IPopOverProps } from '@/types/common/PopOverProps';
 import { Link, useNavigate } from 'react-router-dom';
-import { IPopOverProps } from 'types/common/PopOverProps';
 
 import { logout } from '@/apis/user';
 import flower from '@/assets/icons/ML_flower-icon.png';
