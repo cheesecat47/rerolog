@@ -1,4 +1,4 @@
-import profile from 'assets/images/ML_test-profile.png';
+import profile from '@/assets/images/ML_test-profile.png';
 import React, { useState } from 'react';
 import { IBlog } from 'types/model/Blog';
 import { CategoryListType } from 'types/model/Category';

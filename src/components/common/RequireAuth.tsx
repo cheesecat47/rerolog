@@ -1,5 +1,5 @@
+import useUserStore from '@/stores/useUserStore';
 import { Navigate, useLocation } from 'react-router-dom';
-import useUserStore from 'stores/useUserStore';
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
     const { isLogin } = useUserStore();

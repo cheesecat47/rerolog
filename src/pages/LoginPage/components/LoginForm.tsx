@@ -1,11 +1,11 @@
-import useInput from 'hooks/useInput';
+import useInput from '@/hooks/useInput';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { login } from 'apis/user';
-import kakao from 'assets/icons/ML_kakao-icon.png';
-import naver from 'assets/icons/ML_naver-icon.png';
-import useUserStore from 'stores/useUserStore';
+import { login } from '@/apis/user';
+import kakao from '@/assets/icons/ML_kakao-icon.png';
+import naver from '@/assets/icons/ML_naver-icon.png';
+import useUserStore from '@/stores/useUserStore';
 
 const LoginForm = () => {
     const navigate = useNavigate();

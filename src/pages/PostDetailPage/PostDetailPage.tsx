@@ -1,7 +1,7 @@
-import calendar from 'assets/icons/ML_calendar-icon.png';
-import comment from 'assets/icons/ML_comment-icon.png';
-import CategoryBadge from 'components/common/CategoryBadge';
-import { usePost } from 'hooks/usePost';
+import calendar from '@/assets/icons/ML_calendar-icon.png';
+import comment from '@/assets/icons/ML_comment-icon.png';
+import CategoryBadge from '@/components/common/CategoryBadge';
+import { usePost } from '@/hooks/usePost';
 import { useParams } from 'react-router-dom';
 import CommentBoxList from './components/CommentBoxList';
 

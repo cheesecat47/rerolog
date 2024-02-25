@@ -1,4 +1,4 @@
-import calendar from 'assets/icons/ML_calendar-icon.png';
+import calendar from '@/assets/icons/ML_calendar-icon.png';
 import { IComment } from 'types/model/Comment';
 
 const CommentBox = ({ comment }: { comment: IComment }) => (

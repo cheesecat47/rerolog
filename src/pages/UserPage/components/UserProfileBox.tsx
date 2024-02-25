@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 
-import github from 'assets/icons/ML_github-icon.png';
-import linkedin from 'assets/icons/ML_linkedin-icon.png';
-import mail from 'assets/icons/ML_mail-icon.png';
-import defaultProfile from 'assets/images/ML_test-profile.png';
-import { useBlog } from 'hooks/useBlog';
+import github from '@/assets/icons/ML_github-icon.png';
+import linkedin from '@/assets/icons/ML_linkedin-icon.png';
+import mail from '@/assets/icons/ML_mail-icon.png';
+import defaultProfile from '@/assets/images/ML_test-profile.png';
+import { useBlog } from '@/hooks/useBlog';
 
 const UserProfileBox = () => {
     // @TODO: 아이디 받아오기

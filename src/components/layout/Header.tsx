@@ -1,18 +1,18 @@
 // import React, { useEffect, useState } from 'react';
 
-import { HeaderIconText, PopOver } from 'components/common';
+import { HeaderIconText, PopOver } from '@/components/common';
 import { Link, useNavigate } from 'react-router-dom';
 import { IPopOverProps } from 'types/common/PopOverProps';
 
-import { logout } from 'apis/user';
-import flower from 'assets/icons/ML_flower-icon.png';
-import login from 'assets/icons/ML_login_icon.png';
-import logoutIcon from 'assets/icons/ML_logout-icon.png';
-import moon from 'assets/icons/ML_moon-icon.png';
-import my from 'assets/icons/ML_my-icon.png';
-import pencil from 'assets/icons/ML_pencil-icon.png';
-import sun from 'assets/icons/ML_sun-icon.png';
-import useUserStore from 'stores/useUserStore';
+import { logout } from '@/apis/user';
+import flower from '@/assets/icons/ML_flower-icon.png';
+import login from '@/assets/icons/ML_login_icon.png';
+import logoutIcon from '@/assets/icons/ML_logout-icon.png';
+import moon from '@/assets/icons/ML_moon-icon.png';
+import my from '@/assets/icons/ML_my-icon.png';
+import pencil from '@/assets/icons/ML_pencil-icon.png';
+import sun from '@/assets/icons/ML_sun-icon.png';
+import useUserStore from '@/stores/useUserStore';
 
 const Header = ({ blogName }: { blogName: string }) => {
     const { isLogin, accessToken, userId: myId, logoutUser } = useUserStore();

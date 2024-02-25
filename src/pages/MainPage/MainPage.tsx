@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { DropBox } from 'components/common';
-import PostList from 'components/post/PostList';
-import { sortList } from 'constants/sortList';
+import { DropBox } from '@/components/common';
+import PostList from '@/components/post/PostList';
+import { sortList } from '@/constants/sortList';
 
 const MainPage = () => {
     const navigate = useNavigate();

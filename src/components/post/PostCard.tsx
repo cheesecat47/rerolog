@@ -1,7 +1,7 @@
-import calendarIcon from 'assets/icons/ML_calendar-icon.png';
-import commentIcon from 'assets/icons/ML_comment-icon.png';
-import thumbnail from 'assets/images/ML_test-thumbnail.png';
-import CategoryBadge from 'components/common/CategoryBadge';
+import calendarIcon from '@/assets/icons/ML_calendar-icon.png';
+import commentIcon from '@/assets/icons/ML_comment-icon.png';
+import thumbnail from '@/assets/images/ML_test-thumbnail.png';
+import CategoryBadge from '@/components/common/CategoryBadge';
 import { useNavigate } from 'react-router-dom';
 
 import { IPost } from 'types/model';

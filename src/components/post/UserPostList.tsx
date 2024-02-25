@@ -1,5 +1,5 @@
-import { usePost } from 'hooks/usePost';
-import { IPost } from 'types/model';
+import { usePost } from '@/hooks/usePost';
+import { IPost } from '@/types/model';
 import PostCard from './PostCard';
 
 const UserPostList = () => {

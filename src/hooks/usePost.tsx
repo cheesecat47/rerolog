@@ -1,19 +1,19 @@
-import { useQuery } from '@tanstack/react-query';
-import { defaultInstance } from 'apis/defaultInstance';
-import { QUERY_KEY } from 'constants/queryKeys';
+import { defaultInstance } from '@/apis/defaultInstance';
+import { QUERY_KEY } from '@/constants/queryKeys';
 import {
     getPostDetailRequest,
     getPostDetailResponse,
     getPostListRequest,
     getPostListResponse,
-} from 'types/api/post';
+} from '@/types/api/post';
+import { useQuery } from '@tanstack/react-query';
 
 export const usePost = () => {
-    const staleTime = Number(process.env.REACT_APP_STALE_TIME);
+    const staleTime = Number(import.meta.env.VITE_STALE_TIME);
 
     const getPostList = ({ userId, categoryId, order }: getPostListRequest) => {
         const key: getPostListRequest = {};
-        let url = '/post';
+        let url = 'post';
         const sortList: string[] = [];
 
         if (userId || categoryId || order) {
@@ -53,7 +53,7 @@ export const usePost = () => {
             queryKey: [QUERY_KEY.POST, { userId, postId }],
             queryFn: async () => {
                 const response: getPostDetailResponse = await defaultInstance
-                    .get(`/post/${userId}/${postId}`)
+                    .get(`post/${userId}/${postId}`)
                     .then((res) => res.data);
 
                 return response.data;
