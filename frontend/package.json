@@ -1,0 +1,80 @@
+{
+    "homepage": "http://rerolog.github.io",
+    "name": "frontend",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@headlessui/react": "^1.7.17",
+        "@tanstack/react-query": "^5.14.6",
+        "@tanstack/react-query-devtools": "^5.15.0",
+        "@testing-library/jest-dom": "^5.17.0",
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^13.5.0",
+        "@types/jest": "^27.5.2",
+        "@types/react": "^18.2.42",
+        "@types/react-dom": "^18.2.17",
+        "@types/react-router-dom": "^5.3.3",
+        "axios": "^1.6.2",
+        "gh-pages": "^6.1.1",
+        "html-react-parser": "^5.0.11",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-quill": "^2.0.0",
+        "react-router-dom": "^6.20.1",
+        "typescript": "^4.9.5",
+        "web-vitals": "^2.1.4",
+        "zustand": "^4.5.0"
+    },
+    "scripts": {
+<<<<<<< HEAD:package.json
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "preview": "vite preview"
+=======
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "deploy": "gh-pages -d build",
+        "predeploy": "npm run build"
+>>>>>>> rerolog/main:frontend/package.json
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+        "@types/node": "^20.11.20",
+        "@typescript-eslint/eslint-plugin": "^6.13.2",
+        "@typescript-eslint/parser": "^6.13.2",
+        "@vitejs/plugin-react": "^4.2.1",
+        "autoprefixer": "^10.4.16",
+        "eslint": "^8.55.0",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-config-standard-with-typescript": "^40.0.0",
+        "eslint-import-resolver-typescript": "^3.6.1",
+        "eslint-plugin-import": "^2.29.0",
+        "eslint-plugin-jsx-a11y": "^6.8.0",
+        "eslint-plugin-n": "^16.3.1",
+        "eslint-plugin-prettier": "^5.0.1",
+        "eslint-plugin-promise": "^6.1.1",
+        "eslint-plugin-react": "^7.33.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "postcss": "^8.4.32",
+        "prettier": "^3.1.1",
+        "tailwindcss": "^3.3.6",
+        "vite": "^5.1.4"
+    }
+}
