@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d34320be.css",
+    "main.js": "/static/js/main.a8c1aa65.js",
+    "static/media/ML_test-profile.png": "/static/media/ML_test-profile.a56035aab2c87ba7608a.png",
+    "static/media/ML_kakao-icon.png": "/static/media/ML_kakao-icon.dfae22dc7df8f6b76462.png",
+    "static/media/ML_test-thumbnail.png": "/static/media/ML_test-thumbnail.d5b3da27d66ad3f4c584.png",
+    "index.html": "/index.html",
+    "main.d34320be.css.map": "/static/css/main.d34320be.css.map",
+    "main.a8c1aa65.js.map": "/static/js/main.a8c1aa65.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d34320be.css",
+    "static/js/main.a8c1aa65.js"
+  ]
+}
