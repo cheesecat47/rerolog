@@ -1,15 +1,8 @@
 /* eslint-disable */
 import { getAccessToken } from '@/utils/localStorage';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-<<<<<<< HEAD:src/apis/authInstance.ts
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
-=======
-import { serverURL } from 'constants/url';
-import { getAccessToken } from 'utils/localStorage';
-
-const baseUrl = serverURL;
->>>>>>> rerolog/main:frontend/src/apis/authInstance.ts
 
 let retry: boolean = false;
 
