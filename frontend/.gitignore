@@ -348,6 +348,11 @@ sketch
 
 ### Gradle ###
 .gradle
+<<<<<<< HEAD
+=======
+**/build/
+!src/**/build/
+>>>>>>> 047af6962c2784af5a822fecb25efe2d881d7296
 
 # Ignore Gradle GUI config
 gradle-app.setting
