@@ -1,3 +1,4 @@
+import { authInstance } from "@/apis/authInstance";
 import { defaultInstance } from '@/apis/defaultInstance';
 import { QUERY_KEY } from '@/constants/queryKeys';
 import {
@@ -5,11 +6,13 @@ import {
     getPostDetailResponse,
     getPostListRequest,
     getPostListResponse,
+    writePostRequest,
 } from '@/types/api/post';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const usePost = () => {
     const staleTime = Number(import.meta.env.VITE_STALE_TIME);
+    const queryClient = useQueryClient();
 
     const getPostList = ({ userId, categoryId, order }: getPostListRequest) => {
         const key: getPostListRequest = {};
@@ -53,7 +56,7 @@ export const usePost = () => {
             queryKey: [QUERY_KEY.POST, { userId, postTitle }],
             queryFn: async () => {
                 const response: getPostDetailResponse = await defaultInstance
-                    .get(`post/${userId}/${postTitle}`)
+                    .get(`post/${postTitle}`)
                     .then((res) => res.data);
 
                 return response.data;
@@ -62,8 +65,31 @@ export const usePost = () => {
         });
     };
 
+    const writePost = () => {
+        return useMutation({
+            mutationFn: async (postData: writePostRequest) => {
+                try { 
+                    const { data } = await authInstance.post('post', postData);
+                    return data;
+                }
+                catch (err) {
+                    throw err;
+                }
+            },
+            onSuccess: () => {
+                // queryClient.invalidateQueries({ queryKey: [QUERY_KEY.POST, postTitle] });
+                alert('게시글을 성공적으로 작성했습니다.');
+            },
+            onError: () => {
+                console.log('에러');
+                alert('로그인 후 이용가능합니다.');
+            }
+        })
+    }
+
     return {
         getPostList,
         getPostDetail,
+        writePost
     };
 };

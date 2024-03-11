@@ -1,3 +1,7 @@
+import { useCategory } from "@/hooks/useCategory";
+import { usePost } from "@/hooks/usePost";
+import useUserStore from "@/stores/useUserStore";
+import { writePostRequest } from "@/types/api/post";
 import Parser from 'html-react-parser';
 import { useState } from 'react';
 import ReactQuill from 'react-quill';
@@ -6,6 +10,13 @@ import { useNavigate } from 'react-router-dom';
 import './PostWritePage.css';
 
 const PostWritePage = () => {
+    const { userId } = useUserStore();
+    const { getCategoryList } = useCategory();
+    const { data: categoryList } = getCategoryList({ userId });
+
+    const { writePost } = usePost();
+    const { mutate } = writePost();
+
     const myColors = [
         'purple',
         '#785412',
@@ -43,14 +54,23 @@ const PostWritePage = () => {
         'align',
     ];
 
-    const [title, setTitle] = useState<string>('');
-    const [editorText, setEditorText] = useState<string>('');
+    const [postData, setPostData] = useState<writePostRequest>({
+        userId: userId,
+        categoryName: '',
+        title: '',
+        excerpt: '',
+        content: ''
+      });
 
     const handleProcedureContentChange = (content: string) => {
-        setEditorText(content);
+        setPostData((prev) => {
+            return {
+                ...prev,
+                content: content
+            }
+        })
+        
     };
-
-    // console.log(editorText, title);
 
     const navigate = useNavigate();
 
@@ -58,8 +78,10 @@ const PostWritePage = () => {
         navigate(-1);
     };
 
-    // @TODO: post 작성 메서드 작성
-    const writePost = () => {};
+    const handleWritePost = () => {
+        mutate(postData);
+        navigate('/');
+    };
 
     return (
         <div className="grid grid-cols-2">
@@ -77,7 +99,7 @@ const PostWritePage = () => {
                     <button
                         type="button"
                         className="text-white bg-ml-pink-200 px-3 py-2 rounded-md hover:bg-ml-pink-300"
-                        onClick={writePost}
+                        onClick={handleWritePost}
                     >
                         작성하기
                     </button>
@@ -88,24 +110,41 @@ const PostWritePage = () => {
                         className="text-4xl m-2 w-full"
                         type="text"
                         placeholder="제목을 입력하세요"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        value={postData.title}
+                        onChange={(e) => setPostData((prev) => {
+                            return {
+                                ...prev,
+                                title: e.target.value
+                            }
+                        })}
                     />
+                </div>
+                <div className="flex">
+                    {
+                        categoryList && categoryList.map((category, idx) => {
+                            return <div onClick={(e) => setPostData((prev) => {
+                                return {
+                                    ...prev,
+                                    categoryName: category.categoryName
+                                }
+                            })} className={`m-1 px-2 py-1 border border-gray-200 rounded-lg cursor-pointer ${category.categoryName === postData.categoryName && 'bg-gray-200'}`} key={idx}>{category.categoryName}</div>
+                        })
+                    }
                 </div>
                 {/* 에디터 */}
                 <ReactQuill
                     theme="snow"
                     modules={modules}
                     formats={formats}
-                    value={editorText}
+                    value={postData.content}
                     placeholder="내용을 입력하세요"
                     onChange={handleProcedureContentChange}
                 />
             </div>
             {/* 오른쪽 = 미리보기 */}
             <div className="p-8 w-full text-ellipsis overflow-scroll">
-                <div className="text-5xl pb-4">{title}</div>
-                <div>{Parser(editorText)}</div>
+                <div className="text-5xl pb-4">{postData.title}</div>
+                <div>{Parser(postData.content)}</div>
             </div>
         </div>
     );

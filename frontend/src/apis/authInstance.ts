@@ -1,11 +1,8 @@
-
-/* eslint-disable */
+import { getAccessToken, getRefreshToken } from '@/utils/localStorage';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { serverURL } from 'constants/url';
-import { getAccessToken } from 'utils/localStorage';
 
-const baseUrl = serverURL;
-
+const baseUrl = import.meta.env.VITE_BASE_URL;
+    
 let retry: boolean = false;
 
 type refreshResponseType = {
@@ -28,8 +25,6 @@ authInstance.interceptors.response.use(
         const originalRequest = error.config;
 
         if (!originalRequest || !error.response || retry) {
-            window.location.href = '/login';
-            console.log('test');
             return;
         }
 
@@ -37,10 +32,10 @@ authInstance.interceptors.response.use(
             retry = true;
 
             try {
-                const refreshToken: string = 'test';
+                const refreshToken: string = getRefreshToken();
 
                 const tokenRefreshResponse: AxiosResponse<refreshResponseType> =
-                    await authInstance.post('/user/refresh', {
+                    await authInstance.post('user/refresh', {
                         refreshToken,
                     });
 
@@ -52,7 +47,6 @@ authInstance.interceptors.response.use(
 
                 return authInstance(originalRequest);
             } catch (refreshError) {
-                console.log('에러', refreshError);
                 window.location.href = '/login';
                 return Promise.reject(refreshError);
             }

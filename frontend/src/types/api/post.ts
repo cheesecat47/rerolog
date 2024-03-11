@@ -19,3 +19,11 @@ export type getPostDetailRequest = {
 };
 
 export type getPostDetailResponse = ApiResponse<IPostDetail>;
+
+export type writePostRequest = {
+    userId: string,
+    categoryName: string,
+    title: string,
+    excerpt: string,
+    content: string
+  }

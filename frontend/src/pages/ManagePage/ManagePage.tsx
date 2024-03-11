@@ -1,34 +1,44 @@
-import profile from '@/assets/images/ML_test-profile.png';
-import { IBlog } from '@/types/model/Blog';
+import { useBlog } from "@/hooks/useBlog";
+import { useUser } from "@/hooks/useUser";
+import useUserStore from "@/stores/useUserStore";
 import { CategoryListType } from '@/types/model/Category';
-import { IUser } from '@/types/model/User';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const ManagePage = () => {
-    const [userInfo, setUserInfo] = useState<IUser>({
-        userId: 'shlee',
-        nickName: '춘장이',
-        content: '개발을 잘하고 싶으요',
-        createdAt: '2023-12-20T09:00:00Z',
-        profileImage: null,
-        contacts: [
-            {
-                type: 'Email',
-                value: 'tnghk9611@naver.com',
-            },
-            {
-                type: 'GitHub',
-                value: 'rosielsh',
-            },
-        ],
-    });
 
-    const [blogInfo, setBlogInfo] = useState<IBlog>({
-        userId: 'shlee',
-        blogName: 'myBlog',
-        content: '개발자 지망생 임니당..',
-        createdAt: '2023-12-20T09:00:00Z',
-    });
+    const { userId } = useUserStore(); 
+    const { getUserInfo } = useUser();
+    const { data: userInfo } = getUserInfo({ userId });
+
+    const { getBlogInfo } = useBlog();
+    const { data: blogInfo } = getBlogInfo({ userId });
+
+    const [addCategory, setAddCategory] = useState<string>('');
+
+    // const [modifyInfo, setModifyInfo] = useState<IUser>({
+    //     userId: 'shlee',
+    //     nickName: '춘장이',
+    //     content: '개발을 잘하고 싶으요',
+    //     createdAt: '2023-12-20T09:00:00Z',
+    //     profileImage: null,
+    //     contacts: [
+    //         {
+    //             type: 'Email',
+    //             value: 'tnghk9611@naver.com',
+    //         },
+    //         {
+    //             type: 'GitHub',
+    //             value: 'rosielsh',
+    //         },
+    //     ],
+    // });
+
+    // const [blogInfo, setBlogInfo] = useState<IBlog>({
+    //     userId: 'shlee',
+    //     blogName: 'myBlog',
+    //     content: '개발자 지망생 임니당..',
+    //     createdAt: '2023-12-20T09:00:00Z',
+    // });
 
     const [isClicked, setIsClicked] = useState({
         profile: false,
@@ -49,19 +59,19 @@ const ManagePage = () => {
     ]);
 
     // 값이 수정될 때 호출되는 함수
-    const changeModifyUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserInfo((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
-    };
+    // const changeModifyUser = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setModifyInfo((prev) => ({
+    //         ...prev,
+    //         [e.target.name]: e.target.value,
+    //     }));
+    // };
 
-    const changeModifyBlog = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setBlogInfo((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
-    };
+    // const changeModifyBlog = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setBlogInfo((prev) => ({
+    //         ...prev,
+    //         [e.target.name]: e.target.value,
+    //     }));
+    // };
 
     type ModifyPropertyType = 'profile' | 'blog' | 'contact' | 'category';
 
@@ -90,13 +100,15 @@ const ManagePage = () => {
         setCategoryList([...filteredCategory]);
     };
 
+    console.log(blogInfo);
+
     return (
         <div>
-            <div className="absolute top-0 w-full h-60 bg-ml-pink-100 -z-10">
+            <div className="absolute top-0 w-full h-80 bg-ml-pink-100 -z-10">
                 &nbsp;
             </div>
-            <div className="flex flex-col bg-white text-center w-[60%] m-auto mt-20 rounded-10 shadow-md p-5">
-                {isClicked.profile ? (
+            <div className="flex flex-col bg-white text-center w-[60%] m-auto mt-48 rounded-10 shadow-md p-5">
+                {/* {isClicked.profile ? (
                     <button
                         type="button"
                         className="text-right text-sm pr-2 text-gray-700"
@@ -107,26 +119,26 @@ const ManagePage = () => {
                 ) : (
                     <button
                         type="button"
-                        className="text-right text-sm pr-2 text-gray-400 hover:text-gray-700"
+                        className="text-right text-sm pr-2 my-2 text-gray-400 hover:text-gray-700"
                         onClick={() => handleModify('profile', false)}
                     >
                         프로필 편집
                     </button>
-                )}
-                <div className="w-32 m-auto mb-4">
+                )} */}
+                {/* <div className="w-32 m-auto mb-4">
                     <img src={profile} alt="profile" />
-                </div>
+                </div> */}
                 {isClicked.profile ? (
                     <input
                         type="text"
                         name="nickName"
-                        value={userInfo.nickName}
+                        value={userInfo?.nickName}
                         className="border w-[80%] m-auto py-2 px-1 rounded-sm"
-                        onChange={changeModifyUser}
+                        // onChange={changeModifyUser}
                     />
                 ) : (
                     <div className="text-2xl font-semibold">
-                        {userInfo.nickName}
+                        {userInfo?.nickName}
                     </div>
                 )}
                 <div className="text-md">
@@ -134,12 +146,12 @@ const ManagePage = () => {
                         <input
                             type="text"
                             name="content"
-                            value={userInfo.content}
+                            value={userInfo?.content}
                             className="border w-[80%] m-auto py-2 px-1 rounded-sm mt-1"
-                            onChange={changeModifyUser}
+                            // onChange={changeModifyUser}
                         />
                     ) : (
-                        <div className="text-md">{userInfo.content}</div>
+                        <div className="text-md">{userInfo?.content}</div>
                     )}
                 </div>
             </div>
@@ -147,7 +159,8 @@ const ManagePage = () => {
             <div className=" w-[60%] m-auto mt-16 ">
                 <div className="flex my-5">
                     <div className="basis-1/6">블로그명</div>
-                    {isClicked.blog ? (
+                    <div className="basis-2/3">{blogInfo?.data.blogName}</div>
+                    {/* {isClicked.blog ? (
                         <>
                             <input
                                 type="text"
@@ -175,23 +188,23 @@ const ManagePage = () => {
                                 수정하기
                             </button>
                         </>
-                    )}
+                    )} */}
                 </div>
                 <hr />
                 <div className="flex my-5">
                     <div className="basis-1/6">연락처 정보</div>
                     <div className="basis-2/3">
-                        {userInfo.contacts.map((contact) => (
+                        {userInfo?.contacts.map((contact) => (
                             <div key={contact.value}>{contact.value}</div>
                         ))}
                     </div>
-                    <button
+                    {/* <button
                         className="basis-1/6 text-sm text-gray-400 hover:text-gray-700"
                         type="button"
                         onClick={() => handleModify('contact', false)}
                     >
                         수정하기
-                    </button>
+                    </button> */}
                 </div>
                 <hr />
                 <div className="flex my-5">
@@ -217,14 +230,15 @@ const ManagePage = () => {
                                         </button>
                                     </span>
                                 ))}
+                                <input placeholder="카테고리 입력" value={addCategory}/>
                             </div>
-                            <button
+                            {/* <button
                                 className="basis-1/6 text-sm text-gray-400 hover:text-gray-700"
                                 type="button"
                                 onClick={() => handleModify('category', true)}
                             >
                                 저장하기
-                            </button>
+                            </button> */}
                         </>
                     ) : (
                         <>
@@ -237,14 +251,15 @@ const ManagePage = () => {
                                         {category.categoryName}
                                     </span>
                                 ))}
+                                    
                             </div>
-                            <button
+                            {/* <button
                                 className="basis-1/6 text-sm text-gray-400 hover:text-gray-700"
                                 type="button"
                                 onClick={() => handleModify('category', false)}
                             >
                                 수정하기
-                            </button>
+                            </button> */}
                         </>
                     )}
                 </div>

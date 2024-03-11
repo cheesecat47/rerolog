@@ -9,9 +9,12 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Category, TabBar, UserProfileBox } from './components';
 
 const UserPage = () => {
-    // @TODO: 본인 아이디 받아오기
     const { userId } = useUserStore();
     const location = useLocation();
+    const navigate = useNavigate();
+    
+    const { getCategoryList } = useCategory();
+    const { data: categoryList } = getCategoryList({ userId });
 
     const getCurrentTabUrl = (): string => {
         const path = location.pathname;
@@ -29,29 +32,24 @@ const UserPage = () => {
     };
 
     const [selecteTab, setSelectedTab] = useState<string>(getCurrentTabUrl());
-    const navigate = useNavigate();
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
 
     const handleTabBar = (tab: ITabBarProps) => {
         setSelectedTab(tab.text);
         navigate(`/${userId}/${tab.link}`);
     };
 
-    const { getCategoryList } = useCategory();
-
-    const { data: categoryList } = getCategoryList({ userId });
-
     console.log(categoryList);
 
     const handleCategory = (category: string) => {
-        // category가 선택됨
         navigate(`/${userId}/category/${category}`);
+        setSelectedCategory(category);
         setSelectedTab('포스트');
     };
 
     const viewOptionList = ['board', 'list'];
 
-    const [selectedViewOption, setSelectedViewOption] =
-        useState<string>('board');
+    const [selectedViewOption, setSelectedViewOption] = useState<string>('board');
 
     const handleViewOption = (option: string) => {
         setSelectedViewOption(option);
@@ -59,11 +57,11 @@ const UserPage = () => {
 
     return (
         <div>
-            <div className="absolute top-0 w-full h-48 bg-ml-pink-100 -z-10">
+            <div className="w-full h-48 bg-ml-pink-100">
                 &nbsp;
             </div>
-            <div className="my-8 w-10/12 mx-auto">
-                <div className="h-72 w-full">
+            <div className="my-10 w-10/12 mx-auto">
+                <div className="w-full p-2">
                     <UserProfileBox />
                 </div>
                 <div className="h-10 border-b-[1px]">
@@ -76,6 +74,7 @@ const UserPage = () => {
                 <div className="grid grid-cols-5 p-4">
                     <div className="col-span-1">
                         <Category
+                            selectedCategory={selectedCategory}
                             categoryList={categoryList || []}
                             handleCategory={handleCategory}
                         />

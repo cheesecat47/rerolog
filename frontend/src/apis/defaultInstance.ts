@@ -1,8 +1,6 @@
-
 import axios from 'axios';
-import { serverURL } from 'constants/url';
 
-const baseUrl = serverURL;
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export const defaultInstance = axios.create({
     baseURL: baseUrl,
